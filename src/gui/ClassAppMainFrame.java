@@ -13,6 +13,7 @@ import javax.swing.JSplitPane;
 import javax.swing.JToolBar;
 import javax.swing.border.TitledBorder;
 
+@SuppressWarnings("serial")
 public class ClassAppMainFrame extends JFrame implements ActionListener{
 	/*
 	 * 班级软件的主面板

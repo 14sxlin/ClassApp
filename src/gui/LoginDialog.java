@@ -11,6 +11,7 @@ import javax.swing.JLabel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
+@SuppressWarnings("serial")
 public class LoginDialog extends JDialog implements ActionListener {
 	/*
 	 * 用户登录界面
