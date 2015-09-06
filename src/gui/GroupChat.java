@@ -3,10 +3,6 @@ package gui;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -23,8 +19,7 @@ import javax.swing.text.Document;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 
-import socket.Server;
-import socket.SocketStream;
+import socket.DefaultSocketServer;
 
 @SuppressWarnings("serial")
 public class GroupChat extends JDialog implements ActionListener {
@@ -36,8 +31,7 @@ public class GroupChat extends JDialog implements ActionListener {
 	private JButton sendButton,faceButton;
 	private JList<String> groupmember;
 	private DefaultListModel<String>listModel;
-	private Server server;
-	private SocketStream socketStream;
+	private DefaultSocketServer defaultSocketServer;
 	private Color myColor,otherColor;
 	public GroupChat(JFrame jframe) {
 		this.setTitle("私/组聊");
@@ -85,31 +79,31 @@ public class GroupChat extends JDialog implements ActionListener {
 		this.setVisible(true);
 	}
 	
-	//发送聊天语句
-	public void send(String massage)
-	{
-		PrintWriter wr=new PrintWriter(socketStream.out,true);
-		wr.println(massage);
-		this.setText(massage, myColor);
-		chatFiled.setText("");
-	}
+//	//发送聊天语句
+//	public void send(String massage)
+//	{
+//		PrintWriter wr=new PrintWriter(socketStream.out,true);
+//		wr.println(massage);
+//		this.setText(massage, myColor);
+//		chatFiled.setText("");
+//	}
 	
-	//接收聊天信息
-	public void receive()
-	{
-		String line="";
-		while(socketStream.socket.isConnected())
-		{
-			BufferedReader br=new BufferedReader(new InputStreamReader(socketStream.in));
-			try {
-				line=br.readLine();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}		
-			this.setText(line, otherColor);
-		}
-	}
+//	//接收聊天信息
+//	public void receive()
+//	{
+//		String line="";
+//		while(socketStream.socket.isConnected())
+//		{
+//			BufferedReader br=new BufferedReader(new InputStreamReader(socketStream.in));
+//			try {
+//				line=br.readLine();
+//			} catch (IOException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}		
+//			this.setText(line, otherColor);
+//		}
+//	}
 	
 	//给JTextPanel设置文本,可以设置单行的颜色
 	public void setText(String massage,Color color)

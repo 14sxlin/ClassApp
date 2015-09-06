@@ -89,7 +89,7 @@ public class PublicChatRoom extends JDialog implements ActionListener {
 		classModel=new DefaultListModel<String>();
 		classmateList=new JList<String>(classModel);
 //		JScrollPane jScrollPane=new JScrollPane(classmateList);//这里添加这个之后大小显示不正常
-		classmateList.setBackground(Color.gray);
+		classmateList.setBackground(Color.lightGray);
 		this.add(classmateList, constraints);
 		
 		//工具栏
