@@ -7,7 +7,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 import org.junit.Test;
-
+@Deprecated
 public class TestSocketConnection {
 	
 	public class MockServer extends Thread implements MySocketServer

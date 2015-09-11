@@ -13,7 +13,7 @@ import java.net.Socket;
 import org.junit.Before;
 import org.junit.Test;
 
-
+@Deprecated
 public class TestSocketSendRecevie {
 	private MockSocketClinet mockClient;
 	private MockSocketServer mockServer;
