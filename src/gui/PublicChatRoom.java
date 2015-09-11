@@ -27,7 +27,7 @@ public class PublicChatRoom extends JDialog implements ActionListener {
 	 * ¹«¹²ÁÄÌìÊÒ
 	 */
 	public static boolean online_only;
-	private JTextArea jTextArea;
+	protected JTextArea jTextArea;
 	private JTextField jTextField;
 	private JButton sendButton;
 	private JComboBox<String>searchCombo;	

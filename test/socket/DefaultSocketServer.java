@@ -16,7 +16,8 @@ public class DefaultSocketServer implements  MySocketServer{
 	 * 然后由SocketStream来返回输入输出流
 	 */
 	private ServerSocket serverSocket;
-	
+	private InputStream in;
+	private OutputStream out;
 	public DefaultSocketServer() {//构造方法指定一个端口
 
 	}
@@ -53,25 +54,27 @@ System.out.println("当前监听的端口是:"+serverSocket.getLocalPort());
 	@Override
 	public InputStream getInStream() {
 		// TODO Auto-generated method stub
-		return null;
+		return in;
 	}
 
 	@Override
 	public OutputStream getOutStream() {
 		// TODO Auto-generated method stub
-		return null;
+		return out;
 	}
 
 	@Override
 	public void closeStream() throws IOException {
 		// TODO Auto-generated method stub
-		
+		in.close();
+		out.close();
 	}
 
 	@Override
 	public void setStream(Socket socket) throws IOException {
 		// TODO Auto-generated method stub
-		
+		in=socket.getInputStream();
+		out=socket.getOutputStream();
 	}
 
 	
