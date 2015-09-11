@@ -112,14 +112,15 @@ public class PublicChatRoom extends JDialog implements ActionListener {
 				online_only = true;
 		}
 	}
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		new PublicChatRoom(null);
-	}
+	
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		// TODO Auto-generated method stub
 		
 	}
-
+	
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		new PublicChatRoom(null);
+	}
 }

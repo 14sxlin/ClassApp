@@ -1,12 +1,14 @@
 package socket;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
 import javax.swing.JOptionPane;
 
-public class DefaultSocketServer {
+public class DefaultSocketServer implements  MySocketServer{
 	/*
 	 * 林思鑫
 	 * 用来接收别人的连接
@@ -37,8 +39,40 @@ System.out.println("当前监听的端口是:"+serverSocket.getLocalPort());
 		}
 	}
 	
+	@Override
+	public void close() throws IOException {
+		// TODO Auto-generated method stub
+		
+	}
+	
 	public static void main(String args[])
 	{
 		new DefaultSocketServer().createConnection(5566);
 	}
+
+	@Override
+	public InputStream getInStream() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public OutputStream getOutStream() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void closeStream() throws IOException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setStream(Socket socket) throws IOException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	
 }
