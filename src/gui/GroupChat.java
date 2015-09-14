@@ -19,6 +19,7 @@ import javax.swing.text.Document;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 
+import login.LoginDialog;
 import socket.DefaultSocketServer;
 
 @SuppressWarnings("serial")

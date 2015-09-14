@@ -13,6 +13,8 @@ import javax.swing.JSplitPane;
 import javax.swing.JToolBar;
 import javax.swing.border.TitledBorder;
 
+import login.LoginDialog;
+
 @SuppressWarnings("serial")
 public class ClassAppMainFrame extends JFrame implements ActionListener{
 	/*

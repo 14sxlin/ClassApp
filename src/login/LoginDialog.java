@@ -1,4 +1,4 @@
-package gui;
+package login;
 
 import java.awt.Dimension;
 import java.awt.GridLayout;
