@@ -4,8 +4,7 @@ import java.io.IOException;
 import java.net.Socket;
 
 /**
- * 
- * 接口,作为Socket的客户端
+ * 用来创建Socket的服务端,等待其他socket的接入
  * @author 林思鑫
  */
 public interface MySocketServer extends MySocketStream {

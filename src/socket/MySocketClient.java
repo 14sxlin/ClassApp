@@ -3,7 +3,7 @@ package socket;
 import java.io.IOException;
 
 /**
- * 有关socket的作为客户端的接口
+ * 用来连接指定的计算机
  * @author 林思鑫
  *
  */
@@ -20,4 +20,5 @@ public interface MySocketClient extends MySocketStream{
 	 * @throws IOException
 	 */
 	void close() throws IOException;
+	
 }
