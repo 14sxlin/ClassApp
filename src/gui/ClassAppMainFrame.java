@@ -17,9 +17,7 @@ import login.LoginDialog;
 
 @SuppressWarnings("serial")
 public class ClassAppMainFrame extends JFrame implements ActionListener{
-	/*
-	 * 班级软件的主面板
-	 */
+	
 	public static boolean admim;
 	private JPanel messageArea,buttonArea;
 	private JList<String> classList,stuList;
@@ -62,8 +60,10 @@ public class ClassAppMainFrame extends JFrame implements ActionListener{
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setVisible(true);
 	}
-	
-	public void setAdmin()//设置admin的值
+	/**
+	 * 设置admin的值
+	 */
+	public void setAdmin()
 	{
 		
 	}
@@ -77,5 +77,4 @@ public class ClassAppMainFrame extends JFrame implements ActionListener{
 		// TODO Auto-generated method stub
 		
 	}
-
 }
