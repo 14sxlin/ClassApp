@@ -1,6 +1,7 @@
 package socket;
 
 import java.io.IOException;
+import java.net.Socket;
 
 /**
  * 用来连接指定的计算机
@@ -12,9 +13,10 @@ public interface MySocketClient extends MySocketStream{
 	 * 连接指定的socket通道
 	 * @param ip 指定对方的IP
 	 * @param port 指定对方的端口
+	 * @return 
 	 * @throws IOException
 	 */
-	void connect(String ip,int port) throws IOException;	
+	Socket connect(String ip,int port) throws IOException;	
 	/**
 	 * 关闭socket通道
 	 * @throws IOException

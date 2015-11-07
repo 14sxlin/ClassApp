@@ -12,8 +12,9 @@ public interface MySocketServer extends MySocketStream {
 	 * 在指定的端口创建连接
 	 * @param port 指定服务器的端口
 	 * @return 返回一个被客户端连接的对象
+	 * @throws IOException 
 	 */
-	Socket createConnection(int port);		
+	Socket createConnection(int port) throws IOException;		
 	/**
 	 * 关闭socket连接
 	 * @throws IOException

@@ -20,7 +20,7 @@ public class MockPublicChatRoom_Server extends PublicChatRoom {
 	
 	private InputStream in;
 	private OutputStream out;
-	public Socket socket;
+	private Socket socket;
 	public MockPublicChatRoom_Server(JFrame host) throws IOException {
 		super(host);
 		super.setTitle("·þÎñ¶Ë");		

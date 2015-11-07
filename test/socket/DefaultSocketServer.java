@@ -6,9 +6,10 @@ import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import javax.swing.JOptionPane;
+import server_client.AsServer;
 
-public class DefaultSocketServer implements  MySocketServer{
+@Deprecated
+public class DefaultSocketServer implements  AsServer, MySocketServer,Runnable{
 	/*
 	 * 林思鑫
 	 * 用来接收别人的连接
@@ -19,25 +20,18 @@ public class DefaultSocketServer implements  MySocketServer{
 	private InputStream in;
 	private OutputStream out;
 	public DefaultSocketServer() {//构造方法指定一个端口
-
 	}
 	
 	public Socket createConnection(int port)
 	{
 		try {
-			serverSocket=new ServerSocket(port);
-System.out.println("当前监听的端口是:"+serverSocket.getLocalPort());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			JOptionPane.showMessageDialog(null, "创建serverSocket失败");
-		}
-		try {
+			serverSocket = new ServerSocket(port);
+			System.out.println("当前监听的端口是:" + serverSocket.getLocalPort());
 			return serverSocket.accept();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			JOptionPane.showMessageDialog(null, "接收客户端连接失败");
+			e.printStackTrace();
 			return null;
-		}
+		} 
 	}
 	
 	@Override
@@ -46,9 +40,10 @@ System.out.println("当前监听的端口是:"+serverSocket.getLocalPort());
 		
 	}
 	
-	public static void main(String args[])
+	public static void main(String args[]) throws IOException
 	{
-		new DefaultSocketServer().createConnection(5566);
+		
+		new DefaultSocketServer().run();
 	}
 
 	@Override
@@ -72,9 +67,45 @@ System.out.println("当前监听的端口是:"+serverSocket.getLocalPort());
 
 	@Override
 	public void setStream(Socket socket) throws IOException {
-		// TODO Auto-generated method stub
 		in=socket.getInputStream();
 		out=socket.getOutputStream();
+	}
+
+	@Override
+	public void sendMessage(MySocketClient c1, MySocketClient c2) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void updateList() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void addNewClient() throws IOException {
+		// TODO Auto-generated method stub
+	}
+	
+	public void printList()
+	{
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void run() {
+		DefaultSocketServer server=new DefaultSocketServer();
+		while(true)
+		{
+			server.createConnection(5571);
+			try {
+				server.addNewClient();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			server.printList();
+		}
 	}
 
 	
