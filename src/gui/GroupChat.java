@@ -20,7 +20,6 @@ import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 
 import login.LoginDialog;
-import socket.DefaultSocketServer;
 
 @SuppressWarnings("serial")
 public class GroupChat extends JDialog implements ActionListener {
@@ -32,7 +31,6 @@ public class GroupChat extends JDialog implements ActionListener {
 	private JButton sendButton,faceButton;
 	private JList<String> groupmember;
 	private DefaultListModel<String>listModel;
-	private DefaultSocketServer defaultSocketServer;
 	private Color myColor,otherColor;
 	public GroupChat(JFrame jframe) {
 		this.setTitle("Ë½/×éÁÄ");

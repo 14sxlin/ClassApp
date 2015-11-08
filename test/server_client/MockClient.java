@@ -5,33 +5,45 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
 
 import javax.swing.JFrame;
 
 import gui.PublicChatRoom;
-import socket.MySocketClient;
 
 @SuppressWarnings("serial")
-public class MockClient extends PublicChatRoom implements AsClient {
+public class MockClient extends PublicChatRoom{
 
 	private Socket socketToServer;
 	@SuppressWarnings("unused")
 	private Socket socketToOther;
 	private int serverPort;
+	private SocketStream ss;
+	private String userName="小林子";
 	public MockClient(JFrame host) throws IOException {
 		super(host);
-		this.setTitle("客户端");
-		this.setResizable(false);
+		this.setTitle("客户端"+":userName="+userName);
+//		this.setResizable(false);
+		
+//		//创建用户名用来表示用户,mock专用
+//		JTextField tempTextFiled;
+//		this.add(tempTextFiled=new JTextField());
+//		JButton tempButton=new JButton("设置用户名");
+//		tempButton.addActionListener(new ActionListener() {
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//				if(e.getActionCommand().equals("设置用户名"))
+//					userName=tempTextFiled.getText();
+//			}
+//		});
+//		this.add(tempButton);
+		
 		
 		//创建自己的ServerSocket
-		this.socketToOther=this.createConnection(serverPort);
+//		this.socketToOther=this.createConnection(serverPort);
 		super.addWindowListener(new WindowListener() {
 			
 			@Override
@@ -60,13 +72,13 @@ public class MockClient extends PublicChatRoom implements AsClient {
 			
 			@Override
 			public void windowClosing(WindowEvent e) {
-				try {
-					closeStream();
-					socketToServer.close();
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
+//				try {
+//					closeStream();
+//					socketToServer.close();
+//				} catch (IOException e1) {
+//					// TODO Auto-generated catch block
+//					e1.printStackTrace();
+//				}
 				System.exit(0);
 			}
 			
@@ -84,74 +96,23 @@ public class MockClient extends PublicChatRoom implements AsClient {
 		});
 		try {
 			socketToServer=new Socket(MockPort.LOCAL_IP, MockPort.PORT);
-			SocketStream ss=new SocketStream(socketToServer);
-			ss.pw.println("UserName="+Math.random()*100%10
-					+";ServerPort="+serverPort+";");
+			ss=new SocketStream(socketToServer);
+			ss.pw.println("UserName="+this.userName
+					+"&Ip="+this.socketToServer.getInetAddress().getHostAddress()
+					+"&ServerPort="+serverPort+";");
 			ss.pw.flush();
-		    ss.closeStream();
 			String line=null;
-			while((line=ss.br.readLine())!=null||true)
+			while((line=ss.br.readLine())!=null)
 			{
-				super.jTextArea.append(line);
+				super.jTextArea.append(line+"\n");
 			}
+		
 		} catch (SocketException e1) {
 			this.jTextArea.append("服务器关闭");
+			ss.closeStream();
 		}
 	}
 
-	@Override
-	public Socket connect(String ip, int port) throws IOException {
-		return new Socket(ip, port);
-	}
-
-	@Override
-	public void close() throws IOException {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public InputStream getInStream() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public OutputStream getOutStream() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void closeStream() throws IOException {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void setStream(Socket socket) throws IOException {
-		//maybe don't need this class
-	}
-
-	@Override
-	public Socket createConnection(int port) throws IOException {
-		@SuppressWarnings("resource")
-		ServerSocket temp=new ServerSocket(port);
-		return temp.accept();
-	}
-
-	@Override
-	public String sendDestinationHeader(MySocketClient client) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String getMyIp() {
-		return this.socketToServer.getInetAddress().getHostAddress();
-	}
-
-	
 	//内部类SocketStream
 	private class SocketStream{
 		private BufferedReader br;
