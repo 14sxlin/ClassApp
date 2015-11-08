@@ -1,11 +1,10 @@
-package gui;
+package gui.client;
 
 import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.io.IOException;
 
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultListModel;
@@ -17,25 +16,63 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JToolBar;
 
-@SuppressWarnings("serial")
-public class PublicChatRoom extends JDialog implements ActionListener {
-	/*
-	 * 公共聊天室
+import server_client.ServerInfo;
+import server_client.TcpSocketClient;
+
+/**
+ * 公共聊天室,给客户端使用的
+ * @author 林思鑫
+ *
+ */
+public class PublicChatRoom extends JDialog {
+
+	/**
+	 * 版本1.0
 	 */
-	public static boolean online_only;
+	private static final long serialVersionUID = 1L;
+	
+	/**
+	 * 使用一个client,用来管理socket的连接
+	 */
+	private TcpSocketClient client;
+	
 	protected JTextArea jTextArea;
-	private JTextField jTextField;
-	private JButton sendButton;
+	protected JTextField jTextField;
+	protected JButton sendButton;
 	private JComboBox<String>searchCombo;	
 	private JToolBar toolBar;
 	private JRadioButton online,all;
 	private JList<String> classmateList;
 	private DefaultListModel< String> classModel;
+	
+	/**
+	 * 默认的构造函数,创建一个公共聊天室的窗口
+	 * @param host 指定了parent容器,可以为null
+	 */
 	public PublicChatRoom(JFrame host) {
+		
+		guiDesign(host);
+		
+		//启动client连接服务器
+		try {
+			client=new TcpSocketClient("小林子", ServerInfo.SERVER_LOCAL_IP, ServerInfo.PORT);
+			client.startConnectServer();
+		} catch (IOException e) {
+			this.jTextArea.append("服务器已断开");
+		}
+	}
+	
+	/**
+	 * gui的设定
+	 * @param host 指定父容器
+	 */
+	private void guiDesign(JFrame host)
+	{
 		this.setTitle("我们这一班-群聊");
 		this.setSize(500, 400);
 		this.setLocationRelativeTo(host);
@@ -43,23 +80,24 @@ public class PublicChatRoom extends JDialog implements ActionListener {
 		GridBagLayout bagLayout=new GridBagLayout();
 		this.setLayout(bagLayout);
 		
-		//公共聊天区域
+		//文本展示区
 		GridBagConstraints constraints=new 
 				GridBagConstraints(0, 0, 6, 8, 1, 1, GridBagConstraints.CENTER, 
 				GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0);
 		jTextArea=new JTextArea();
-		this.add(jTextArea, constraints);
+		jTextArea.setEditable(false);
+		this.add(new JScrollPane(jTextArea), constraints);
 		
 		//文本输入框
 		jTextField=new JTextField();
 		constraints=new GridBagConstraints(0, 9, 4, 1, 1, 0, GridBagConstraints.CENTER, 
 				GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0);
 		this.add(jTextField, constraints);		
+		
 		//发送按钮
 		constraints=new GridBagConstraints(5, 9, 1, 1, 0, 0, GridBagConstraints.CENTER, 
 				GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0);
 		sendButton=new JButton("发送");
-		sendButton.addActionListener(this);
 		this.add(sendButton, constraints);
 		
 		//搜索框
@@ -88,7 +126,6 @@ public class PublicChatRoom extends JDialog implements ActionListener {
 				GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0);
 		classModel=new DefaultListModel<String>();
 		classmateList=new JList<String>(classModel);
-//		JScrollPane jScrollPane=new JScrollPane(classmateList);//这里添加这个之后大小显示不正常
 		classmateList.setBackground(Color.lightGray);
 		this.add(classmateList, constraints);
 		
@@ -98,29 +135,12 @@ public class PublicChatRoom extends JDialog implements ActionListener {
 				GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0);
 		this.add(toolBar, constraints);
 		
-		this.setOnline_Only();
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		this.setVisible(true);
 		
 	}
-	public void setOnline_Only()
-	{
-		if (all!=null) {
-			if (all.isSelected())
-				online_only = false;
-			else
-				online_only = true;
-		}
-	}
-	
-	@Override
-	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
 	
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 		new PublicChatRoom(null);
 	}
 }

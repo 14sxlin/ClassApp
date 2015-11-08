@@ -9,6 +9,8 @@ import java.net.Socket;
 
 import javax.swing.JFrame;
 
+import gui.client.PublicChatRoom;
+
 
 /*
  * ÁÖË¼öÎ

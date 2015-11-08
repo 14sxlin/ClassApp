@@ -1,4 +1,4 @@
-package gui;
+package gui.client;
 
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -16,6 +16,11 @@ import javax.swing.border.TitledBorder;
 import login.LoginDialog;
 
 @SuppressWarnings("serial")
+/**
+ * 主窗口,客户使用
+ * @author 林思鑫
+ *
+ */
 public class ClassAppMainFrame extends JFrame implements ActionListener{
 	
 	public static boolean admim;
@@ -25,10 +30,23 @@ public class ClassAppMainFrame extends JFrame implements ActionListener{
 	private String [] buttonstr= {"聊天室","文件互传","发送公告"};
 	private JButton [] buttons;
 	private JToolBar toolbar;
+	
+	/**
+	 * 默认的构造函数
+	 */
 	public ClassAppMainFrame() {
+		guiDesign();
+	}
+	
+	/**
+	 * 界面布置
+	 */
+	private void guiDesign()
+	{
 		this.setTitle("我们这一班");
 		LoginDialog.dim=getToolkit().getScreenSize();
 		this.setBounds(LoginDialog.dim.width/2-250, LoginDialog.dim.height/2-200, 500, 400);
+		
 		//添加公告栏
 		messageArea=new JPanel(new GridLayout(1, 2));
 		messageArea.setBorder(new TitledBorder("公告栏"));
@@ -38,6 +56,7 @@ public class ClassAppMainFrame extends JFrame implements ActionListener{
 		stuList=new JList<>(stuModel);
 		messageArea.add(classList);
 		messageArea.add(stuList);
+		
 		//添加按钮区
 		buttonArea=new JPanel();
 		buttons=new JButton[buttonstr.length];
@@ -47,6 +66,7 @@ public class ClassAppMainFrame extends JFrame implements ActionListener{
 			buttonArea.add(buttons[i]);
 			buttons[i].addActionListener(this);
 		}
+		
 		//添加工具栏
 		toolbar=new JToolBar();
 		this.add(toolbar,"South");
@@ -60,15 +80,8 @@ public class ClassAppMainFrame extends JFrame implements ActionListener{
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setVisible(true);
 	}
-	/**
-	 * 设置admin的值
-	 */
-	public void setAdmin()
-	{
-		
-	}
+
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 		new ClassAppMainFrame();
 	}
 

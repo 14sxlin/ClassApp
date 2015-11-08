@@ -1,6 +1,10 @@
 package server_client;
 
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.BufferedReader;
@@ -10,9 +14,11 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.SocketException;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JTextField;
 
-import gui.PublicChatRoom;
+import gui.client.PublicChatRoom;
 
 @SuppressWarnings("serial")
 public class MockClient extends PublicChatRoom{
@@ -26,20 +32,7 @@ public class MockClient extends PublicChatRoom{
 	public MockClient(JFrame host) throws IOException {
 		super(host);
 		this.setTitle("客户端"+":userName="+userName);
-//		this.setResizable(false);
-		
-//		//创建用户名用来表示用户,mock专用
-//		JTextField tempTextFiled;
-//		this.add(tempTextFiled=new JTextField());
-//		JButton tempButton=new JButton("设置用户名");
-//		tempButton.addActionListener(new ActionListener() {
-//			@Override
-//			public void actionPerformed(ActionEvent e) {
-//				if(e.getActionCommand().equals("设置用户名"))
-//					userName=tempTextFiled.getText();
-//			}
-//		});
-//		this.add(tempButton);
+//		this.setResizable(false);//这一句不知道为什么会导致神经错乱
 		
 		
 		//创建自己的ServerSocket
@@ -73,7 +66,7 @@ public class MockClient extends PublicChatRoom{
 			@Override
 			public void windowClosing(WindowEvent e) {
 //				try {
-//					closeStream();
+				//	ss.closeStream();//null poiter
 //					socketToServer.close();
 //				} catch (IOException e1) {
 //					// TODO Auto-generated catch block
@@ -97,19 +90,64 @@ public class MockClient extends PublicChatRoom{
 		try {
 			socketToServer=new Socket(MockPort.LOCAL_IP, MockPort.PORT);
 			ss=new SocketStream(socketToServer);
-			ss.pw.println("UserName="+this.userName
+			
+			//发送头信息到服务器
+			ss.pw.println("#head#"+"UserName="+this.userName
 					+"&Ip="+this.socketToServer.getInetAddress().getHostAddress()
 					+"&ServerPort="+serverPort+";");
 			ss.pw.flush();
+			
+			//实现给服务器发送消息
+			jTextField.addKeyListener(new KeyListener() {
+				
+				@Override
+				public void keyTyped(KeyEvent e) {
+					if(e.getKeyCode()==KeyEvent.VK_ENTER)
+					{
+						String sendTxt=jTextField.getText();
+						ss.pw.println(sendTxt);
+						ss.pw.flush();
+						jTextArea.append(sendTxt+"\n");
+						jTextField.setText("");
+					}
+				}
+				
+				@Override
+				public void keyReleased(KeyEvent e) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void keyPressed(KeyEvent e) {
+					// TODO Auto-generated method stub
+					
+				}
+			});
+			super.sendButton.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					if(e.getSource()==sendButton)
+					{
+						String sendTxt=jTextField.getText();
+						ss.pw.println(sendTxt);
+						ss.pw.flush();
+						jTextArea.append(sendTxt+"\n");
+						jTextField.setText("");
+					}
+				}
+			});
+		
+			
+			//读取服务器返回的消息
 			String line=null;
 			while((line=ss.br.readLine())!=null)
 			{
 				super.jTextArea.append(line+"\n");
 			}
-		
+			
 		} catch (SocketException e1) {
 			this.jTextArea.append("服务器关闭");
-			ss.closeStream();
 		}
 	}
 
@@ -123,9 +161,28 @@ public class MockClient extends PublicChatRoom{
 		}
 		private void closeStream() throws IOException
 		{
-			this.br.close();
-			this.pw.close();
+			if(br!=null)
+				this.br.close();
+			if(pw!=null)
+				this.pw.close();
 		}
+	}
+	
+	@SuppressWarnings("unused")
+	private void setUserName()
+	{
+		//创建用户名用来表示用户,mock专用
+		JTextField tempTextFiled;
+		this.add(tempTextFiled=new JTextField());
+		JButton tempButton=new JButton("设置用户名");
+		tempButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(e.getActionCommand().equals("设置用户名"))
+					userName=tempTextFiled.getText();
+			}
+		});
+		this.add(tempButton);
 	}
 	
 	public static void main(String[] args) {

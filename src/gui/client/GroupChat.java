@@ -1,4 +1,4 @@
-package gui;
+package gui.client;
 
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -21,8 +21,14 @@ import javax.swing.text.StyleConstants;
 
 import login.LoginDialog;
 
+/**
+ * 组聊的窗口,给用户使用的
+ * @author 林思鑫
+ *
+ */
 @SuppressWarnings("serial")
 public class GroupChat extends JDialog implements ActionListener {
+	
 	private JButton[] buttons;
 	private String [] strButton= {"设置颜色","导出聊天记录","邀请加入"};
 	private JToolBar bar;
@@ -32,6 +38,11 @@ public class GroupChat extends JDialog implements ActionListener {
 	private JList<String> groupmember;
 	private DefaultListModel<String>listModel;
 	private Color myColor,otherColor;
+	
+	/**
+	 * 默认的构造函数
+	 * @param jframe 需要指定父容器,也可以为null
+	 */
 	public GroupChat(JFrame jframe) {
 		this.setTitle("私/组聊");
 		LoginDialog.dim=getToolkit().getScreenSize();
