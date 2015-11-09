@@ -18,10 +18,10 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JTextField;
 
-import gui.client.PublicChatRoom;
+import gui.client.PublicChatRoomForUser;
 
 @SuppressWarnings("serial")
-public class MockClient extends PublicChatRoom{
+public class MockClient extends PublicChatRoomForUser{
 
 	private Socket socketToServer;
 	@SuppressWarnings("unused")
@@ -97,19 +97,12 @@ public class MockClient extends PublicChatRoom{
 					+"&ServerPort="+serverPort+";");
 			ss.pw.flush();
 			
-			//实现给服务器发送消息
+			//实现给服务器发送消息,监听回车键
 			jTextField.addKeyListener(new KeyListener() {
 				
 				@Override
 				public void keyTyped(KeyEvent e) {
-					if(e.getKeyCode()==KeyEvent.VK_ENTER)
-					{
-						String sendTxt=jTextField.getText();
-						ss.pw.println(sendTxt);
-						ss.pw.flush();
-						jTextArea.append(sendTxt+"\n");
-						jTextField.setText("");
-					}
+					// TODO Auto-generated method stub
 				}
 				
 				@Override
@@ -120,8 +113,14 @@ public class MockClient extends PublicChatRoom{
 				
 				@Override
 				public void keyPressed(KeyEvent e) {
-					// TODO Auto-generated method stub
-					
+					if(e.getKeyCode()==KeyEvent.VK_ENTER)
+					{
+						String sendTxt=jTextField.getText();
+						ss.pw.println(sendTxt);
+						ss.pw.flush();
+						jTextArea.append(sendTxt+"\n");
+						jTextField.setText("");
+					}
 				}
 			});
 			super.sendButton.addActionListener(new ActionListener() {
@@ -159,6 +158,7 @@ public class MockClient extends PublicChatRoom{
 			this.br=new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			this.pw=new PrintWriter(socket.getOutputStream());
 		}
+		@SuppressWarnings("unused")
 		private void closeStream() throws IOException
 		{
 			if(br!=null)

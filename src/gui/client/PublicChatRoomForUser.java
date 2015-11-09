@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.io.IOException;
 
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultListModel;
@@ -21,29 +20,29 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JToolBar;
 
-import server_client.ServerInfo;
-import server_client.TcpSocketClient;
-
 /**
  * 公共聊天室,给客户端使用的
  * @author 林思鑫
  *
  */
-public class PublicChatRoom extends JDialog {
+public class PublicChatRoomForUser extends JDialog {
 
 	/**
 	 * 版本1.0
 	 */
 	private static final long serialVersionUID = 1L;
+
+	/**
+	 * 公用的,暴露在外面让别的类引用
+	 */
+	public  JTextArea jTextArea;
 	
 	/**
-	 * 使用一个client,用来管理socket的连接
+	 * 公用的发送按钮,暴露在外
 	 */
-	private TcpSocketClient client;
+	public  JButton sendButton;
 	
-	protected JTextArea jTextArea;
-	protected JTextField jTextField;
-	protected JButton sendButton;
+	public JTextField jTextField;
 	private JComboBox<String>searchCombo;	
 	private JToolBar toolBar;
 	private JRadioButton online,all;
@@ -54,18 +53,11 @@ public class PublicChatRoom extends JDialog {
 	 * 默认的构造函数,创建一个公共聊天室的窗口
 	 * @param host 指定了parent容器,可以为null
 	 */
-	public PublicChatRoom(JFrame host) {
+	public PublicChatRoomForUser(JFrame host) {
 		
 		guiDesign(host);
-		
-		//启动client连接服务器
-		try {
-			client=new TcpSocketClient("小林子", ServerInfo.SERVER_LOCAL_IP, ServerInfo.PORT);
-			client.startConnectServer();
-		} catch (IOException e) {
-			this.jTextArea.append("服务器已断开");
-		}
 	}
+	
 	
 	/**
 	 * gui的设定
@@ -138,9 +130,5 @@ public class PublicChatRoom extends JDialog {
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		this.setVisible(true);
 		
-	}
-	
-	public static void main(String[] args) {
-		new PublicChatRoom(null);
 	}
 }

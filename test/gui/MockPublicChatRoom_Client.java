@@ -9,11 +9,11 @@ import java.net.Socket;
 
 import javax.swing.JFrame;
 
-import gui.client.PublicChatRoom;
+import gui.client.PublicChatRoomForUser;
 
 
 @SuppressWarnings("serial")
-public class MockPublicChatRoom_Client extends PublicChatRoom  {
+public class MockPublicChatRoom_Client extends PublicChatRoomForUser  {
 
 	private InputStream in;
 	private OutputStream out;

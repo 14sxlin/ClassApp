@@ -18,10 +18,10 @@ import java.util.Iterator;
 
 import javax.swing.JFrame;
 
-import gui.client.PublicChatRoom;
+import gui.client.PublicChatRoomForUser;
 
 
-public class MockServer extends PublicChatRoom  {
+public class MockServer extends PublicChatRoomForUser  {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -30,6 +30,7 @@ public class MockServer extends PublicChatRoom  {
 	private ArrayList<String>  usernameList;
 	
 	private HashMap<String , Socket> name_socketMap;
+	@SuppressWarnings("unused")
 	private HashMap<String , Thread>  threadMap;
 	
     private SocketStream ss;
@@ -127,6 +128,7 @@ System.out.println("正在等待连接");
 							public void keyTyped(KeyEvent e) {
 								if(e.getKeyCode()==KeyEvent.VK_ENTER)
 								{
+									System.out.println("invoke keyboard");
 									String sendTxt=jTextField.getText();
 									ss.pw.println(sendTxt);
 									ss.pw.flush();
@@ -158,7 +160,6 @@ System.out.println("正在等待连接");
 									ss.pw.flush();
 									jTextArea.append(sendTxt+"\n");
 									jTextField.setText("");
-jTextArea.append("buttonInvoke");
 								}
 							}
 						});
@@ -170,7 +171,7 @@ jTextArea.append("buttonInvoke");
 						line=ss.br.readLine();
 						handleHeaderInfo(line,tempSocket);
 						
-						while((line=ss.br.readLine())!=null||true)
+						while((line=ss.br.readLine())!=null)
 						{	
 							jTextArea.append(line+"\n");
 						}
@@ -195,6 +196,7 @@ jTextArea.append("buttonInvoke");
 			this.br=new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			this.pw=new PrintWriter(socket.getOutputStream());
 		}
+		@SuppressWarnings("unused")
 		private void closeStream() throws IOException
 		{
 			this.br.close();

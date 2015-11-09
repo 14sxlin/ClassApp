@@ -11,6 +11,10 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import javax.swing.JTextArea;
+
+import threadData.ThreadDataTransfer;
+
 /**
  * 服务器的Socket服务
  * @author 林思鑫
@@ -53,14 +57,58 @@ public class TcpSocketServer {
 	 */
 	private String currentUserName;
 	
-	public TcpSocketServer() {
+	/**
+	 * 用来显示获取客户端的发送到服务器的信息
+	 */
+	public JTextArea textPane;
+	
+	/**
+	 * 用来计算在线人数
+	 * 向外暴露
+	 */
+	public int counter=0;
+	
+	/**
+	 * 用来保存当前的线程
+	 */
+	private Thread currentThread;
+	
+	/**
+	 * 用来表示是否启用向外部传输数据的功能
+	 */
+	public boolean outSwing;
+
+	/**
+	 * 用来传递线程中的值到外面
+	 */
+	private ThreadDataTransfer tdt;
+	
+	/**
+	 * 构造方法
+	 * @param outSwing 是否要向外界传递线程内的数据
+	 */
+	public TcpSocketServer(ThreadDataTransfer tdt)  {
 		socketMap=new HashMap<>();
 		userNameList=new ArrayList<>();
 		threadMap=new HashMap<>();
+		socketStreamMap=new HashMap<>();
+		
+		this.tdt=tdt;
+	}
+	
+	/**
+	 * 构造方法
+	 * @param textPane 用来显示信息的,主要是测试使用
+	 * @param tdt 向外界传递线程内的数据的中介
+	 */
+	public TcpSocketServer(ThreadDataTransfer tdt,JTextArea textPane)  {
+		this(tdt);
+		this.textPane=textPane;
 	}
 	
 	/**
 	 * 启动服务,接收客户端的连接,多线程的创建
+	 * @param port 所使用的端口
 	 */
 	public  void startService(int port)
 	{
@@ -68,29 +116,72 @@ public class TcpSocketServer {
 			//新建一个serverSocket,可能会出现端口已经被占用的问题
 			serverSocket=new ServerSocket(port);
 			
-			//开始监听并创建新的线程
+			if ( textPane != null )
+				textPane.append("正在等待链接\n");
+			
+			//开始监听并创建新的线程,发送连接成功的信息,处理客户端发来的头信息
 			while(true)
 			{
 				Socket currentSocket=serverSocket.accept();
-				Thread currentThread=null;
 				currentThread=new Thread(new Runnable() {
-					
 					@Override
 					public void run() {
 						try {
 							ss=new SocketStream(currentSocket);
-							String line=ss.br.readLine();//第一次读取的是头信息
+							
+							synchronized(this)
+							{
+								counter++;
+							}
+							
+							ss.pw.println("连接服务器成功\n");
+							ss.pw.flush();
+							
+							//接收头信息
+							String line=ss.br.readLine();
+							
+							if(textPane != null)
+								textPane.append(line+"\n");
+							
 							handleHeaderInfo(line, currentSocket,
 									socketMap, userNameList);
+							
+							//向外界传递信息
+							if(tdt!=null)
+								tdt.updateState(counter, userNameList);
+							
 							currentUserName=searchUserName(line);
+							
+							if(textPane != null)
+								textPane.append("ueserNameList="+listToString(userNameList)+"\n");
+							
+							synchronized(this)
+							{	
+								socketStreamMap.put(currentUserName, ss);	
+								threadMap.put(currentUserName , currentThread);
+							}	
+							
+							//接收信息 测试使用 这个应该放在最后
+							try {
+								if(textPane != null)
+									while((line=ss.br.readLine()) != null)
+									{
+										textPane.append(line+"\n");
+									}
+							} catch (Exception e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							
+							
 						} catch (IOException e) {
 							e.printStackTrace();
 						}
-					
+						
 					}
 				});
-				threadMap.put(currentUserName , currentThread);
-				socketStreamMap.put(currentUserName, ss);				
+				currentThread.start();//线程必须启动,否则会一直阻塞在那里
+							
 			}
 			
 		} catch (IOException e) {
@@ -103,7 +194,7 @@ public class TcpSocketServer {
 	 * @author 林思鑫
 	 *
 	 */
-	private class SocketStream{
+	private  class SocketStream{
 		private BufferedReader br;
 		private PrintWriter pw;
 		public SocketStream(Socket socket) throws IOException {
@@ -111,7 +202,7 @@ public class TcpSocketServer {
 			this.pw=new PrintWriter(socket.getOutputStream());
 		}
 		@SuppressWarnings("unused")
-		private void closeStream() throws IOException
+		public  void closeStream() throws IOException
 		{
 			this.br.close();
 			this.pw.close();
@@ -138,7 +229,6 @@ public class TcpSocketServer {
 	 * @param nameList 保存了在线用户名信息的列表
 	 * @return 特定格式的在线用户名字符串
 	 */
-	@SuppressWarnings("unused")
 	private String listToString(ArrayList<String> nameList)
 	{
 		String returnString="";
@@ -151,7 +241,7 @@ public class TcpSocketServer {
 	}
 	
 	/**
-	 * 用来处理头信息,获取客户端的信息,然后将用户信息添加到列表当中
+	 * 用来处理头信息,获取客户端的信息,然后将用户信息添加到用户名列表当中
 	 * @param line 从输入流中读取的字符串
 	 * @param currentSocket 发送信息过来的Socket
 	 * @param socketMap 添加目标
@@ -172,11 +262,14 @@ public class TcpSocketServer {
 	}
 	
 	/**
-	 * 停止所有的服务
+	 * 停止所有的服务,这个应该给所有的客户端发送退出消息,然后让客户端退出,之后自己在停止socket
+	 * @throws IOException 
 	 */
 	@SuppressWarnings("deprecation")
-	public void stopService()
+	synchronized public void stopService() throws IOException
 	{
+//		if(ss != null)
+//			ss.closeStream();
 		Iterator<String> it=userNameList.iterator();
 		String username;
 		while(it.hasNext())
@@ -186,11 +279,24 @@ public class TcpSocketServer {
 				socketMap.get(username).close();
 				threadMap.get(username).stop();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
+		this.serverSocket.close();//这个指定的是不再去监听那个端口了
 			
+		if ( textPane != null )
+			textPane.append("服务已关闭\n");
 	}
+	
+	/**
+	 * 暴露给外面的接口,用来发信息给当前的线程的客户端
+	 * @param 要发的信息
+	 */
+	public void sendMessage(String message)
+	{
+		this.ss.pw.println(message);
+		this.ss.pw.flush();
+	}
+
 }
 

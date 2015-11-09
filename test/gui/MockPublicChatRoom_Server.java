@@ -9,14 +9,14 @@ import java.net.Socket;
 
 import javax.swing.JFrame;
 
-import gui.client.PublicChatRoom;
+import gui.client.PublicChatRoomForUser;
 
 
 /*
  * 林思鑫
  * 即作为客户端,也作为服务端,可以接收别人的请求
  */
-public class MockPublicChatRoom_Server extends PublicChatRoom {
+public class MockPublicChatRoom_Server extends PublicChatRoomForUser {
 
 	private static final long serialVersionUID = 1L;
 	

@@ -11,11 +11,14 @@ import javax.swing.JLabel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
+/**
+ * 用户登录的界面
+ * @author 林思鑫
+ *
+ */
 @SuppressWarnings("serial")
 public class LoginDialog extends JDialog implements ActionListener {
-	/*
-	 * 用户登录界面
-	 */
+
 	public static Dimension dim;
 	private JTextField userName;
 	private JPasswordField password;
