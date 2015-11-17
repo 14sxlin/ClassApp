@@ -14,6 +14,7 @@ import threadData.ThreadDataTransfer;
  *
  */
 public class ServerGUI {
+	
 	/**
 	 * 用户图形界面
 	 */
@@ -33,6 +34,15 @@ public class ServerGUI {
 	 */
 	public ServerGUI() {
 		gui=new MainFrameForServer();
+		gui.sendbutton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				server.sendMessage("*", gui.textField.getText());
+				gui.textPane.append(gui.textField.getText()+"\n");
+				gui.textField.setText("");
+			}
+		});
 	}
 	
 	/**
@@ -75,6 +85,7 @@ public class ServerGUI {
 			
 		});	
 	}
+	
 	
 	public static void main(String []args)
 	{

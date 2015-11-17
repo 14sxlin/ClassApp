@@ -48,6 +48,8 @@ public class MainFrameForServer extends JFrame {
 	 * 启动服务的按钮,暴露在外
 	 */
 	public JButton startServiceButton;
+	public JTextField textField;
+	public JButton sendbutton;
 	
 	/**
 	 * Launch the application.
@@ -83,6 +85,13 @@ public class MainFrameForServer extends JFrame {
 		startServiceButton = new JButton("\u5F00\u542F\u670D\u52A1");
 
 		panel.add(startServiceButton);
+		
+		textField = new JTextField();
+		panel.add(textField);
+		textField.setColumns(10);
+		
+		sendbutton = new JButton("\u53D1\u9001");
+		panel.add(sendbutton);
 		
 		JSplitPane splitPane = new JSplitPane();
 		splitPane.setResizeWeight(0.8);

@@ -14,7 +14,7 @@ import javax.swing.JTextArea;
  * @author 林思鑫
  *
  */
-public class TcpSocketClient {
+public class TcpSocketClient implements AsClient {
 	/**
 	 * 客户端用户的名称,用来标志客户端
 	 */
@@ -60,6 +60,7 @@ public class TcpSocketClient {
 	 * @param serverPort 服务器的服务端口
 	 * @throws IOException 抛出异常让调用它的类处理
 	 */
+	@Override
 	public void startConnectServer(String serverIp,int serverPort) throws IOException
 	{
 		try {
@@ -109,7 +110,8 @@ public class TcpSocketClient {
 	 * 发送头信息给服务器
 	 * @param pw 指定服务器的输出流
 	 */
-	private void sendHeaderInfo(PrintWriter pw)
+	@Override
+	public void sendHeaderInfo(PrintWriter pw)
 	{
 		//目前只有两个信息
 		pw.println("#head#"+"UserName="+this.userName
@@ -128,13 +130,27 @@ public class TcpSocketClient {
 		return ss.br.readLine();
 	}
 	
-	/**
-	 * 暴露给外面的接口,用于发送信息到服务器
-	 * @param message 要发送的消息
-	 */
-	public void sendMessage(String message)
+
+	@Override
+	public void sendMessageToServer(String message)
 	{
-		ss.pw.println(message);
-		ss.pw.flush();
+		if(ss != null)
+		{
+			ss.pw.println(message);
+			ss.pw.flush();
+		}
+	}
+
+
+	@Override
+	public void receiveMessageFromServer(StringBuilder storeString) throws IOException {
+		
+		if (ss!=null) {
+			String line;
+			while ((line = ss.br.readLine()) != null) {
+				storeString.append(line + "/n");
+				this.jTextArea.append(line);
+			} 
+		}
 	}
 }

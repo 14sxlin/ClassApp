@@ -1,5 +1,7 @@
 package gui.client;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 
 import server_client.ServerInfo;
@@ -10,7 +12,7 @@ import server_client.TcpSocketClient;
  * @author think
  *
  */
-public class ClientGUI {
+	public class ClientGUI {
 	/**
 	 * 使用一个client,用来管理socket的连接
 	 */
@@ -20,15 +22,61 @@ public class ClientGUI {
 	 */
 	private PublicChatRoomForUser gui;
 	
+	/**
+	 * 用来保存服务器发送过来的信息
+	 */
+	private StringBuilder storeString;
+	
 	public ClientGUI() {
+		
 		gui=new  PublicChatRoomForUser(null);
 		
+		Thread thread=new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				connectServer();
+				receiveMessageFromServer();
+			}
+		});
+		thread.start();
+		
+		//可以向服务器发送消息 测试使用
+		gui.sendButton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				client.sendMessageToServer(gui.jTextField.getText());
+				gui.jTextArea.append(gui.jTextField.getText());
+				gui.jTextField.setText("");
+			}
+		});
+	}
+	
+	/**
+	 * 连接服务器
+	 */
+	private void connectServer()
+	{
 		//连接服务器
 		try {
 			client=new TcpSocketClient("小林子",gui.jTextArea);
 			client.startConnectServer(ServerInfo.SERVER_LOCAL_IP, ServerInfo.PORT);
 		} catch (IOException e) {
 			gui.jTextArea.append("服务器关闭了");
+		}		
+	}
+	
+	/**
+	 * 监听服务器的消息
+	 */
+	private void receiveMessageFromServer()
+	{
+		try {
+			client.receiveMessageFromServer(storeString);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 	

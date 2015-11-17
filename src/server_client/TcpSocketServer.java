@@ -20,7 +20,7 @@ import threadData.ThreadDataTransfer;
  * @author 林思鑫
  *
  */
-public class TcpSocketServer {
+public class TcpSocketServer implements AsServer{
 	
 	/**
 	 * 服务器的ServerSocket
@@ -110,6 +110,7 @@ public class TcpSocketServer {
 	 * 启动服务,接收客户端的连接,多线程的创建
 	 * @param port 所使用的端口
 	 */
+	@Override
 	public  void startService(int port)
 	{
 		try {
@@ -134,6 +135,7 @@ public class TcpSocketServer {
 								counter++;
 							}
 							
+							//向客户端发送连接成功的消息
 							ss.pw.println("连接服务器成功\n");
 							ss.pw.flush();
 							
@@ -146,20 +148,27 @@ public class TcpSocketServer {
 							handleHeaderInfo(line, currentSocket,
 									socketMap, userNameList);
 							
-							//向外界传递信息
+							//更新服务器组件的数据
 							if(tdt!=null)
 								tdt.updateState(counter, userNameList);
 							
+							
+							//获取用户名
 							currentUserName=searchUserName(line);
 							
 							if(textPane != null)
 								textPane.append("ueserNameList="+listToString(userNameList)+"\n");
 							
+							//由用户名保存相应的线程和流
 							synchronized(this)
 							{	
 								socketStreamMap.put(currentUserName, ss);	
 								threadMap.put(currentUserName , currentThread);
-							}	
+							}
+							
+							
+							//向客户端发送在线列表的消息
+							
 							
 							//接收信息 测试使用 这个应该放在最后
 							try {
@@ -169,7 +178,6 @@ public class TcpSocketServer {
 										textPane.append(line+"\n");
 									}
 							} catch (Exception e) {
-								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
 							
@@ -289,13 +297,47 @@ public class TcpSocketServer {
 	}
 	
 	/**
-	 * 暴露给外面的接口,用来发信息给当前的线程的客户端
+	 * 用来发信息给指定的客户端
+	 * @param username 指定发送信息的用户名,用*号代表向所有的在线用户发送
 	 * @param message 要发的信息
 	 */
-	public void sendMessage(String message)
+	public void sendMessage(String username, String message)
 	{
-		this.ss.pw.println(message);
-		this.ss.pw.flush();
+		if (username != "*") {
+			SocketStream tempss = socketStreamMap.get(username);
+			if (tempss != null) {
+				tempss.pw.println(message);
+				tempss.pw.flush();
+			} 
+		}else
+		{
+			SocketStream tempss;
+			Iterator<String> it=userNameList.iterator();
+			while( it.hasNext() )
+			{
+				tempss = socketStreamMap.get( it.next() );
+				tempss.pw.println(message);
+				tempss.pw.flush();
+			}
+		}
+	}
+
+	@Override
+	public void notifyLogin() throws IOException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void notifyLogout() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void registerUpdate() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
