@@ -85,7 +85,7 @@ public class TcpSocketServer {
 	
 	/**
 	 * 构造方法
-	 * @param outSwing 是否要向外界传递线程内的数据
+	 * @param tdt 中介数据传输类
 	 */
 	public TcpSocketServer(ThreadDataTransfer tdt)  {
 		socketMap=new HashMap<>();
@@ -263,7 +263,7 @@ public class TcpSocketServer {
 	
 	/**
 	 * 停止所有的服务,这个应该给所有的客户端发送退出消息,然后让客户端退出,之后自己在停止socket
-	 * @throws IOException 
+	 * @throws IOException serverSocket.close()会产生的错误,交给调用者处理
 	 */
 	@SuppressWarnings("deprecation")
 	synchronized public void stopService() throws IOException
@@ -290,7 +290,7 @@ public class TcpSocketServer {
 	
 	/**
 	 * 暴露给外面的接口,用来发信息给当前的线程的客户端
-	 * @param 要发的信息
+	 * @param message 要发的信息
 	 */
 	public void sendMessage(String message)
 	{

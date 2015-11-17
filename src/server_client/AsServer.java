@@ -19,6 +19,7 @@ public interface AsServer{
 	
 	/**
 	 * 当有人登录的时候要更新在线列表
+	 * @throws IOException 提交异常,交给调用者处理
 	 */
 	void  notifyLogin() throws IOException;
 	

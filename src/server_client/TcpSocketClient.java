@@ -39,7 +39,6 @@ public class TcpSocketClient {
 	/**
 	 * 构造方法
 	 * @param userName 传入客户端的用户名
-	 * @param serverIp	传入服务器的IP地址
 	 */
 	public TcpSocketClient(String userName) {
 		this.userName=userName;
@@ -131,6 +130,7 @@ public class TcpSocketClient {
 	
 	/**
 	 * 暴露给外面的接口,用于发送信息到服务器
+	 * @param message 要发送的消息
 	 */
 	public void sendMessage(String message)
 	{

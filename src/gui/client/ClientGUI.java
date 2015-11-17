@@ -5,6 +5,11 @@ import java.io.IOException;
 import server_client.ServerInfo;
 import server_client.TcpSocketClient;
 
+/**
+ * 客户端的公共聊天室的界面
+ * @author think
+ *
+ */
 public class ClientGUI {
 	/**
 	 * 使用一个client,用来管理socket的连接

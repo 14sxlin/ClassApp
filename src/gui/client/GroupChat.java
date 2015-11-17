@@ -22,7 +22,7 @@ import javax.swing.text.StyleConstants;
 import login.LoginDialog;
 
 /**
- * 组聊的窗口,给用户使用的
+ * 组聊的窗口,给客户端使用的
  * @author 林思鑫
  *
  */

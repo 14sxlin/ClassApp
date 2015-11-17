@@ -15,12 +15,13 @@ import javax.swing.border.TitledBorder;
 
 import login.LoginDialog;
 
-@SuppressWarnings("serial")
+
 /**
  * 主窗口,客户使用
  * @author 林思鑫
  *
  */
+@SuppressWarnings("serial")
 public class ClassAppMainFrame extends JFrame implements ActionListener{
 	
 	public static boolean admim;

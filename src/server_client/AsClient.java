@@ -26,6 +26,7 @@ public interface AsClient  {
 
 	 /**
 	 * 向服务器发送退出的消息
+	 * @param out 到服务器的输出流
 	 */
 	void sendLogoutInfo(OutputStream out);
 }

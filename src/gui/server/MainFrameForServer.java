@@ -21,6 +21,11 @@ import javax.swing.border.TitledBorder;
 import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
 
+/**
+ * 服务器的界面,服务器使用
+ * @author 林思鑫
+ *
+ */
 public class MainFrameForServer extends JFrame {
 
 	/**
@@ -46,6 +51,7 @@ public class MainFrameForServer extends JFrame {
 	
 	/**
 	 * Launch the application.
+	 * @param args 命令行参数
 	 */
 	public static void main(String[] args) {
 		new MainFrameForServer();
@@ -134,7 +140,9 @@ public class MainFrameForServer extends JFrame {
 	
 	/**
 	 * 这个是用来设置列表模型的值的
-	 * @param listmodel 要设置的列表模型
+	 * @param list 要设置的列表模型
+	 * @return 返回一个列表模型
+	 * @deprecated 现在用一个中介类来处理,不用这个了
 	 */
 	public DefaultListModel<String> setListModel(ArrayList<String> list)
 	{

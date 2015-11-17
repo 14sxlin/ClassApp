@@ -8,6 +8,11 @@ import server_client.ServerInfo;
 import server_client.TcpSocketServer;
 import threadData.ThreadDataTransfer;
 
+/**
+ * 服务器的管理器
+ * @author 林思鑫
+ *
+ */
 public class ServerGUI {
 	/**
 	 * 用户图形界面
@@ -28,6 +33,13 @@ public class ServerGUI {
 	 */
 	public ServerGUI() {
 		gui=new MainFrameForServer();
+	}
+	
+	/**
+	 * 开始提供服务
+	 */
+	public void startService()
+	{
 		tdt=new ThreadDataTransfer();
 		tdt.setField(gui.counterTextField, gui.listmodel);
 		
@@ -62,22 +74,10 @@ public class ServerGUI {
 			}
 			
 		});	
-		
-//		synchronized(gui.counterTextField)
-//		{
-//			Timer timer=new Timer(5, new ActionListener() {
-//				@Override
-//				public void actionPerformed(ActionEvent e) {
-//					//设置显示的状态
-//					server.setState( gui.counterTextField ,  gui.listmodel);
-//				}
-//			});
-//			timer.start();
-//		}
 	}
 	
 	public static void main(String []args)
 	{
-		new ServerGUI();
+		new ServerGUI().startService();;
 	}
 }
