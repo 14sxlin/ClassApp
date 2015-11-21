@@ -18,10 +18,10 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JTextField;
 
-import gui.client.PublicChatRoomForUser;
+import gui.client.GuiForPublicChatRoom;
 
 @SuppressWarnings("serial")
-public class MockClient extends PublicChatRoomForUser{
+public class MockClient extends GuiForPublicChatRoom{
 
 	private Socket socketToServer;
 	@SuppressWarnings("unused")

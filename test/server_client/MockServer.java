@@ -18,10 +18,10 @@ import java.util.Iterator;
 
 import javax.swing.JFrame;
 
-import gui.client.PublicChatRoomForUser;
+import gui.client.GuiForPublicChatRoom;
 
 
-public class MockServer extends PublicChatRoomForUser  {
+public class MockServer extends GuiForPublicChatRoom  {
 
 	private static final long serialVersionUID = 1L;
 	

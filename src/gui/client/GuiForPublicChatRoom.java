@@ -25,7 +25,7 @@ import javax.swing.JToolBar;
  * @author 林思鑫
  *
  */
-public class PublicChatRoomForUser extends JDialog {
+public class GuiForPublicChatRoom extends JDialog {
 
 	/**
 	 * 版本1.0
@@ -53,7 +53,7 @@ public class PublicChatRoomForUser extends JDialog {
 	 * 默认的构造函数,创建一个公共聊天室的窗口
 	 * @param host 指定了parent容器,可以为null
 	 */
-	public PublicChatRoomForUser(JFrame host) {
+	public GuiForPublicChatRoom(JFrame host) {
 		
 		guiDesign(host);
 	}

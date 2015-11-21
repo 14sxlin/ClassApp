@@ -1,9 +1,10 @@
-package gui.server;
+package main_frame.server;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 
+import gui.server.GuiForServer;
 import server_client.ServerInfo;
 import server_client.TcpSocketServer;
 import threadData.ThreadDataTransfer;
@@ -13,12 +14,12 @@ import threadData.ThreadDataTransfer;
  * @author 林思鑫
  *
  */
-public class ServerGUI {
+public class ServerMainFraim {
 	
 	/**
 	 * 用户图形界面
 	 */
-	MainFrameForServer gui;
+	GuiForServer gui;
 	/**
 	 * 服务器变量
 	 */
@@ -32,14 +33,15 @@ public class ServerGUI {
 	/**
 	 * 默认的构造方法
 	 */
-	public ServerGUI() {
-		gui=new MainFrameForServer();
+	public ServerMainFraim() {
+		gui=new GuiForServer();
 		gui.sendbutton.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				server.sendMessage("*", gui.textField.getText());
-				gui.textPane.append(gui.textField.getText()+"\n");
+				if( gui.textField.getText() != "" )
+					gui.textPane.append(gui.textField.getText()+"\n");
 				gui.textField.setText("");
 			}
 		});
@@ -89,6 +91,7 @@ public class ServerGUI {
 	
 	public static void main(String []args)
 	{
-		new ServerGUI().startService();;
+		new ServerMainFraim().startService();
 	}
+
 }

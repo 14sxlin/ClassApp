@@ -1,9 +1,10 @@
-package gui.client;
+package main_frame.Client;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 
+import gui.client.GuiForPublicChatRoom;
 import server_client.ServerInfo;
 import server_client.TcpSocketClient;
 
@@ -12,7 +13,7 @@ import server_client.TcpSocketClient;
  * @author think
  *
  */
-	public class ClientGUI {
+	public class PubChatRoomMainFrame {
 	/**
 	 * 使用一个client,用来管理socket的连接
 	 */
@@ -20,16 +21,16 @@ import server_client.TcpSocketClient;
 	/**
 	 * 公共聊天室的用户界面
 	 */
-	private PublicChatRoomForUser gui;
+	private GuiForPublicChatRoom gui;
 	
 	/**
 	 * 用来保存服务器发送过来的信息
 	 */
 	private StringBuilder storeString;
 	
-	public ClientGUI() {
+	public PubChatRoomMainFrame() {
 		
-		gui=new  PublicChatRoomForUser(null);
+		gui=new  GuiForPublicChatRoom(null);
 		
 		Thread thread=new Thread(new Runnable() {
 			
@@ -60,7 +61,7 @@ import server_client.TcpSocketClient;
 	{
 		//连接服务器
 		try {
-			client=new TcpSocketClient("小林子",gui.jTextArea);
+			client=new TcpSocketClient("小李子",gui.jTextArea);
 			client.startConnectServer(ServerInfo.SERVER_LOCAL_IP, ServerInfo.PORT);
 		} catch (IOException e) {
 			gui.jTextArea.append("服务器关闭了");
@@ -75,13 +76,13 @@ import server_client.TcpSocketClient;
 		try {
 			client.receiveMessageFromServer(storeString);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
+
 	
 	public static void main(String []args)
 	{
-		new ClientGUI();
+		new PubChatRoomMainFrame();
 	}
 }

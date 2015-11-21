@@ -26,7 +26,7 @@ import javax.swing.event.ListDataListener;
  * @author 林思鑫
  *
  */
-public class MainFrameForServer extends JFrame {
+public class GuiForServer extends JFrame {
 
 	/**
 	 * 版本1.0
@@ -56,13 +56,13 @@ public class MainFrameForServer extends JFrame {
 	 * @param args 命令行参数
 	 */
 	public static void main(String[] args) {
-		new MainFrameForServer();
+		new GuiForServer();
 	}
 
 	/**
 	 * Create the frame.
 	 */
-	public MainFrameForServer() {
+	public GuiForServer() {
 		guiDesign();
 	}
 	
