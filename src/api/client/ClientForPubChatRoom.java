@@ -14,7 +14,7 @@ import javax.swing.JTextArea;
  * @author 林思鑫
  *
  */
-public class TcpSocketClient implements AsClient {
+public class ClientForPubChatRoom implements AsClient {
 	/**
 	 * 客户端用户的名称,用来标志客户端
 	 */
@@ -40,7 +40,7 @@ public class TcpSocketClient implements AsClient {
 	 * 构造方法
 	 * @param userName 传入客户端的用户名
 	 */
-	public TcpSocketClient(String userName) {
+	public ClientForPubChatRoom(String userName) {
 		this.userName=userName;
 	}
 	
@@ -49,7 +49,7 @@ public class TcpSocketClient implements AsClient {
 	 * @param userName 用户名
 	 * @param jTextArea 外部的变量
 	 */
-	public TcpSocketClient(String userName,JTextArea jTextArea) {
+	public ClientForPubChatRoom(String userName,JTextArea jTextArea) {
 		this(userName);
 		this.jTextArea=jTextArea;
 	}

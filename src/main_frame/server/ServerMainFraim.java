@@ -5,7 +5,7 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 
 import api.server.ServerInfo;
-import api.server.TcpSocketServer;
+import api.server.ServerForPubChatRoom;
 import gui.server.GuiForServer;
 import threadData.ThreadDataTransfer;
 
@@ -23,7 +23,7 @@ public class ServerMainFraim {
 	/**
 	 * 服务器变量
 	 */
-	private TcpSocketServer server;
+	private ServerForPubChatRoom server;
 	
 	/**
 	 * 用来与server中的线程的数据交互
@@ -67,7 +67,7 @@ public class ServerMainFraim {
 						
 						@Override
 						public void run() {
-							server=new TcpSocketServer(tdt,gui.textPane);	
+							server=new ServerForPubChatRoom(tdt,gui.textPane);	
 							server.startService(ServerInfo.PORT);
 						}
 					});

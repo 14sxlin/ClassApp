@@ -4,7 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 
-import api.client.TcpSocketClient;
+import api.client.ClientForPubChatRoom;
 import api.server.ServerInfo;
 import gui.client.GuiForPublicChatRoom;
 
@@ -17,7 +17,7 @@ import gui.client.GuiForPublicChatRoom;
 	/**
 	 * 使用一个client,用来管理socket的连接
 	 */
-	private TcpSocketClient client;
+	private ClientForPubChatRoom client;
 	/**
 	 * 公共聊天室的用户界面
 	 */
@@ -61,7 +61,7 @@ import gui.client.GuiForPublicChatRoom;
 	{
 		//连接服务器
 		try {
-			client=new TcpSocketClient("小李子",gui.jTextArea);
+			client=new ClientForPubChatRoom("小李子",gui.jTextArea);
 			client.startConnectServer(ServerInfo.SERVER_LOCAL_IP, ServerInfo.PORT);
 		} catch (IOException e) {
 			gui.jTextArea.append("服务器关闭了");

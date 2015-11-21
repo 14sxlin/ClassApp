@@ -20,7 +20,7 @@ import threadData.ThreadDataTransfer;
  * @author 林思鑫
  *
  */
-public class TcpSocketServer implements AsServer{
+public class ServerForPubChatRoom implements AsServer{
 	
 	/**
 	 * 服务器的ServerSocket
@@ -87,7 +87,7 @@ public class TcpSocketServer implements AsServer{
 	 * 构造方法
 	 * @param tdt 中介数据传输类
 	 */
-	public TcpSocketServer(ThreadDataTransfer tdt)  {
+	public ServerForPubChatRoom(ThreadDataTransfer tdt)  {
 		socketMap=new HashMap<>();
 		userNameList=new ArrayList<>();
 		threadMap=new HashMap<>();
@@ -101,7 +101,7 @@ public class TcpSocketServer implements AsServer{
 	 * @param textPane 用来显示信息的,主要是测试使用
 	 * @param tdt 向外界传递线程内的数据的中介
 	 */
-	public TcpSocketServer(ThreadDataTransfer tdt,JTextArea textPane)  {
+	public ServerForPubChatRoom(ThreadDataTransfer tdt,JTextArea textPane)  {
 		this(tdt);
 		this.textPane=textPane;
 	}
