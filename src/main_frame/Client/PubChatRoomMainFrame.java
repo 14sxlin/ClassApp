@@ -4,9 +4,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 
+import api.client.TcpSocketClient;
+import api.server.ServerInfo;
 import gui.client.GuiForPublicChatRoom;
-import server_client.ServerInfo;
-import server_client.TcpSocketClient;
 
 /**
  * 客户端的公共聊天室的界面

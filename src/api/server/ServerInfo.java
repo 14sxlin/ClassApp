@@ -1,4 +1,4 @@
-package server_client;
+package api.server;
 
 /**
  * 保存了服务器的信息

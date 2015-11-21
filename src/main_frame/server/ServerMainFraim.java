@@ -4,9 +4,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 
+import api.server.ServerInfo;
+import api.server.TcpSocketServer;
 import gui.server.GuiForServer;
-import server_client.ServerInfo;
-import server_client.TcpSocketServer;
 import threadData.ThreadDataTransfer;
 
 /**

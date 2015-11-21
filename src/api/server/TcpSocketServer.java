@@ -1,4 +1,4 @@
-package server_client;
+package api.server;
 
 import java.io.BufferedReader;
 import java.io.IOException;
