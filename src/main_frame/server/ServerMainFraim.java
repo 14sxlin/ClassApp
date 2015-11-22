@@ -2,11 +2,13 @@ package main_frame.server;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.IOException;
 
-import api.server.ServerInfo;
 import api.server.ServerForPubChatRoom;
-import gui.server.GuiForServer;
+import api.server.ServerInfo;
+import gui.pubChatRoom.server.GuiForServer;
 import threadData.ThreadDataTransfer;
 
 /**
@@ -35,16 +37,7 @@ public class ServerMainFraim {
 	 */
 	public ServerMainFraim() {
 		gui=new GuiForServer();
-		gui.sendbutton.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				server.sendMessage("*", gui.textField.getText());
-				if( gui.textField.getText() != "" )
-					gui.textPane.append(gui.textField.getText()+"\n");
-				gui.textField.setText("");
-			}
-		});
+		addListener();
 	}
 	
 	/**
@@ -88,6 +81,46 @@ public class ServerMainFraim {
 		});	
 	}
 	
+	/**
+	 * 实现gui的button和textfiled的监听
+	 */
+	private void addListener()
+	{
+			gui.sendbutton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				server.sendAllClient(gui.textField.getText());
+				if( gui.textField.getText() != "" )
+					gui.textPane.append(gui.textField.getText()+"\n");
+				gui.textField.setText("");
+			}
+		});
+		
+		gui.textField.addKeyListener(new KeyListener() {
+			
+			@Override
+			public void keyTyped(KeyEvent e) {
+				
+			}
+			
+			@Override
+			public void keyReleased(KeyEvent e) {
+				if(e.getKeyCode() == KeyEvent.VK_ENTER)
+				{
+					server.sendAllClient(gui.textField.getText());
+					if( gui.textField.getText() != "" )
+						gui.textPane.append(gui.textField.getText()+"\n");
+					gui.textField.setText("");
+				}
+			}
+			
+			@Override
+			public void keyPressed(KeyEvent e) {
+				
+			}
+		});
+	}
 	
 	public static void main(String []args)
 	{

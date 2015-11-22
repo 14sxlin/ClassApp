@@ -18,7 +18,7 @@ import java.util.Iterator;
 
 import javax.swing.JFrame;
 
-import gui.client.GuiForPublicChatRoom;
+import gui.pubChatRoom.client.GuiForPublicChatRoom;
 
 
 public class MockServer extends GuiForPublicChatRoom  {

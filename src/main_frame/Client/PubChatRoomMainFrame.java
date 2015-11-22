@@ -2,11 +2,13 @@ package main_frame.Client;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.IOException;
 
 import api.client.ClientForPubChatRoom;
 import api.server.ServerInfo;
-import gui.client.GuiForPublicChatRoom;
+import gui.pubChatRoom.client.GuiForPublicChatRoom;
 
 /**
  * 客户端的公共聊天室的界面
@@ -14,7 +16,8 @@ import gui.client.GuiForPublicChatRoom;
  *
  */
 	public class PubChatRoomMainFrame {
-	/**
+	
+		/**
 	 * 使用一个client,用来管理socket的连接
 	 */
 	private ClientForPubChatRoom client;
@@ -31,6 +34,7 @@ import gui.client.GuiForPublicChatRoom;
 	public PubChatRoomMainFrame() {
 		
 		gui=new  GuiForPublicChatRoom(null);
+		storeString=new StringBuilder();
 		
 		Thread thread=new Thread(new Runnable() {
 			
@@ -42,16 +46,7 @@ import gui.client.GuiForPublicChatRoom;
 		});
 		thread.start();
 		
-		//可以向服务器发送消息 测试使用
-		gui.sendButton.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				client.sendMessageToServer(gui.jTextField.getText());
-				gui.jTextArea.append(gui.jTextField.getText());
-				gui.jTextField.setText("");
-			}
-		});
+		addListener();
 	}
 	
 	/**
@@ -80,6 +75,45 @@ import gui.client.GuiForPublicChatRoom;
 		}
 	}
 
+	
+	/**
+	 * 实现gui的button和textfiled的监听
+	 */
+	private void addListener()
+	{
+		gui.sendButton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				client.sendMessageToServer(gui.jTextField.getText());
+				gui.jTextArea.append(gui.jTextField.getText()+"\n");
+				gui.jTextField.setText("");
+			}
+		});
+		
+		gui.jTextField.addKeyListener(new KeyListener() {
+			
+			@Override
+			public void keyTyped(KeyEvent e) {
+				
+			}
+			
+			@Override
+			public void keyReleased(KeyEvent e) {
+				if(e.getKeyCode() == KeyEvent.VK_ENTER)
+				{
+					client.sendMessageToServer(gui.jTextField.getText());
+					gui.jTextArea.append(gui.jTextField.getText()+"\n");
+					gui.jTextField.setText("");
+				}
+			}
+			
+			@Override
+			public void keyPressed(KeyEvent e) {
+				
+			}
+		});
+	}
 	
 	public static void main(String []args)
 	{

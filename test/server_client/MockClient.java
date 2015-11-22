@@ -18,7 +18,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JTextField;
 
-import gui.client.GuiForPublicChatRoom;
+import gui.pubChatRoom.client.GuiForPublicChatRoom;
 
 @SuppressWarnings("serial")
 public class MockClient extends GuiForPublicChatRoom{

@@ -1,13 +1,13 @@
 package api.client;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
 import javax.swing.JTextArea;
+
+import object_client_server.Server;
 
 /**
  * 客户端的socket管理
@@ -21,15 +21,9 @@ public class ClientForPubChatRoom implements AsClient {
 	private String userName;
 	
 	/**
-	 * 与服务器连接的stream
+	 * 服务器对象
 	 */
-	private SocketStream ss; 
-	
-	
-	/**
-	 * 与服务器连接的socket
-	 */
-	private Socket serverSocket;
+	private Server server;
 	
 	/**
 	 * 用来与外界交互的变量
@@ -65,45 +59,14 @@ public class ClientForPubChatRoom implements AsClient {
 	{
 		try {
 			//尝试连接服务器
-			this.serverSocket=new Socket(serverIp, serverPort);
-			ss=new SocketStream(serverSocket);
+			server=new Server( new Socket(serverIp, serverPort));
 			
 			//发送头信息
-			sendHeaderInfo(ss.pw);
-		
-			//读取服务器的信息,测试使用
-			String line;
-			while( (line=ss.br.readLine()) != null)
-			{
-				this.jTextArea.append(line+"\n");
-			}
+			sendHeaderInfo(server.getSocketStream().getPrintWriter());
 			
 		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 
-	}
-	
-	/**
-	 * 内部socketStream类,用于获取socket的流
-	 */
-	public class SocketStream{
-		private BufferedReader br;
-		private PrintWriter pw;
-		
-		public SocketStream(Socket socket) throws IOException {
-			this.br=new BufferedReader(new InputStreamReader(socket.getInputStream()));
-			this.pw=new PrintWriter(socket.getOutputStream());
-		}
-		
-		@SuppressWarnings("unused")
-		private void closeStream() throws IOException
-		{
-			if(br!=null)
-				this.br.close();
-			if(pw!=null)
-				this.pw.close();
-		}
 	}
 	
 	/**
@@ -115,42 +78,45 @@ public class ClientForPubChatRoom implements AsClient {
 	{
 		//目前只有两个信息
 		pw.println("#head#"+"UserName="+this.userName
-				+"&Ip="+this.serverSocket.getInetAddress().getHostAddress());
+				+"&Ip="+this.server.getSocket().getInetAddress().getHostAddress());
 		pw.flush();
 	}
 
-	
 	/**
-	 * 给外面用的接口,接收从远方发来的信息
-	 * @return 返回这个信息
-	 * @throws IOException 给调用者去处理
+	 * 给服务器发送消息
+	 * @param message 要发送的消息
 	 */
-	public String recevieMessage() throws IOException
-	{
-		return ss.br.readLine();
-	}
-	
-
 	@Override
 	public void sendMessageToServer(String message)
 	{
-		if(ss != null)
+		if(server.getSocketStream() != null)
 		{
-			ss.pw.println(message);
-			ss.pw.flush();
+			PrintWriter pw=server.getSocketStream().getPrintWriter();
+			pw.println(message);
+			pw.flush();
 		}
 	}
 
 
+	/**
+	 * 接收服务器发送过来的消息
+	 * @param storeString 用来储存接收到的消息
+	 */
 	@Override
 	public void receiveMessageFromServer(StringBuilder storeString) throws IOException {
 		
-		if (ss!=null) {
+		if (server.getSocketStream()!=null) {
 			String line;
-			while ((line = ss.br.readLine()) != null) {
-				storeString.append(line + "/n");
-				this.jTextArea.append(line);
+			while ((line = server.getSocketStream().getBufferReader().readLine()) != null) {
+				storeString.append(line + "\n");
+				this.jTextArea.append(line+"\n");
 			} 
 		}
+	}
+
+	
+	@Override
+	public void sendLogoutMessage() {
+		this.sendMessageToServer("#head:logout?username="+this.userName);
 	}
 }

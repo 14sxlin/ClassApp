@@ -9,7 +9,7 @@ import java.net.Socket;
 
 import javax.swing.JFrame;
 
-import gui.client.GuiForPublicChatRoom;
+import gui.pubChatRoom.client.GuiForPublicChatRoom;
 
 
 @SuppressWarnings("serial")

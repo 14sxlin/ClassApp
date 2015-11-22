@@ -1,4 +1,4 @@
-package gui.client;
+package gui.groupChatRoom;
 
 import java.awt.Color;
 import java.awt.event.ActionEvent;

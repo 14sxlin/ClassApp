@@ -37,4 +37,9 @@ public interface AsClient  {
 	 * @param message 要发送的信息
 	 */
 	void sendMessageToServer(String message);
+	
+	/**
+	 * 向服务器发送退出的消息
+	 */
+	void sendLogoutMessage();
 }

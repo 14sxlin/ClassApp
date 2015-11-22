@@ -1,18 +1,15 @@
 package api.server;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
 
 import javax.swing.JTextArea;
 
+import object_client_server.Client;
 import threadData.ThreadDataTransfer;
 
 /**
@@ -26,36 +23,12 @@ public class ServerForPubChatRoom implements AsServer{
 	 * 服务器的ServerSocket
 	 */
 	private ServerSocket serverSocket;
-	
-	/**
-	 * 用来保存在线用户的socketstream
-	 */
-	private HashMap<String, SocketStream> socketStreamMap;
-	
-	/**
-	 * 用来保存在线的用户socket
-	 */
-	public HashMap<String, Socket> socketMap;
-	
-	/**
-	 * 用来保存线程的信息
-	 */
-	public HashMap<String, Thread> threadMap;
+
 	
 	/**
 	 * 用来保存在线用户名列表
 	 */
 	public ArrayList<String> userNameList;
-	
-	/**
-	 * 内部类,保存了输入流和输出流信息
-	 */
-	private SocketStream ss;
-	
-	/**
-	 * 保存当前的用户名
-	 */
-	private String currentUserName;
 	
 	/**
 	 * 用来显示获取客户端的发送到服务器的信息
@@ -69,9 +42,9 @@ public class ServerForPubChatRoom implements AsServer{
 	public int counter=0;
 	
 	/**
-	 * 用来保存当前的线程
+	 * 用来保存客户端
 	 */
-	private Thread currentThread;
+	ArrayList<Client> clientList;
 	
 	/**
 	 * 用来表示是否启用向外部传输数据的功能
@@ -88,11 +61,8 @@ public class ServerForPubChatRoom implements AsServer{
 	 * @param tdt 中介数据传输类
 	 */
 	public ServerForPubChatRoom(ThreadDataTransfer tdt)  {
-		socketMap=new HashMap<>();
 		userNameList=new ArrayList<>();
-		threadMap=new HashMap<>();
-		socketStreamMap=new HashMap<>();
-		
+		clientList=new ArrayList<>();
 		this.tdt=tdt;
 	}
 	
@@ -124,11 +94,11 @@ public class ServerForPubChatRoom implements AsServer{
 			while(true)
 			{
 				Socket currentSocket=serverSocket.accept();
-				currentThread=new Thread(new Runnable() {
+				Thread tempThread=new Thread(new Runnable() {
 					@Override
 					public void run() {
 						try {
-							ss=new SocketStream(currentSocket);
+							Client client=new Client(currentSocket);
 							
 							synchronized(this)
 							{
@@ -136,17 +106,17 @@ public class ServerForPubChatRoom implements AsServer{
 							}
 							
 							//向客户端发送连接成功的消息
-							ss.pw.println("连接服务器成功\n");
-							ss.pw.flush();
+							client.getSocketStream().getPrintWriter().println("连接服务器成功\n");
+							client.getSocketStream().getPrintWriter().flush();
 							
 							//接收头信息
-							String line=ss.br.readLine();
+							String line=client.getSocketStream().getBufferReader().readLine();
 							
 							if(textPane != null)
 								textPane.append(line+"\n");
 							
-							handleHeaderInfo(line, currentSocket,
-									socketMap, userNameList);
+//							handleHeaderInfo(line, currentSocket,
+//									socketMap, userNameList);
 							
 							//更新服务器组件的数据
 							if(tdt!=null)
@@ -154,17 +124,20 @@ public class ServerForPubChatRoom implements AsServer{
 							
 							
 							//获取用户名
-							currentUserName=searchUserName(line);
+							client.setUserName(searchUserName(line));
+							
+							//将客户端加入到列表中去
+							clientList.add(client);
 							
 							if(textPane != null)
 								textPane.append("ueserNameList="+listToString(userNameList)+"\n");
 							
-							//由用户名保存相应的线程和流
-							synchronized(this)
-							{	
-								socketStreamMap.put(currentUserName, ss);	
-								threadMap.put(currentUserName , currentThread);
-							}
+//							//由用户名保存相应的线程和流
+//							synchronized(this)
+//							{	
+//								socketStreamMap.put(currentUserName, ss);	
+//								threadMap.put(currentUserName , currentThread);
+//							}
 							
 							
 							//向客户端发送在线列表的消息
@@ -173,9 +146,10 @@ public class ServerForPubChatRoom implements AsServer{
 							//接收信息 测试使用 这个应该放在最后
 							try {
 								if(textPane != null)
-									while((line=ss.br.readLine()) != null)
+									while((line=client.getSocketStream().getBufferReader().readLine()) != null)
 									{
 										textPane.append(line+"\n");
+System.out.println("invoke3");
 									}
 							} catch (Exception e) {
 								e.printStackTrace();
@@ -188,32 +162,12 @@ public class ServerForPubChatRoom implements AsServer{
 						
 					}
 				});
-				currentThread.start();//线程必须启动,否则会一直阻塞在那里
+				tempThread.start();//线程必须启动,否则会一直阻塞在那里
 							
 			}
 			
 		} catch (IOException e) {
 			e.printStackTrace();
-		}
-	}
-
-	/**
-	 * 内部的Socket类
-	 * @author 林思鑫
-	 *
-	 */
-	private  class SocketStream{
-		private BufferedReader br;
-		private PrintWriter pw;
-		public SocketStream(Socket socket) throws IOException {
-			this.br=new BufferedReader(new InputStreamReader(socket.getInputStream()));
-			this.pw=new PrintWriter(socket.getOutputStream());
-		}
-		@SuppressWarnings("unused")
-		public  void closeStream() throws IOException
-		{
-			this.br.close();
-			this.pw.close();
 		}
 	}
 	
@@ -248,92 +202,57 @@ public class ServerForPubChatRoom implements AsServer{
 		return returnString;
 	}
 	
-	/**
-	 * 用来处理头信息,获取客户端的信息,然后将用户信息添加到用户名列表当中
-	 * @param line 从输入流中读取的字符串
-	 * @param currentSocket 发送信息过来的Socket
-	 * @param socketMap 添加目标
-	 * @param userNameList 添加目标
-	 */
-	private void handleHeaderInfo(String line,Socket currentSocket,
-			Map<String, Socket> socketMap,ArrayList<String> userNameList)
-	{
-		//处理头信息
-		if(line.substring(0, 6).equals("#head#"))
-		{
-			//组装socketMap和userList和threadMap
-			String userName=searchUserName(line);
-			socketMap.put(userName, currentSocket);
-			userNameList.add(userName);
-		}
-		
-	}
 	
 	/**
 	 * 停止所有的服务,这个应该给所有的客户端发送退出消息,然后让客户端退出,之后自己在停止socket
 	 * @throws IOException serverSocket.close()会产生的错误,交给调用者处理
 	 */
-	@SuppressWarnings("deprecation")
 	synchronized public void stopService() throws IOException
 	{
 //		if(ss != null)
 //			ss.closeStream();
-		Iterator<String> it=userNameList.iterator();
-		String username;
+		this.serverSocket.close();//这个指定的是不再去监听那个端口了
+		
+		Iterator<Client> it = clientList.iterator();
 		while(it.hasNext())
 		{
-			username=it.next();
-			try {
-				socketMap.get(username).close();
-				threadMap.get(username).stop();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			it.next().getSocketStream().closeStream();
 		}
-		this.serverSocket.close();//这个指定的是不再去监听那个端口了
-			
+		
 		if ( textPane != null )
 			textPane.append("服务已关闭\n");
 	}
 	
 	/**
 	 * 用来发信息给指定的客户端
-	 * @param username 指定发送信息的用户名,用*号代表向所有的在线用户发送
+	 * @param username 指定发送信息的用户名
 	 * @param message 要发的信息
 	 */
-	public void sendMessage(String username, String message)
+	public void sendMessage(Client client, String message)
 	{
-		if (username != "*") {
-			SocketStream tempss = socketStreamMap.get(username);
-			if (tempss != null) {
-				tempss.pw.println(message);
-				tempss.pw.flush();
-			} 
-		}else
+		if (client != null )
 		{
-			SocketStream tempss;
-			Iterator<String> it=userNameList.iterator();
-			while( it.hasNext() )
-			{
-				tempss = socketStreamMap.get( it.next() );
-				tempss.pw.println(message);
-				tempss.pw.flush();
-			}
+			client.getSocketStream().getPrintWriter().println(message);
+			client.getSocketStream().getPrintWriter().flush();
 		}
 	}
 
-	@Override
-	public void notifyLogin() throws IOException {
-		// TODO Auto-generated method stub
-		
+	/**
+	 * 对所有保存的活动客户发送消息
+	 * @param message
+	 */
+	public void sendAllClient(String message)
+	{
+		Iterator<Client> it = clientList.iterator();
+		while(it.hasNext())
+		{
+			PrintWriter pw=it.next().getSocketStream().getPrintWriter();
+			pw.println(message);
+			pw.flush();
+		}
 	}
-
-	@Override
-	public void notifyLogout() {
-		// TODO Auto-generated method stub
-		
-	}
-
+	
+	
 	@Override
 	public void registerUpdate() {
 		// TODO Auto-generated method stub

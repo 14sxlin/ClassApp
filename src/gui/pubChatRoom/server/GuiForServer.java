@@ -1,4 +1,4 @@
-package gui.server;
+package gui.pubChatRoom.server;
 
 import java.awt.BorderLayout;
 import java.awt.Color;

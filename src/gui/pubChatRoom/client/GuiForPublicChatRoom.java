@@ -1,4 +1,4 @@
-package gui.client;
+package gui.pubChatRoom.client;
 
 import java.awt.Color;
 import java.awt.GridBagConstraints;
