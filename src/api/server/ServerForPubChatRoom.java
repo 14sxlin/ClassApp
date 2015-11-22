@@ -79,95 +79,99 @@ public class ServerForPubChatRoom implements AsServer{
 	/**
 	 * 启动服务,接收客户端的连接,多线程的创建
 	 * @param port 所使用的端口
+	 * @throws IOException 
 	 */
 	@Override
-	public  void startService(int port)
+	public  void startService(int port) throws IOException
 	{
-		try {
 			//新建一个serverSocket,可能会出现端口已经被占用的问题
 			serverSocket=new ServerSocket(port);
 			
 			if ( textPane != null )
 				textPane.append("正在等待链接\n");
 			
-			//开始监听并创建新的线程,发送连接成功的信息,处理客户端发来的头信息
-			while(true)
-			{
-				Socket currentSocket=serverSocket.accept();
-				Thread tempThread=new Thread(new Runnable() {
-					@Override
-					public void run() {
-						try {
-							Client client=new Client(currentSocket);
-							
-							synchronized(this)
-							{
-								counter++;
-							}
-							
-							//向客户端发送连接成功的消息
-							client.getSocketStream().getPrintWriter().println("连接服务器成功\n");
-							client.getSocketStream().getPrintWriter().flush();
-							
-							//接收头信息
-							String line=client.getSocketStream().getBufferReader().readLine();
-							
-							if(textPane != null)
-								textPane.append(line+"\n");
-							
-//							handleHeaderInfo(line, currentSocket,
-//									socketMap, userNameList);
-							
-							//更新服务器组件的数据
-							if(tdt!=null)
-								tdt.updateState(counter, userNameList);
-							
-							
-							//获取用户名
-							client.setUserName(searchUserName(line));
-							
-							//将客户端加入到列表中去
-							clientList.add(client);
-							
-							if(textPane != null)
-								textPane.append("ueserNameList="+listToString(userNameList)+"\n");
-							
-//							//由用户名保存相应的线程和流
-//							synchronized(this)
-//							{	
-//								socketStreamMap.put(currentUserName, ss);	
-//								threadMap.put(currentUserName , currentThread);
-//							}
-							
-							
-							//向客户端发送在线列表的消息
-							
-							
-							//接收信息 测试使用 这个应该放在最后
-							try {
-								if(textPane != null)
-									while((line=client.getSocketStream().getBufferReader().readLine()) != null)
-									{
-										textPane.append(line+"\n");
-System.out.println("invoke3");
-									}
-							} catch (Exception e) {
-								e.printStackTrace();
-							}
-							
-							
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
-						
-					}
-				});
-				tempThread.start();//线程必须启动,否则会一直阻塞在那里
-							
-			}
+			startListen();
 			
-		} catch (IOException e) {
-			e.printStackTrace();
+	}
+	
+	/**
+	 * 开始监听端口 让客户端连接进来
+	 * @throws IOException
+	 */
+	private void startListen() throws IOException
+	{
+		//开始监听并创建新的线程,发送连接成功的信息,处理客户端发来的头信息
+		while(true)
+		{
+			Socket currentSocket = serverSocket.accept();
+			Thread tempThread=new Thread(new Runnable() {
+				@Override
+				public void run() {
+					
+					Client client = null;
+					try {
+						client = new Client(currentSocket);
+					} catch (IOException e2) {
+						// TODO Auto-generated catch block
+						e2.printStackTrace();
+					}
+
+					synchronized(this)
+					{
+						counter++;
+					}
+					
+					//向客户端发送连接成功的消息
+					client.getSocketStream().getPrintWriter().println("连接服务器成功\n");
+					client.getSocketStream().getPrintWriter().flush();
+					
+					//接收头信息
+					String line = null;
+					try {
+						line = client.getSocketStream().getBufferReader().readLine();
+						
+						if(textPane != null)
+							textPane.append(line+"\n");
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					
+					//获取用户名
+					client.setUserName(searchUserName(line));
+					
+					//将客户端加入到列表中去
+					clientList.add(client);
+					
+					//将用户名加入到列表中去
+					userNameList.add(client.getUserName());
+					
+					//更新服务器组件的数据
+					if(tdt!=null)
+						tdt.updateState(counter, userNameList);
+					
+					if(textPane != null)
+						textPane.append("userNameList="+listToString(userNameList)+"\n");
+					
+					
+					//向客户端发送在线列表的消息
+					
+					
+					//接收信息 测试使用 这个应该放在最后
+					if(textPane != null)
+						try {
+							while((line=client.getSocketStream().getBufferReader().readLine()) != null)
+							{
+								textPane.append(line+"\n");
+							}
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}	
+					
+				}
+			});
+			tempThread.start();//线程必须启动,否则会一直阻塞在那里
 		}
 	}
 	
@@ -209,18 +213,15 @@ System.out.println("invoke3");
 	 */
 	synchronized public void stopService() throws IOException
 	{
-//		if(ss != null)
-//			ss.closeStream();
+		//流的关闭有点复杂 这是因为流的关闭是两方面的 需要好好研究一下
+//		Iterator<Client> it = clientList.iterator();
+//		while(it.hasNext())
+//		{
+//			it.next().getSocketStream().closeStream();
+//		}
+//		
 		this.serverSocket.close();//这个指定的是不再去监听那个端口了
 		
-		Iterator<Client> it = clientList.iterator();
-		while(it.hasNext())
-		{
-			it.next().getSocketStream().closeStream();
-		}
-		
-		if ( textPane != null )
-			textPane.append("服务已关闭\n");
 	}
 	
 	/**

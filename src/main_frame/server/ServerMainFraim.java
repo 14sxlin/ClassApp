@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.IOException;
+import java.net.SocketException;
 
 import api.server.ServerForPubChatRoom;
 import api.server.ServerInfo;
@@ -26,6 +27,11 @@ public class ServerMainFraim {
 	 * 服务器变量
 	 */
 	private ServerForPubChatRoom server;
+	
+	/**
+	 * 线程对象
+	 */
+	private Thread currentThread;
 	
 	/**
 	 * 用来与server中的线程的数据交互
@@ -56,15 +62,23 @@ public class ServerMainFraim {
 				if(e.getActionCommand().equals("开启服务"))
 				{
 					gui.startServiceButton.setText("关闭服务");
-					Thread thread=new Thread(new Runnable() {
+					currentThread=new Thread(new Runnable() {
 						
 						@Override
 						public void run() {
 							server=new ServerForPubChatRoom(tdt,gui.textPane);	
-							server.startService(ServerInfo.PORT);
+							try {
+								server.startService(ServerInfo.PORT);
+							} catch (SocketException e) {
+								// TODO Auto-generated catch block
+								gui.textPane.append("服务器不再接收连接\n");
+							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
 						}
 					});
-					thread.start();					
+					currentThread.start();					
 				}
 				else//这个需要完善一下
 				{

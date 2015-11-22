@@ -3,6 +3,7 @@ package api.client;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.net.SocketException;
 import java.net.UnknownHostException;
 
 import javax.swing.JTextArea;
@@ -101,12 +102,13 @@ public class ClientForPubChatRoom implements AsClient {
 	/**
 	 * 接收服务器发送过来的消息
 	 * @param storeString 用来储存接收到的消息
+	 * @exception IOException 当服务器断开连接的时候会触发这个
 	 */
 	@Override
-	public void receiveMessageFromServer(StringBuilder storeString) throws IOException {
+	public void receiveMessageFromServer(StringBuilder storeString) throws IOException,SocketException {
 		
-		if (server.getSocketStream()!=null) {
-			String line;
+		if (server != null && server.getSocketStream()!=null) {
+			String line="";
 			while ((line = server.getSocketStream().getBufferReader().readLine()) != null) {
 				storeString.append(line + "\n");
 				this.jTextArea.append(line+"\n");
