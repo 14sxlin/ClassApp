@@ -2,8 +2,6 @@ package gui.pubChatRoom.server;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.util.ArrayList;
-import java.util.Iterator;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -147,26 +145,4 @@ public class GuiForServer extends JFrame {
 		this.setVisible(true);		
 	}
 	
-	/**
-	 * 这个是用来设置列表模型的值的
-	 * @param list 要设置的列表模型
-	 * @return 返回一个列表模型
-	 * @deprecated 现在用一个中介类来处理,不用这个了
-	 */
-	public DefaultListModel<String> setListModel(ArrayList<String> list)
-	{
-		if(list!=null)
-		{
-			Iterator<String> it=list.iterator();
-			while(it.hasNext())
-			{
-				listmodel.addElement(it.next());
-			}
-			return listmodel;
-		}
-		else return null;
-	}
-
-	
-
 }

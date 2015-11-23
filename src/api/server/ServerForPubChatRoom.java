@@ -9,6 +9,8 @@ import java.util.Iterator;
 
 import javax.swing.JTextArea;
 
+import headInfoFliter.factory.FilterFactory;
+import headInfoFliter.fliter.HeadInfoFilter;
 import object_client_server.Client;
 import threadData.ThreadDataTransfer;
 
@@ -47,14 +49,14 @@ public class ServerForPubChatRoom implements AsServer{
 	ArrayList<Client> clientList;
 	
 	/**
-	 * 用来表示是否启用向外部传输数据的功能
-	 */
-	public boolean outSwing;
-
-	/**
 	 * 用来传递线程中的值到外面
 	 */
 	private ThreadDataTransfer tdt;
+	
+	/**
+	 * 过滤器工厂,用来过滤头信息,然后执行相应的操作
+	 */
+	private FilterFactory filterFactory;
 	
 	/**
 	 * 构造方法
@@ -137,6 +139,8 @@ public class ServerForPubChatRoom implements AsServer{
 						e1.printStackTrace();
 					}
 					
+					//新建头信息处理工厂过滤信息
+					filterFactory.setMemeberList(clientList);
 					//获取用户名
 					client.setUserName(searchUserName(line));
 					

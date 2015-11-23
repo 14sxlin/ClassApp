@@ -17,8 +17,11 @@ public class SocketStream {
 		private  PrintWriter pw;
 		
 		public  SocketStream(Socket socket) throws IOException {
-			this.br=new BufferedReader(new InputStreamReader(socket.getInputStream()));
-			this.pw=new PrintWriter(socket.getOutputStream());
+			if(socket != null)
+			{
+				this.br=new BufferedReader(new InputStreamReader(socket.getInputStream()));
+				this.pw=new PrintWriter(socket.getOutputStream());
+			}
 		}
 		
 		

@@ -52,7 +52,7 @@ import gui.pubChatRoom.client.GuiForPublicChatRoom;
 	/**
 	 * 连接服务器
 	 */
-	private void connectServer()
+	public void connectServer()
 	{
 		//连接服务器
 		try {

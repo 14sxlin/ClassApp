@@ -22,7 +22,7 @@ public class ServerMainFraim {
 	/**
 	 * 用户图形界面
 	 */
-	GuiForServer gui;
+	private GuiForServer gui;
 	/**
 	 * 服务器变量
 	 */
