@@ -20,6 +20,8 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JToolBar;
 
+import api.client.ClientGuiNotifier;
+
 /**
  * 公共聊天室,给客户端使用的
  * @author 林思鑫
@@ -46,9 +48,8 @@ public class GuiForPublicChatRoom extends JDialog {
 	private JComboBox<String>searchCombo;	
 	private JToolBar toolBar;
 	private JRadioButton online,all;
-	private JList<String> classmateList;
-	private DefaultListModel< String> classModel;
-	
+	public JList<String> classmateList;
+	public static ClientGuiNotifier clientGuiNotifier;
 	/**
 	 * 默认的构造函数,创建一个公共聊天室的窗口
 	 * @param host 指定了parent容器,可以为null
@@ -56,6 +57,7 @@ public class GuiForPublicChatRoom extends JDialog {
 	public GuiForPublicChatRoom(JFrame host) {
 		
 		guiDesign(host);
+		clientGuiNotifier = new ClientGuiNotifier(this.classmateList);
 	}
 	
 	
@@ -116,8 +118,7 @@ public class GuiForPublicChatRoom extends JDialog {
 		//同学列表
 		constraints=new GridBagConstraints(6, 2, 2, 8, 0, 0, GridBagConstraints.CENTER, 
 				GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0);
-		classModel=new DefaultListModel<String>();
-		classmateList=new JList<String>(classModel);
+		classmateList = new JList<>(new DefaultListModel<>());
 		classmateList.setBackground(Color.lightGray);
 		this.add(classmateList, constraints);
 		

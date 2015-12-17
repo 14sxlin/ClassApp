@@ -1,7 +1,6 @@
 package api.server;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -26,26 +25,26 @@ public class ServerForPubChatRoom implements AsServer{
 	private ServerSocket serverSocket;
 
 	
-	/**
-	 * 用来保存在线用户名列表
-	 */
-	public ArrayList<String> userNameList;
+//	/**
+//	 * 用来保存在线用户名列表
+//	 */
+//	public ArrayList<String> userNameList;
 	
 	/**
 	 * 用来显示获取客户端的发送到服务器的信息
 	 */
 	public JTextArea textPane;
 	
-	/**
-	 * 用来计算在线人数
-	 * 向外暴露
-	 */
-	public int counter=0;
+//	/**
+//	 * 用来计算在线人数
+//	 * 向外暴露
+//	 */
+//	public int counter=0;
 	
-	/**
-	 * 用来保存客户端
-	 */
-	ArrayList<Client> clientList;
+//	/**
+//	 * 用来保存客户端
+//	 */
+//	ArrayList<Client> clientList;
 	
 	/**
 	 * 用来传递线程中的值到外面
@@ -53,17 +52,12 @@ public class ServerForPubChatRoom implements AsServer{
 	private ThreadDataTransfer tdt;
 	
 	/**
-	 * 过滤器工厂,用来过滤头信息,然后执行相应的操作
-	 */
-	private ProcesserFactory processerFactory;
-	
-	/**
 	 * 构造方法
 	 * @param tdt 中介数据传输类
 	 */
 	public ServerForPubChatRoom(ThreadDataTransfer tdt)  {
-		userNameList=new ArrayList<>();
-		clientList=new ArrayList<>();
+//		userNameList=new ArrayList<>();
+//		clientList=new ArrayList<>();
 		this.tdt=tdt;
 	}
 	
@@ -117,16 +111,15 @@ public class ServerForPubChatRoom implements AsServer{
 						e2.printStackTrace();
 					}
 
-					synchronized(this)
-					{
-						counter++;
-					}
 					
 					//向客户端发送连接成功的消息
 					client.getSocketStream().getPrintWriter().println("连接服务器成功\n");
 					client.getSocketStream().getPrintWriter().flush();
 					
-					//接收头信息
+					
+					
+					//接收客户端发送过来的头信息
+					//认为第一次发过来的信息就是头信息
 					String line = null;
 					try {
 						line = client.getSocketStream().getBufferReader().readLine();
@@ -139,26 +132,27 @@ public class ServerForPubChatRoom implements AsServer{
 					}
 					
 					//新建头信息处理工厂过滤信息
-					ProcesserFactory.setMemeberList(clientList);
+					ProcesserFactory.setMemeberList(ClientsManager.clientList);
 					//获取用户名
 					client.setUserName(searchUserName(line));
 					
-					//将客户端加入到列表中去
-					clientList.add(client);
-					
-					//将用户名加入到列表中去
-					userNameList.add(client.getUserName());
-					
-					//更新服务器组件的数据
-					if(tdt!=null)
-						tdt.updateState(counter, userNameList);
-					
-					if(textPane != null)
-						textPane.append("userNameList="+listToString(userNameList)+"\n");
-					
-					
-					//向客户端发送在线列表的消息
-					
+					synchronized (ClientsManager.class) {
+						//将客户端加入到列表中去
+						ClientsManager.clientList.add(client);
+						//将用户名加入到列表中去
+						ClientsManager.userNameList.add(client.getUserName());
+						//计数
+						ClientsManager.counter++;
+						//向客户端发送在线用户的列表的头信息
+						client.getSocketStream().getPrintWriter().println(listToString(ClientsManager.userNameList));
+						client.getSocketStream().getPrintWriter().flush();
+						
+						//更新服务器组件的数据
+						if (tdt != null)
+							tdt.updateState(ClientsManager.counter, ClientsManager.userNameList);
+						if (textPane != null)
+							textPane.append("userNameList=" + listToString(ClientsManager.userNameList) + "\n");
+					}
 					
 					//接收信息 测试使用 这个应该放在最后
 					if(textPane != null)
@@ -200,12 +194,13 @@ public class ServerForPubChatRoom implements AsServer{
 	 */
 	private String listToString(ArrayList<String> nameList)
 	{
-		String returnString="";
+		String returnString="#head:list#";
 		Iterator<String> it=nameList.iterator();
 		while(it.hasNext())
 		{
 			returnString=returnString+it.next()+"&";
 		}
+		returnString = returnString.substring(0, returnString.length()-1);
 		return returnString;
 	}
 	
@@ -228,33 +223,33 @@ public class ServerForPubChatRoom implements AsServer{
 	}
 	
 	/**
-	 * 用来发信息给指定的客户端
-	 * @param username 指定发送信息的用户名
-	 * @param message 要发的信息
-	 */
-	public void sendMessage(Client client, String message)
-	{
-		if (client != null )
-		{
-			client.getSocketStream().getPrintWriter().println(message);
-			client.getSocketStream().getPrintWriter().flush();
-		}
-	}
+//	 * 用来发信息给指定的客户端
+//	 * @param username 指定发送信息的用户名
+//	 * @param message 要发的信息
+//	 */
+//	public void sendMessage(Client client, String message)
+//	{
+//		if (client != null )
+//		{
+//			client.getSocketStream().getPrintWriter().println(message);
+//			client.getSocketStream().getPrintWriter().flush();
+//		}
+//	}
 
-	/**
-	 * 对所有保存的活动客户发送消息
-	 * @param message
-	 */
-	public void sendAllClient(String message)
-	{
-		Iterator<Client> it = clientList.iterator();
-		while(it.hasNext())
-		{
-			PrintWriter pw=it.next().getSocketStream().getPrintWriter();
-			pw.println(message);
-			pw.flush();
-		}
-	}
+//	/**
+//	 * 对所有保存的活动客户发送消息
+//	 * @param message
+//	 */
+//	public void sendAllClient(String message)
+//	{
+//		Iterator<Client> it = clientList.iterator();
+//		while(it.hasNext())
+//		{
+//			PrintWriter pw=it.next().getSocketStream().getPrintWriter();
+//			pw.println(message);
+//			pw.flush();
+//		}
+//	}
 	
 	
 	@Override

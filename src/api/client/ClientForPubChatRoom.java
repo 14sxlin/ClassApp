@@ -6,8 +6,10 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 
+import javax.swing.JList;
 import javax.swing.JTextArea;
 
+import gui.pubChatRoom.client.GuiForPublicChatRoom;
 import object_client_server.Server;
 
 /**
@@ -30,6 +32,11 @@ public class ClientForPubChatRoom implements AsClient {
 	 * 用来与外界交互的变量
 	 */
 	private JTextArea jTextArea;
+	
+	/**
+	 * 用来显示在线或不在线的用户
+	 */
+	public JList<String> clientList;
 	
 	/**
 	 * 构造方法
@@ -101,17 +108,37 @@ public class ClientForPubChatRoom implements AsClient {
 
 	/**
 	 * 接收服务器发送过来的消息
+	 * 检查是不是头信息,如果是头信息要做出相应的处理
 	 * @param storeString 用来储存接收到的消息
 	 * @exception IOException 当服务器断开连接的时候会触发这个
 	 */
 	@Override
 	public void receiveMessageFromServer(StringBuilder storeString) throws IOException,SocketException {
-		
+		//TODO Auto-generated catch block
+		//这里如果是服务器首先断开了连接的话,会产生SocketException的错误
+		//这里应该处理一下
 		if (server != null && server.getSocketStream()!=null) {
 			String line="";
 			while ((line = server.getSocketStream().getBufferReader().readLine()) != null) {
-				storeString.append(line + "\n");
-				this.jTextArea.append(line+"\n");
+				if( line.contains("#head:"))
+				{
+					// TODO Auto-generated catch block
+					//包含了头信息,首先要确定是什么类型的头信息
+					//列表类型
+					if(line.contains("list"))
+					{
+						//通知gui中的list变化
+						GuiForPublicChatRoom.clientGuiNotifier.updateList(line);
+					}
+					storeString.append(line + "\n");
+					this.jTextArea.append("接收到头信息"+"\n");
+					this.jTextArea.append(line+"\n");
+				}
+				else
+				{
+					storeString.append(line + "\n");
+					this.jTextArea.append(line+"\n");
+				}
 			} 
 		}
 	}

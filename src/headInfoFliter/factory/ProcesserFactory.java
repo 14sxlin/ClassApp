@@ -32,11 +32,11 @@ public class ProcesserFactory {
 	 * @param filterType 传入的判断条件
 	 * @return 返回相应的过滤器
 	 */
-	public static  HeadInfoProcesser createFilter(String filterType)
+	public static  HeadInfoProcesser createFilter(String type)
 	{
-		if(filterType.equals("login") )
+		if(type.contains("login") )
 			return new LoginProcesser(memberList);
-		if(filterType.equals("logout") )
+		if(type.contains("logout") )
 			return new LogoutProcesser(memberList);
 		else return null;
 	}

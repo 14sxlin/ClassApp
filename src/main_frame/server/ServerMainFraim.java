@@ -7,6 +7,7 @@ import java.awt.event.KeyListener;
 import java.io.IOException;
 import java.net.SocketException;
 
+import api.server.ClientsManager;
 import api.server.ServerForPubChatRoom;
 import api.server.ServerInfo;
 import gui.pubChatRoom.server.GuiForServer;
@@ -100,11 +101,11 @@ public class ServerMainFraim {
 	 */
 	private void addListener()
 	{
-			gui.sendbutton.addActionListener(new ActionListener() {
+		gui.sendbutton.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				server.sendAllClient(gui.textField.getText());
+				ClientsManager.sendAllClient(gui.textField.getText());
 				if( gui.textField.getText() != "" )
 					gui.textPane.append(gui.textField.getText()+"\n");
 				gui.textField.setText("");
@@ -122,7 +123,7 @@ public class ServerMainFraim {
 			public void keyReleased(KeyEvent e) {
 				if(e.getKeyCode() == KeyEvent.VK_ENTER)
 				{
-					server.sendAllClient(gui.textField.getText());
+					ClientsManager.sendAllClient(gui.textField.getText());
 					if( gui.textField.getText() != "" )
 						gui.textPane.append(gui.textField.getText()+"\n");
 					gui.textField.setText("");
