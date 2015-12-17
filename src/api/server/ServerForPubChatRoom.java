@@ -9,8 +9,7 @@ import java.util.Iterator;
 
 import javax.swing.JTextArea;
 
-import headInfoFliter.factory.FilterFactory;
-import headInfoFliter.fliter.HeadInfoFilter;
+import headInfoFliter.factory.ProcesserFactory;
 import object_client_server.Client;
 import threadData.ThreadDataTransfer;
 
@@ -56,7 +55,7 @@ public class ServerForPubChatRoom implements AsServer{
 	/**
 	 * 过滤器工厂,用来过滤头信息,然后执行相应的操作
 	 */
-	private FilterFactory filterFactory;
+	private ProcesserFactory processerFactory;
 	
 	/**
 	 * 构造方法
@@ -140,7 +139,7 @@ public class ServerForPubChatRoom implements AsServer{
 					}
 					
 					//新建头信息处理工厂过滤信息
-					filterFactory.setMemeberList(clientList);
+					ProcesserFactory.setMemeberList(clientList);
 					//获取用户名
 					client.setUserName(searchUserName(line));
 					

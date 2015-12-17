@@ -7,17 +7,17 @@ import java.util.ArrayList;
 import org.junit.Before;
 import org.junit.Test;
 
-import headInfoFliter.factory.FilterFactory;
-import headInfoFliter.fliter.HeadInfoFilter;
-import headInfoFliter.fliter.LoginFilter;
-import headInfoFliter.fliter.LogoutFilter;
+import headInfoFliter.factory.ProcesserFactory;
+import headInfoFliter.fliter.HeadInfoProcesser;
+import headInfoFliter.fliter.LoginProcesser;
+import headInfoFliter.fliter.LogoutProcesser;
 import object_client_server.Client;
 
-public class TestFilterFactory {
+public class TestProcesserFactory {
 
 	ArrayList<Client> clientList;
-	HeadInfoFilter out;
-	HeadInfoFilter in;
+	HeadInfoProcesser out;
+	HeadInfoProcesser in;
 	Client c1,c2,c3;
 
 	@Before
@@ -30,17 +30,17 @@ public class TestFilterFactory {
 		clientList.add(c1);
 		clientList.add(c2);
 		
-		FilterFactory.setMemeberList(clientList);
-		in = FilterFactory.createFilter("login") ;
-		out =FilterFactory.createFilter("logout") ;
+		ProcesserFactory.setMemeberList(clientList);
+		in = ProcesserFactory.createFilter("login") ;
+		out =ProcesserFactory.createFilter("logout") ;
 	}
 
 	@Test
 	public void testFactoryWorkWell() {
 		
-		assertEquals(true,out instanceof LogoutFilter);
+		assertEquals(true,out instanceof LogoutProcesser);
 		
-		assertEquals(true, in instanceof LoginFilter);
+		assertEquals(true, in instanceof LoginProcesser);
 		
 	}
 	

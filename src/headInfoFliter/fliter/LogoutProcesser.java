@@ -8,12 +8,12 @@ import api.notifier.LogoutNotifier;
 import api.notifier.Notifier;
 import object_client_server.Client;
 
-public class LogoutFilter extends HeadInfoFilter {
+public class LogoutProcesser extends HeadInfoProcesser {
 	
 	private Notifier logoutNotifier;
 	private ArrayList<Client> memberList;
 	
-	public LogoutFilter(ArrayList<Client> memberList) {
+	public LogoutProcesser(ArrayList<Client> memberList) {
 		this.logoutNotifier=new LogoutNotifier();
 		this.memberList=memberList;
 	}

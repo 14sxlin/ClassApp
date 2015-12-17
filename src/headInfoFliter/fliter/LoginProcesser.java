@@ -7,12 +7,12 @@ import api.notifier.LoginNotifier;
 import api.notifier.Notifier;
 import object_client_server.Client;
 
-public class LoginFilter extends HeadInfoFilter{
+public class LoginProcesser extends HeadInfoProcesser{
 
 	private ArrayList<Client> memberList;
 	private Notifier loginNotifier;
 	
-	public LoginFilter(ArrayList<Client> memberList) {
+	public LoginProcesser(ArrayList<Client> memberList) {
 		loginNotifier=new LoginNotifier();
 		this.memberList=memberList;
 	}

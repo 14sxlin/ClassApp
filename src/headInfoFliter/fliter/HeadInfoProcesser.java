@@ -9,10 +9,10 @@ import object_client_server.Client;
  * @author 林思鑫
  *
  */
-public abstract class HeadInfoFilter {
+public abstract class HeadInfoProcesser {
 		
 	/**
-	 * 适用于网列表中添加对象
+	 * 适用于往列表中添加对象
 	 * @param client 传入一个Client对象
 	 * @return 传回新的客户端列表
 	 */

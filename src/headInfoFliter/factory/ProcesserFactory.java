@@ -2,19 +2,19 @@ package headInfoFliter.factory;
 
 import java.util.ArrayList;
 
-import headInfoFliter.fliter.HeadInfoFilter;
-import headInfoFliter.fliter.LoginFilter;
-import headInfoFliter.fliter.LogoutFilter;
+import headInfoFliter.fliter.HeadInfoProcesser;
+import headInfoFliter.fliter.LoginProcesser;
+import headInfoFliter.fliter.LogoutProcesser;
 import object_client_server.Client;
 
-public class FilterFactory {
+public class ProcesserFactory {
 	
 	/**
 	 * 用来调用下面提醒的方法
 	 */
 	public static  ArrayList<Client> memberList;
 	
-	public FilterFactory() {
+	public ProcesserFactory() {
 		
 	}
 	
@@ -32,12 +32,12 @@ public class FilterFactory {
 	 * @param filterType 传入的判断条件
 	 * @return 返回相应的过滤器
 	 */
-	public static  HeadInfoFilter createFilter(String filterType)
+	public static  HeadInfoProcesser createFilter(String filterType)
 	{
 		if(filterType.equals("login") )
-			return new LoginFilter(memberList);
+			return new LoginProcesser(memberList);
 		if(filterType.equals("logout") )
-			return new LogoutFilter(memberList);
+			return new LogoutProcesser(memberList);
 		else return null;
 	}
 }
