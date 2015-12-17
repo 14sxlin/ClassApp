@@ -8,8 +8,11 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+
+import gui.pubChatRoom.client.ClassAppMainFrame;
 
 /**
  * 用户登录的界面
@@ -41,9 +44,22 @@ public class LoginDialog extends JDialog implements ActionListener {
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		this.setVisible(true);
 	}
+	
 	@Override
-	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
+	public void actionPerformed(ActionEvent e) {
+		if(e.getActionCommand().equals("登录"))
+		{
+			// TODO Auto-generated catch block 这里应该从数据库查询
+			if(String.copyValueOf(password.getPassword()).equals("123"))//只要密码是123 就可以登录
+			{
+				new ClassAppMainFrame(userName.getText());
+				this.dispose();
+			}else
+			{
+				JOptionPane.showMessageDialog(this, "用户名或密码错误");
+				password.setText("");
+			}
+		}
 		
 	}
 	

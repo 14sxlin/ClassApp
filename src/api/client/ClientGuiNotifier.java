@@ -7,7 +7,7 @@ import head_Info_Sender_Receiver.ListInfoProcesser;
 
 /**
  * 这个类是用来传递的内层的列表的信息的
- * 当客户端接收到列表的信息的时候
+ * 当客户端接收到列表的字符串信息的时候
  * 通过这个类来通知gui类中的列表进行更新
  * @author think
  *

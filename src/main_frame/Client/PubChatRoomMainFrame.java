@@ -24,17 +24,23 @@ import gui.pubChatRoom.client.GuiForPublicChatRoom;
 	/**
 	 * 公共聊天室的用户界面
 	 */
-	private GuiForPublicChatRoom gui;
+	public GuiForPublicChatRoom gui;
 	
 	/**
 	 * 用来保存服务器发送过来的信息
 	 */
 	private StringBuilder storeString;
 	
-	public PubChatRoomMainFrame() {
+	/**
+	 * 用来保存自己的用户名
+	 */
+	private String username;
+	
+	public PubChatRoomMainFrame(String username) {
 		
 		gui=new  GuiForPublicChatRoom(null);
 		storeString=new StringBuilder();
+		this.username = username ;
 		
 		Thread thread=new Thread(new Runnable() {
 			
@@ -56,7 +62,7 @@ import gui.pubChatRoom.client.GuiForPublicChatRoom;
 	{
 		//连接服务器
 		try {
-			client=new ClientForPubChatRoom("小李子",gui.jTextArea);
+			client=new ClientForPubChatRoom(username,gui.jTextArea);
 			client.startConnectServer(ServerInfo.SERVER_LOCAL_IP, ServerInfo.PORT);
 		} catch (IOException e) {
 			gui.jTextArea.append("服务器关闭了");
@@ -117,6 +123,6 @@ import gui.pubChatRoom.client.GuiForPublicChatRoom;
 	
 	public static void main(String []args)
 	{
-		new PubChatRoomMainFrame();
+		new PubChatRoomMainFrame("xiaoli");
 	}
 }

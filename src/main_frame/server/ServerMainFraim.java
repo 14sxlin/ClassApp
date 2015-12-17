@@ -24,6 +24,7 @@ public class ServerMainFraim {
 	 * 用户图形界面
 	 */
 	private GuiForServer gui;
+
 	/**
 	 * 服务器变量
 	 */
@@ -82,7 +83,7 @@ public class ServerMainFraim {
 					currentThread.start();					
 				}
 				else//这个需要完善一下
-				{
+				{// TODO Auto-generated catch block
 					try {
 						server.stopService();
 					} catch (IOException e1) {

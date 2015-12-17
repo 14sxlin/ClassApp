@@ -143,9 +143,10 @@ public class ServerForPubChatRoom implements AsServer{
 						ClientsManager.userNameList.add(client.getUserName());
 						//计数
 						ClientsManager.counter++;
-						//向客户端发送在线用户的列表的头信息
-						client.getSocketStream().getPrintWriter().println(listToString(ClientsManager.userNameList));
-						client.getSocketStream().getPrintWriter().flush();
+						//向所有的客户端发送在线用户的列表的头信息
+//						client.getSocketStream().getPrintWriter().println(listToString(ClientsManager.userNameList));
+//						client.getSocketStream().getPrintWriter().flush();
+						ClientsManager.sendAllClient(listToString(ClientsManager.userNameList));
 						
 						//更新服务器组件的数据
 						if (tdt != null)
@@ -209,7 +210,7 @@ public class ServerForPubChatRoom implements AsServer{
 	 * 停止所有的服务,这个应该给所有的客户端发送退出消息,然后让客户端退出,之后自己在停止socket
 	 * @throws IOException serverSocket.close()会产生的错误,交给调用者处理
 	 */
-	synchronized public void stopService() throws IOException
+	public void stopService() throws IOException
 	{
 		//流的关闭有点复杂 这是因为流的关闭是两方面的 需要好好研究一下
 //		Iterator<Client> it = clientList.iterator();
@@ -218,7 +219,10 @@ public class ServerForPubChatRoom implements AsServer{
 //			it.next().getSocketStream().closeStream();
 //		}
 //		
-		this.serverSocket.close();//这个指定的是不再去监听那个端口了
+		if( this.serverSocket != null)
+		{
+			this.serverSocket.close();//这个指定的是不再去监听那个端口了
+		}
 		
 	}
 	

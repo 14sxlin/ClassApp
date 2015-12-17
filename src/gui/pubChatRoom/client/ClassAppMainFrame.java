@@ -14,6 +14,7 @@ import javax.swing.JToolBar;
 import javax.swing.border.TitledBorder;
 
 import login.LoginDialog;
+import main_frame.Client.PubChatRoomMainFrame;
 
 
 /**
@@ -31,20 +32,21 @@ public class ClassAppMainFrame extends JFrame implements ActionListener{
 	private String [] buttonstr= {"聊天室","文件互传","发送公告"};
 	private JButton [] buttons;
 	private JToolBar toolbar;
+	private PubChatRoomMainFrame pubChatRoom;
 	
 	/**
 	 * 默认的构造函数
 	 */
-	public ClassAppMainFrame() {
-		guiDesign();
+	public ClassAppMainFrame(String username) {
+		guiDesign(username);
 	}
 	
 	/**
 	 * 界面布置
 	 */
-	private void guiDesign()
+	private void guiDesign(String username)
 	{
-		this.setTitle("我们这一班");
+		this.setTitle("我们这一班--"+username);
 		LoginDialog.dim=getToolkit().getScreenSize();
 		this.setBounds(LoginDialog.dim.width/2-250, LoginDialog.dim.height/2-200, 500, 400);
 		
@@ -78,17 +80,23 @@ public class ClassAppMainFrame extends JFrame implements ActionListener{
 		jsplit.setDividerLocation(200);
 		this.add(jsplit);
 		
+		//构造聊天室界面,但是一开始不可见
+		pubChatRoom = new PubChatRoomMainFrame(username);
+		
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setVisible(true);
 	}
 
-	public static void main(String[] args) {
-		new ClassAppMainFrame();
-	}
+//	public static void main(String[] args) {
+//		new ClassAppMainFrame();
+//	}
 
 	@Override
-	public void actionPerformed(ActionEvent arg0) {
+	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
-		
+		if( e.getActionCommand().equals("聊天室"))
+		{
+			pubChatRoom.gui.setVisible(true);
+		}
 	}
 }

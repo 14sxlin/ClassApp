@@ -128,8 +128,11 @@ public class GuiForPublicChatRoom extends JDialog {
 				GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0);
 		this.add(toolBar, constraints);
 		
-		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-		this.setVisible(true);
+		this.setDefaultCloseOperation(HIDE_ON_CLOSE);
+		//只是隐藏,方便当有人发送消息过来的时候能够接受到
+		
+		//这是为了在登录的时候就想服务器发送消息,所以不要显示出来
+//		this.setVisible(true);
 		
 	}
 }
