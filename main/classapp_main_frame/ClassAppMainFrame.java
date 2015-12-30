@@ -71,7 +71,7 @@ public class ClassAppMainFrame extends JFrame implements ActionListener{
 		
 		//添加组件
 		JSplitPane jsplit=new JSplitPane(JSplitPane.VERTICAL_SPLIT, messageArea, buttonArea);
-		jsplit.setDividerLocation(200);
+		jsplit.setDividerLocation(this.getHeight()*2/3);
 		this.add(jsplit);
 		
 		//构造聊天室界面,但是一开始不可见
@@ -81,9 +81,9 @@ public class ClassAppMainFrame extends JFrame implements ActionListener{
 		this.setVisible(true);
 	}
 
-//	public static void main(String[] args) {
-//		new ClassAppMainFrame();
-//	}
+	public static void main(String[] args) {
+		new ClassAppMainFrame("2223");
+	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
