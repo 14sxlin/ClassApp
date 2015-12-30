@@ -12,7 +12,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
-import gui.pubChatRoom.client.ClassAppMainFrame;
+import classapp_main_frame.ClassAppMainFrame;
 
 /**
  * 用户登录的界面
