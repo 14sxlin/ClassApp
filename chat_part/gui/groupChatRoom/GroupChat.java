@@ -44,6 +44,11 @@ public class GroupChat extends JDialog implements ActionListener {
 	 * @param jframe 需要指定父容器,也可以为null
 	 */
 	public GroupChat(JFrame jframe) {
+		setGui();
+	}
+	
+	private void setGui()
+	{
 		this.setTitle("私/组聊");
 		LoginDialog.dim=getToolkit().getScreenSize();
 		this.setBounds(LoginDialog.dim.width/2-250, LoginDialog.dim.height/2-200, 500, 400);
@@ -88,7 +93,6 @@ public class GroupChat extends JDialog implements ActionListener {
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		this.setVisible(true);
 	}
-	
 //	//发送聊天语句
 //	public void send(String massage)
 //	{
