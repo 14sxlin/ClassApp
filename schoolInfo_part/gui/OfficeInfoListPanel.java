@@ -19,6 +19,7 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JToolBar;
@@ -36,6 +37,9 @@ public class OfficeInfoListPanel extends JPanel{
 	private JButton nextButton,lastButton;
 	private int currentIndex = 1;
 	private JTextField jumpfield;
+	private JScrollPane scrollPane;
+
+	private JButton jumpButton;
 	
 	public OfficeInfoListPanel() {
 		
@@ -48,6 +52,7 @@ public class OfficeInfoListPanel extends JPanel{
 		
 		refreshList(AutoOfficeTools.getInfoList(1));
 		list = new JList<>(this.model);
+		list.setCellRenderer(new JTextPaneListRenderer());
 		list.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e)
 			{
@@ -57,16 +62,15 @@ public class OfficeInfoListPanel extends JPanel{
 						Desktop.getDesktop().browse(
 								new URI(AutoOfficeTools.getDetailWebsite((OfficeInfo) list.getSelectedValue())));
 					} catch (IOException | URISyntaxException e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					} 
 				}
 			}
 		});
-		this.add(new JScrollPane(list),"Center");
+		this.add(scrollPane=new JScrollPane(list),"Center");
 		
 		JToolBar toolbar = new JToolBar();
-		toolbar.add(currentLabel = new JLabel("当前在第 "+currentIndex+ " 页"));
+		toolbar.add(currentLabel = new JLabel("第 "+currentIndex+ " 页"));
 		toolbar.add(lastButton = new JButton("上一页"));
 		toolbar.add(nextButton = new JButton("下一页"));
 		lastButton.addActionListener(new ButtonEvent(false));
@@ -78,13 +82,11 @@ public class OfficeInfoListPanel extends JPanel{
 			
 			@Override
 			public void keyTyped(KeyEvent e) {
-				// TODO Auto-generated method stub
 				
 			}
 			
 			@Override
 			public void keyReleased(KeyEvent e) {
-				// TODO Auto-generated method stub
 				
 			}
 			
@@ -92,24 +94,34 @@ public class OfficeInfoListPanel extends JPanel{
 			public void keyPressed(KeyEvent e) {
 				if(e.getKeyCode() == KeyEvent.VK_ENTER)
 				{
-					try {
-						int index = Integer.parseInt(jumpfield.getText());
-						if( index>=1 && index<=AutoOfficeTools.TOTALINDEX)
-							refreshList(AutoOfficeTools.getInfoList(index));
-						else 	JOptionPane.showMessageDialog(null, "超出范围" );
-						jumpfield.setText("");
-					} catch (NumberFormatException e1) {
-						JOptionPane.showMessageDialog(null, "输入数字" );
-								
-					}
+					jump();
 				}
-				
 			}
 		});
-		
+		toolbar.add(jumpButton = new JButton("跳转"));
+		jumpButton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				jump();
+			}
+			
+		});
 		this.add(toolbar,"South");
 	}
 	
+	private void jump() {
+		try {
+			int index = Integer.parseInt(jumpfield.getText());
+			if( index>=1 && index<=AutoOfficeTools.TOTALINDEX)
+				refreshList(AutoOfficeTools.getInfoList(index));
+			else 	JOptionPane.showMessageDialog(null, "超出范围" );
+			jumpfield.setText("");
+		} catch (NumberFormatException e1) {
+			JOptionPane.showMessageDialog(null, "输入数字" );
+					
+		}
+	}
 	private class ButtonEvent implements ActionListener{
 		private boolean isNextButton = false;
 		
@@ -144,8 +156,13 @@ public class OfficeInfoListPanel extends JPanel{
 			}
 		for( OfficeInfo info: valueList)
 			model.addElement(info);
+		if(scrollPane != null)
+		{	JScrollBar bar = scrollPane.getVerticalScrollBar();
+			bar.setValue(0);
+		}
+		
 		if(currentLabel != null)
-			currentLabel.setText("当前在第 "+currentIndex+ " 页");
+			currentLabel.setText("第 "+currentIndex+ " 页");
 	}
 
 }

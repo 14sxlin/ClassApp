@@ -81,9 +81,9 @@ public class ClassAppMainFrame extends JFrame implements ActionListener{
 		this.setVisible(true);
 	}
 
-	public static void main(String[] args) {
-		new ClassAppMainFrame("2223");
-	}
+//	public static void main(String[] args) {
+//		new ClassAppMainFrame("2223");
+//	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {

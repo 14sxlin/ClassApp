@@ -38,7 +38,7 @@ public class OfficeInfo {
 	
 	@Override
 	public String toString() {
-		return this.title;
+		return this.date+"       \n"+this.title;
 	}
 	
 	
