@@ -7,11 +7,11 @@ import java.util.ArrayList;
 import org.junit.Before;
 import org.junit.Test;
 
-import headInfoFliter.factory.ProcesserFactory;
-import headInfoFliter.fliter.HeadInfoProcesser;
-import headInfoFliter.fliter.LoginProcesser;
-import headInfoFliter.fliter.LogoutProcesser;
-import object_client_server.Client;
+import headInfoProcesser.factory.ProcesserFactory;
+import headInfoProcesser.processer.HeadInfoProcesser;
+import headInfoProcesser.processer.LoginProcesser;
+import headInfoProcesser.processer.LogoutProcesser;
+import object.Client;
 
 public class TestProcesserFactory {
 
