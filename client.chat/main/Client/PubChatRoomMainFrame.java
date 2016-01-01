@@ -1,4 +1,4 @@
-package main_frame.Client;
+package main.Client;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -38,7 +38,7 @@ import gui.pubChatRoom.client.GuiForPublicChatRoom;
 	
 	public PubChatRoomMainFrame(String username) {
 		
-		gui=new  GuiForPublicChatRoom(null);
+		gui=new  GuiForPublicChatRoom(username);
 		storeString=new StringBuilder();
 		this.username = username ;
 		
@@ -62,7 +62,7 @@ import gui.pubChatRoom.client.GuiForPublicChatRoom;
 	{
 		//连接服务器
 		try {
-			client=new ClientForPubChatRoom(username,gui.jTextArea);
+			client=new ClientForPubChatRoom(username,gui);
 			client.startConnectServer(ServerInfo.SERVER_LOCAL_IP, ServerInfo.PORT);
 		} catch (IOException e) {
 			gui.jTextArea.append("服务器关闭了");
@@ -92,7 +92,7 @@ import gui.pubChatRoom.client.GuiForPublicChatRoom;
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				client.sendMessageToServer(gui.jTextField.getText());
-				gui.jTextArea.append(gui.jTextField.getText()+"\n");
+//				gui.jTextArea.append(gui.jTextField.getText()+"\n");
 				gui.jTextField.setText("");
 			}
 		});
@@ -109,7 +109,7 @@ import gui.pubChatRoom.client.GuiForPublicChatRoom;
 				if(e.getKeyCode() == KeyEvent.VK_ENTER)
 				{
 					client.sendMessageToServer(gui.jTextField.getText());
-					gui.jTextArea.append(gui.jTextField.getText()+"\n");
+//					gui.jTextArea.append(gui.jTextField.getText()+"\n");
 					gui.jTextField.setText("");
 				}
 			}
@@ -119,10 +119,10 @@ import gui.pubChatRoom.client.GuiForPublicChatRoom;
 				
 			}
 		});
+		
 	}
-	
-	public static void main(String []args)
-	{
-		new PubChatRoomMainFrame("xiaoli");
+
+	public ClientForPubChatRoom getClient() {
+		return client;
 	}
 }

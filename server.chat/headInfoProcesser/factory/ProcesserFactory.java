@@ -12,27 +12,27 @@ public class ProcesserFactory {
 	/**
 	 * 用来调用下面提醒的方法
 	 */
-	public static  ArrayList<Client> memberList;
+	public  ArrayList<Client> memberList;
 	
-	public ProcesserFactory() {
-		
+	public ProcesserFactory(ArrayList<Client> clientList) {
+		this.memberList = clientList;
 	}
 	
-	/**
-	 * 设置用户列表
-	 * @param clientList
-	 */
-	public static  void setMemeberList(ArrayList<Client> clientList)
-	{
-		memberList=clientList;
-	}
+//	/**
+//	 * 设置用户列表
+//	 * @param clientList
+//	 */
+//	public static  void setMemeberList(ArrayList<Client> clientList)
+//	{
+//		memberList=clientList;
+//	}
 	
 	/**
 	 * 根据条件创建相应的过滤器
 	 * @param Type 传入的判断条件,用包含来判断
 	 * @return 返回相应的过滤器
 	 */
-	public static  HeadInfoProcesser createFilter(String type)
+	public HeadInfoProcesser createProcesser(String type)
 	{
 		if(type.contains("login") )
 			return new LoginProcesser(memberList);

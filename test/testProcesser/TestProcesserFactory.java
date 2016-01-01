@@ -1,4 +1,4 @@
-package testFilter;
+package testProcesser;
 
 import static org.junit.Assert.assertEquals;
 
@@ -30,9 +30,8 @@ public class TestProcesserFactory {
 		clientList.add(c1);
 		clientList.add(c2);
 		
-		ProcesserFactory.setMemeberList(clientList);
-		in = ProcesserFactory.createFilter("login") ;
-		out =ProcesserFactory.createFilter("logout") ;
+		in = new ProcesserFactory(clientList).createProcesser("login") ;
+		out =new ProcesserFactory(clientList).createProcesser("logout") ;
 	}
 
 	@Test
@@ -45,11 +44,14 @@ public class TestProcesserFactory {
 	}
 	
 	@Test 
-	public void testProcessWorkWell()
+	public void testProcessWorkWell() throws Exception
 	{
-		assertEquals( 3 , in.process(c3).size());
-		assertEquals( 2 , out.process("小王").size());
-		assertEquals( 2 , out.process("小张").size());
+		in.process(c3);
+		assertEquals( 3 , clientList.size());
+		out.process("小王");
+		assertEquals( 2 , clientList.size());
+		out.process("小张");
+		assertEquals( 2 , clientList.size());
 	}
 
 }

@@ -20,7 +20,7 @@ public class MockPublicChatRoom_Client extends GuiForPublicChatRoom  {
 	public Socket socket;
 	public MockPublicChatRoom_Client(JFrame host) {
 			// TODO Auto-generated constructor stub
-		super(host);
+		super("");
 		this.setTitle("¿Í»§¶Ë");
 		try {
 			connect("127.0.0.1", 55890);

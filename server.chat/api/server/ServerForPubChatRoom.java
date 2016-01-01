@@ -3,14 +3,16 @@ package api.server;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.Iterator;
 
-import javax.swing.JTextArea;
-
+import gui.pubChatRoom.server.GuiForServer;
 import headInfoProcesser.factory.ProcesserFactory;
+import headInfoProcesser.processer.HeadInfoProcesser;
+import headInfoProcesser.processer.LoginProcesser;
+import headInfoProcesser.processer.LogoutProcesser;
 import object.Client;
+import object.HeadInfoFilter;
 import threadData.ThreadDataTransfer;
+import tools.clientmanager.ClientsManager;
 
 /**
  * 服务器的Socket服务
@@ -24,27 +26,10 @@ public class ServerForPubChatRoom implements AsServer{
 	 */
 	private ServerSocket serverSocket;
 
-	
-//	/**
-//	 * 用来保存在线用户名列表
-//	 */
-//	public ArrayList<String> userNameList;
-	
 	/**
-	 * 用来显示获取客户端的发送到服务器的信息
+	 * 用来与图形界面交互
 	 */
-	public JTextArea textPane;
-	
-//	/**
-//	 * 用来计算在线人数
-//	 * 向外暴露
-//	 */
-//	public int counter=0;
-	
-//	/**
-//	 * 用来保存客户端
-//	 */
-//	ArrayList<Client> clientList;
+	private GuiForServer gui;
 	
 	/**
 	 * 用来传递线程中的值到外面
@@ -52,23 +37,30 @@ public class ServerForPubChatRoom implements AsServer{
 	private ThreadDataTransfer tdt;
 	
 	/**
-	 * 构造方法
-	 * @param tdt 中介数据传输类
+	 * 用来检查并过滤头信息
 	 */
-	public ServerForPubChatRoom(ThreadDataTransfer tdt)  {
-//		userNameList=new ArrayList<>();
-//		clientList=new ArrayList<>();
-		this.tdt=tdt;
-	}
+	private HeadInfoFilter filter;
+	
+	/**
+	 * 用来产生相应的过滤器
+	 */
+	private ProcesserFactory factory;
+	
+//	/**
+//	 * 构造方法
+//	 * @param tdt 中介数据传输类
+//	 */
+//	public ServerForPubChatRoom(ThreadDataTransfer tdt)  {
+//		this.tdt=tdt;
+//	}
 	
 	/**
 	 * 构造方法
 	 * @param textPane 用来显示信息的,主要是测试使用
 	 * @param tdt 向外界传递线程内的数据的中介
 	 */
-	public ServerForPubChatRoom(ThreadDataTransfer tdt,JTextArea textPane)  {
-		this(tdt);
-		this.textPane=textPane;
+	public ServerForPubChatRoom(GuiForServer gui)  {
+		this.gui = gui;
 	}
 	
 	/**
@@ -82,8 +74,8 @@ public class ServerForPubChatRoom implements AsServer{
 			//新建一个serverSocket,可能会出现端口已经被占用的问题
 			serverSocket=new ServerSocket(port);
 			
-			if ( textPane != null )
-				textPane.append("正在等待链接\n");
+			if ( gui.textPane != null )
+				gui.textPane.append("正在等待链接\n");
 			
 			startListen();
 			
@@ -107,7 +99,6 @@ public class ServerForPubChatRoom implements AsServer{
 					try {
 						client = new Client(currentSocket);
 					} catch (IOException e2) {
-						// TODO Auto-generated catch block
 						e2.printStackTrace();
 					}
 
@@ -116,54 +107,63 @@ public class ServerForPubChatRoom implements AsServer{
 					client.getSocketStream().getPrintWriter().println("连接服务器成功\n");
 					client.getSocketStream().getPrintWriter().flush();
 					
-					
-					
 					//接收客户端发送过来的头信息
-					//认为第一次发过来的信息就是头信息
+					//认为第一次发过来的信息就是头信息,包含了用户名
 					String line = null;
 					try {
 						line = client.getSocketStream().getBufferReader().readLine();
-						
-						if(textPane != null)
-							textPane.append(line+"\n");
+					
+						if(gui.textPane != null)
+							gui.textPane.append(line+"\n");
 					} catch (IOException e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
 					
-					//新建头信息处理工厂过滤信息
-					ProcesserFactory.setMemeberList(ClientsManager.clientList);
 					//获取用户名
 					client.setUserName(searchUserName(line));
 					
 					synchronized (ClientsManager.class) {
-						//将客户端加入到列表中去
-						ClientsManager.clientList.add(client);
-						//将用户名加入到列表中去
-						ClientsManager.userNameList.add(client.getUserName());
-						//计数
-						ClientsManager.counter++;
-						//向所有的客户端发送在线用户的列表的头信息
-//						client.getSocketStream().getPrintWriter().println(listToString(ClientsManager.userNameList));
-//						client.getSocketStream().getPrintWriter().flush();
-						ClientsManager.sendAllClient(listToString(ClientsManager.userNameList));
+						try {
+							new LoginProcesser(ClientsManager.clientList).process(client);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
 						
 						//更新服务器组件的数据
 						if (tdt != null)
-							tdt.updateState(ClientsManager.counter, ClientsManager.userNameList);
-						if (textPane != null)
-							textPane.append("userNameList=" + listToString(ClientsManager.userNameList) + "\n");
+							tdt.updateState(ClientsManager.clientList.size(), ClientsManager.userNameList);
+						if (gui.textPane != null)
+							gui.textPane.append("userNameList=" +ClientsManager.userNameList.toString()  + "\n");
 					}
 					
-					//接收信息 测试使用 这个应该放在最后
-					if(textPane != null)
+					//接收客户端的信息 这里面要处理客户端可能发过来的头信息
+					if(gui.textPane != null)
 						try {
 							while((line=client.getSocketStream().getBufferReader().readLine()) != null)
 							{
-								textPane.append(line+"\n");
+								filter = new HeadInfoFilter(line);
+								if(filter.isHeadInfo())
+								{
+									try {
+										factory = new ProcesserFactory(ClientsManager.clientList);
+										HeadInfoProcesser processer ;
+										//根据实例化的对象判断使用哪个方法
+										if((processer=factory.createProcesser(filter.filteType())) instanceof LogoutProcesser)
+											processer.process(filter.filteContent());
+										else processer.process(client);
+									} catch (Exception e) {
+										e.printStackTrace();
+									}
+//									gui.textPane.append(line+"\n");
+								}
+								else
+								{
+//									gui.textPane.append(line+"\n");
+									ClientsManager.sendAllClient(line);
+								}
+								
 							}
 						} catch (IOException e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}	
 					
@@ -180,30 +180,14 @@ public class ServerForPubChatRoom implements AsServer{
 	 */
 	private String searchUserName(String line)
 	{
-		int i=line.indexOf("UserName=");
-		int length="UserName=".length();
+		int i=line.indexOf("content=");
+		int length="content=".length();
 		if(i!=-1)
-			return line.substring(i+length,line.indexOf("&",length));
+			return line.substring(i+length,line.indexOf("#",length));
 		else
 			return "";
 	}
 
-	/**
-	 * 获取用户名信息列表中的所有用户名,转换成特定格式的字符串(userName1&userName2&...&)
-	 * @param nameList 保存了在线用户名信息的列表
-	 * @return 特定格式的在线用户名字符串
-	 */
-	private String listToString(ArrayList<String> nameList)
-	{
-		String returnString="#head:list#";
-		Iterator<String> it=nameList.iterator();
-		while(it.hasNext())
-		{
-			returnString=returnString+it.next()+"&";
-		}
-		returnString = returnString.substring(0, returnString.length()-1);
-		return returnString;
-	}
 	
 	
 	/**
@@ -223,6 +207,12 @@ public class ServerForPubChatRoom implements AsServer{
 		{
 			this.serverSocket.close();//这个指定的是不再去监听那个端口了
 		}
+		
+	}
+
+	@Override
+	public void registerUpdate() {
+		// TODO Auto-generated method stub
 		
 	}
 	
@@ -254,13 +244,6 @@ public class ServerForPubChatRoom implements AsServer{
 //			pw.flush();
 //		}
 //	}
-	
-	
-	@Override
-	public void registerUpdate() {
-		// TODO Auto-generated method stub
-		
-	}
 
 }
 

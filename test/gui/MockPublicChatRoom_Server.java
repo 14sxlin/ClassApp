@@ -24,7 +24,7 @@ public class MockPublicChatRoom_Server extends GuiForPublicChatRoom {
 	private OutputStream out;
 	private Socket socket;
 	public MockPublicChatRoom_Server(JFrame host) throws IOException {
-		super(host);
+		super("");
 		super.setTitle("·þÎñ¶Ë");		
 		this.createConnection(55890);
 	}

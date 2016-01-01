@@ -11,9 +11,10 @@ import javax.swing.JSplitPane;
 import javax.swing.JToolBar;
 import javax.swing.border.TitledBorder;
 
+import api.client.LogoutEvent;
 import classapp.login.LoginDialog;
 import gui.OfficeInfoListPanel;
-import main_frame.Client.PubChatRoomMainFrame;
+import main.Client.PubChatRoomMainFrame;
 
 
 /**
@@ -37,6 +38,7 @@ public class ClassAppMainFrame extends JFrame implements ActionListener{
 	 */
 	public ClassAppMainFrame(String username) {
 		guiDesign(username);
+		this.addWindowListener(new LogoutEvent(pubChatRoom.getClient()));
 	}
 	
 	/**

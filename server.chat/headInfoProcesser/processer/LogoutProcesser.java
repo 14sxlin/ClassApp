@@ -1,56 +1,55 @@
 package headInfoProcesser.processer;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import api.notifier.LogoutNotifier;
-import api.notifier.Notifier;
+import main_frame.server.ServerMainFraim;
 import object.Client;
+import tools.clientmanager.ClientsManager;
 
+/**
+ * @author LinSixin sparrowxin@sina.cn
+ *这个是处理退出类,如果有用户退出的时候
+ *这个类能够更新ClientsManager类中的clients
+ *信息
+ */
 public class LogoutProcesser extends HeadInfoProcesser {
 	
-	private Notifier logoutNotifier;
 	private ArrayList<Client> memberList;
 	
 	public LogoutProcesser(ArrayList<Client> memberList) {
-		this.logoutNotifier=new LogoutNotifier();
 		this.memberList=memberList;
 	}
 	
 	@Override
-	public ArrayList<Client> process(Client client) {
-		return null;
+	public void process(Client logoutClient) throws Exception {
+		throw new Exception("不用这个方法");
 	}
 
 	@Override
-	public ArrayList<Client> process(String userName) {
-		try {
-			
-			this.logoutNotifier.notify(this.memberList);
-			
+	public void process(String logoutClientName) {
+		synchronized (memberList) {
 			Client tempClient;
-			if (( tempClient = findClient(userName)) != null)
+			if ((tempClient = findClient(logoutClientName)) != null)
 				memberList.remove(tempClient);
-			
-			return this.memberList;
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
 		}
+		ClientsManager.updateNameList();
+		ServerMainFraim.tdt.updateState(ClientsManager.counter, ClientsManager.userNameList);
+		ClientsManager.sendAllListMessage();
 	}
 	
 	private Client findClient(String userName)
 	{
-		Iterator<Client> it=this.memberList.iterator();
-		while( it.hasNext())
-		{
-			Client tempClient=it.next();
-			if(tempClient.getUserName().equals(userName))
-				return tempClient;
+		synchronized (memberList) {
+			Iterator<Client> it = this.memberList.iterator();
+			while (it.hasNext()) {
+				Client tempClient = it.next();
+				if (tempClient.getUserName().equals(userName))
+					return tempClient;
+			}
+			return null;
 		}
-		return null;
+		
 	}
 
 }

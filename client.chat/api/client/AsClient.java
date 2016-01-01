@@ -1,7 +1,8 @@
 package api.client;
 
 import java.io.IOException;
-import java.io.PrintWriter;
+
+import object.Server;
 
 /**
  * <p>
@@ -20,11 +21,17 @@ public interface AsClient  {
 	void startConnectServer(String serverIp,int serverPort) throws IOException;
 
 	/**
-	 *发送本机的信息给服务器
+	 *发送本机登录的信息给服务器
 	 * @param out 指定要发送的输出流
 	 */
-	 void sendHeaderInfo(PrintWriter out);
+	 void sendLoginInfo(Server server);
 	
+	 /**
+	  * 向服务器发送退出的信息
+	  * @param out 指定要发送的输出流
+	  */
+	 void sendLogoutInfo(Server server);
+	 
 	/**
 	 * 监听服务器发送过来的消息
 	 * @param storeString 用来保存已经发过来的信息
@@ -37,9 +44,9 @@ public interface AsClient  {
 	 * @param message 要发送的信息
 	 */
 	void sendMessageToServer(String message);
-	
+
 	/**
-	 * 向服务器发送退出的消息
+	 * @return 返回本客户端绑定的服务器
 	 */
-	void sendLogoutMessage();
+	Server getServer();
 }

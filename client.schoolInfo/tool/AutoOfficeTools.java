@@ -1,6 +1,7 @@
 package tool;
 
 import java.util.ArrayList;
+import java.util.concurrent.TimeoutException;
 
 import bean.OfficeInfo;
 import internet.HttpTools;
@@ -18,7 +19,7 @@ public class AutoOfficeTools {
 	public static ArrayList<OfficeInfo> list ;
 	private static StringBuilder sb = new StringBuilder();
 	
-	private static void openPage(int pageIndex)
+	private static void openPage(int pageIndex) throws TimeoutException
 	{
 		String param = "pageindex=";
 		//设置请求参数
@@ -28,11 +29,10 @@ public class AutoOfficeTools {
 			param+=1;
 		param+="&pagesize=10&totalcount=4061&totalindex=407"
 				+ "&keyword=&fwdw=-1";
-		if(sb != null && !sb.equals(""))
-			sb.delete(0, sb.length());
-		
-		sb = HttpTools.post(WEBSITE, param,"gbk");
-		
+			if (sb != null && !sb.equals(""))
+				sb.delete(0, sb.length());
+			sb = HttpTools.post(WEBSITE, param, "gbk");
+			
 //		getTitle();
 //		getDepartment();
 //		getDate();
@@ -99,7 +99,7 @@ public class AutoOfficeTools {
 		return list;
 	}
 	
-	public static ArrayList<OfficeInfo> getInfoList(int pageIndex)
+	public static ArrayList<OfficeInfo> getInfoList(int pageIndex) throws TimeoutException
 	{
 		openPage(pageIndex);
 		ArrayList<String>titles = getTitle();

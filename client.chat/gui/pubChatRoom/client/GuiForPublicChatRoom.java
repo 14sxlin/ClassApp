@@ -1,16 +1,16 @@
 package gui.pubChatRoom.client;
 
-import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
@@ -19,8 +19,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JToolBar;
-
-import api.client.ClientGuiNotifier;
 
 /**
  * 公共聊天室,给客户端使用的
@@ -49,15 +47,21 @@ public class GuiForPublicChatRoom extends JDialog {
 	private JToolBar toolBar;
 	private JRadioButton online,all;
 	public JList<String> classmateList;
-	public static ClientGuiNotifier clientGuiNotifier;
+	
+//	/**
+//	 * 用来通知Jlist变化的类
+//	 */
+//	public static ClientGuiNotifier clientGuiNotifier;
+	
 	/**
 	 * 默认的构造函数,创建一个公共聊天室的窗口
-	 * @param host 指定了parent容器,可以为null
+	 * @param username 用户名
 	 */
-	public GuiForPublicChatRoom(JFrame host) {
+	public GuiForPublicChatRoom(String username) {
 		
-		guiDesign(host);
-		clientGuiNotifier = new ClientGuiNotifier(this.classmateList);
+		guiDesign(username);
+//		clientGuiNotifier = new ClientGuiNotifier(classmateList);
+		
 	}
 	
 	
@@ -65,11 +69,11 @@ public class GuiForPublicChatRoom extends JDialog {
 	 * gui的设定
 	 * @param host 指定父容器
 	 */
-	private void guiDesign(JFrame host)
+	private void guiDesign(String username)
 	{
-		this.setTitle("我们这一班-群聊");
+		this.setTitle("群聊---"+username);
 		this.setSize(500, 400);
-		this.setLocationRelativeTo(host);
+		this.setLocationRelativeTo(null);
 		
 		GridBagLayout bagLayout=new GridBagLayout();
 		this.setLayout(bagLayout);
@@ -119,8 +123,21 @@ public class GuiForPublicChatRoom extends JDialog {
 		constraints=new GridBagConstraints(6, 2, 2, 8, 0, 0, GridBagConstraints.CENTER, 
 				GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0);
 		classmateList = new JList<>(new DefaultListModel<>());
-		classmateList.setBackground(Color.lightGray);
-		this.add(classmateList, constraints);
+		classmateList.setCellRenderer(new ClassmateListRender(username));
+		classmateList.setToolTipText("使用crtl+点击多选,鼠标右键撤销全部选中");
+		this.add(new JScrollPane(classmateList), constraints);
+		classmateList.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if(e.getButton()==MouseEvent.BUTTON1)
+				{
+					// TODO Auto-generated catch block
+				}else
+				{
+					classmateList.clearSelection();
+				}
+			}
+		});
 		
 		//工具栏
 		toolBar=new JToolBar();

@@ -1,10 +1,11 @@
-package api.server;
+package tools.clientmanager;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Iterator;
 
 import object.Client;
+import object.HeadType;
 
 public class ClientsManager {
 	
@@ -60,5 +61,37 @@ public class ClientsManager {
 			client.getSocketStream().getPrintWriter().println(message);
 			client.getSocketStream().getPrintWriter().flush();
 		}
+	}
+
+	/**
+	 * 用来更新用户名列表的
+	 * 其实主要的操作都是在于clientsList列表
+	 * 而userNameList是有clientsList生成的
+	 */
+	public synchronized static void updateNameList()
+	{
+		userNameList.removeAll(userNameList);
+		Iterator<Client> it = clientList.iterator();
+		while (it.hasNext()) {
+			userNameList.add(it.next().getUserName());
+		}
+		counter = userNameList.size();
+	}
+	
+	/**
+	 * 发送列表信息给客户端
+	 */
+	public static void sendAllListMessage()
+	{
+		String returnString;
+		synchronized (userNameList) {
+			returnString = HeadType.LIST;
+			Iterator<String> it = userNameList.iterator();
+			while (it.hasNext()) {
+				returnString = returnString + it.next() + "&";
+			}
+			returnString = returnString.substring(0, returnString.length() - 1)+"#";
+		}
+		sendAllClient(returnString);
 	}
 }

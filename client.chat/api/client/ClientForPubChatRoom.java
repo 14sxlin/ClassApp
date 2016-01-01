@@ -10,7 +10,9 @@ import javax.swing.JList;
 import javax.swing.JTextArea;
 
 import gui.pubChatRoom.client.GuiForPublicChatRoom;
+import object.HeadType;
 import object.Server;
+import tools.listprocesser.ListInfoProcesser;
 
 /**
  * 客户端的socket管理
@@ -39,21 +41,17 @@ public class ClientForPubChatRoom implements AsClient {
 	public JList<String> clientList;
 	
 	/**
+	 * 与gui板块的通信,一个引用
+	 */
+	public GuiForPublicChatRoom gui;
+	/**
 	 * 构造方法
 	 * @param userName 传入客户端的用户名
 	 */
-	public ClientForPubChatRoom(String userName) {
+	public ClientForPubChatRoom(String userName,GuiForPublicChatRoom gui) {
 		this.userName=userName;
-	}
-	
-	/**
-	 * 构造方法
-	 * @param userName 用户名
-	 * @param jTextArea 外部的变量
-	 */
-	public ClientForPubChatRoom(String userName,JTextArea jTextArea) {
-		this(userName);
-		this.jTextArea=jTextArea;
+		this.gui = gui;
+		this.jTextArea=gui.jTextArea;
 	}
 	
 	/**
@@ -70,24 +68,25 @@ public class ClientForPubChatRoom implements AsClient {
 			server=new Server( new Socket(serverIp, serverPort));
 			
 			//发送头信息
-			sendHeaderInfo(server.getSocketStream().getPrintWriter());
+			sendLoginInfo(server);
 			
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		} 
 	}
 	
-	/**
-	 * 发送头信息给服务器
-	 * @param pw 指定服务器的输出流
-	 */
 	@Override
-	public void sendHeaderInfo(PrintWriter pw)
+	public void sendLoginInfo(Server server)
 	{
 		//目前只有两个信息
-		pw.println("#head#"+"UserName="+this.userName
-				+"&Ip="+this.server.getSocket().getInetAddress().getHostAddress());
-		pw.flush();
+		server.getSocketStream().getPrintWriter().println(HeadType.LOGIN+this.userName+"#");
+		server.getSocketStream().getPrintWriter().flush();
+	}
+	
+	@Override
+	public void sendLogoutInfo(Server server) {
+		server.getSocketStream().getPrintWriter().println(HeadType.LOGOUT+this.userName+"#");
+		server.getSocketStream().getPrintWriter().flush();
 	}
 
 	/**
@@ -113,39 +112,39 @@ public class ClientForPubChatRoom implements AsClient {
 	 * @exception IOException 当服务器断开连接的时候会触发这个
 	 */
 	@Override
-	public void receiveMessageFromServer(StringBuilder storeString) throws IOException,SocketException {
-		//TODO Auto-generated catch block
-		//这里如果是服务器首先断开了连接的话,会产生SocketException的错误
-		//这里应该处理一下
-		if (server != null && server.getSocketStream()!=null) {
-			String line="";
-			while ((line = server.getSocketStream().getBufferReader().readLine()) != null) {
-				if( line.contains("#head:"))
-				{
-					// TODO Auto-generated catch block
-					//包含了头信息,首先要确定是什么类型的头信息
-					//列表类型
-					if(line.contains("list"))
+	public void receiveMessageFromServer(StringBuilder storeString) throws IOException {
+		try {
+			if (server != null && server.getSocketStream()!=null) {
+				String line="";
+				while ((line = server.getSocketStream().getBufferReader().readLine()) != null) {
+					if( line.contains(HeadType.LIST))
 					{
-						//通知gui中的list变化
-						GuiForPublicChatRoom.clientGuiNotifier.updateList(line);
+						// TODO Auto-generated catch block
+						try {
+							//通知gui中的list变化
+							gui.classmateList.setModel(ListInfoProcesser.createListModel(line));
+						} catch (NullPointerException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						storeString.append(line + "\n");
+						this.jTextArea.append("接收到list信息"+"\n");
+						this.jTextArea.append(line+"\n");
 					}
-					storeString.append(line + "\n");
-					this.jTextArea.append("接收到头信息"+"\n");
-					this.jTextArea.append(line+"\n");
-				}
-				else
-				{
-					storeString.append(line + "\n");
-					this.jTextArea.append(line+"\n");
-				}
-			} 
+					else
+					{
+						storeString.append(line + "\n");
+						this.jTextArea.append(line+"\n");
+					}
+				} 
+			}
+		} catch (SocketException e) {
+			this.jTextArea.setText("与服务断开连接\n");
 		}
 	}
 
-	
-	@Override
-	public void sendLogoutMessage() {
-		this.sendMessageToServer("#head:logout?username="+this.userName);
+	public Server getServer() {
+		return this.server;
 	}
+	
 }

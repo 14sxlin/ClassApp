@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.concurrent.TimeoutException;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -50,24 +51,28 @@ public class OfficeInfoListPanel extends JPanel{
 	{
 		this.setLayout(new BorderLayout());
 		
-		refreshList(AutoOfficeTools.getInfoList(1));
-		list = new JList<>(this.model);
-		list.setCellRenderer(new JTextPaneListRenderer());
-		list.addMouseListener(new MouseAdapter() {
-			public void mouseClicked(MouseEvent e)
-			{
-				if(e.getClickCount()== 2)
+		try {
+			refreshList(AutoOfficeTools.getInfoList(1));
+			list = new JList<>(this.model);
+			list.setCellRenderer(new JTextPaneListRenderer());
+			list.addMouseListener(new MouseAdapter() {
+				public void mouseClicked(MouseEvent e)
 				{
-					try {
-						Desktop.getDesktop().browse(
-								new URI(AutoOfficeTools.getDetailWebsite((OfficeInfo) list.getSelectedValue())));
-					} catch (IOException | URISyntaxException e1) {
-						e1.printStackTrace();
-					} 
+					if(e.getClickCount()== 2)
+					{
+						try {
+							Desktop.getDesktop().browse(
+									new URI(AutoOfficeTools.getDetailWebsite((OfficeInfo) list.getSelectedValue())));
+						} catch (IOException | URISyntaxException e1) {
+							e1.printStackTrace();
+						} 
+					}
 				}
-			}
-		});
-		this.add(scrollPane=new JScrollPane(list),"Center");
+			});
+			this.add(scrollPane=new JScrollPane(list),"Center");
+		} catch (TimeoutException e2) {
+			JOptionPane.showMessageDialog(null, "无法连接办公自动化");
+		}
 		
 		JToolBar toolbar = new JToolBar();
 		toolbar.add(currentLabel = new JLabel("第 "+currentIndex+ " 页"));
@@ -103,7 +108,14 @@ public class OfficeInfoListPanel extends JPanel{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				jump();
+				new Thread(new Runnable() {
+					
+					@Override
+					public void run() {
+						jump();
+						
+					}
+				}).start();
 			}
 			
 		});
@@ -114,7 +126,11 @@ public class OfficeInfoListPanel extends JPanel{
 		try {
 			int index = Integer.parseInt(jumpfield.getText());
 			if( index>=1 && index<=AutoOfficeTools.TOTALINDEX)
-				refreshList(AutoOfficeTools.getInfoList(index));
+				try {
+					refreshList(AutoOfficeTools.getInfoList(index));
+				} catch (TimeoutException e) {
+					JOptionPane.showMessageDialog(null, "无法连接办公自动化");
+				}
 			else 	JOptionPane.showMessageDialog(null, "超出范围" );
 			jumpfield.setText("");
 		} catch (NumberFormatException e1) {
@@ -132,13 +148,34 @@ public class OfficeInfoListPanel extends JPanel{
 		public void actionPerformed(ActionEvent e) {
 			if( !isNextButton)
 			{	
-				if(currentIndex>1)
-					refreshList(AutoOfficeTools.getInfoList(--currentIndex));
+//				new Thread(new Runnable() {
+//					
+//					@Override
+//					public void run() {
+						if(currentIndex>1)
+							try {
+								refreshList(AutoOfficeTools.getInfoList(--currentIndex));
+							} catch (TimeoutException e1) {
+								JOptionPane.showMessageDialog(null, "无法连接办公自动化");
+							}
+//						
+//					}
+//				}).start();
 				
 			}else
 			{
-				if(currentIndex<AutoOfficeTools.TOTALINDEX)
-					refreshList(AutoOfficeTools.getInfoList(++currentIndex));
+//				new Thread(new Runnable() {
+//					
+//					@Override
+//					public void run() {
+						if(currentIndex<AutoOfficeTools.TOTALINDEX)
+							try {
+								refreshList(AutoOfficeTools.getInfoList(++currentIndex));
+							} catch (TimeoutException e1) {
+								JOptionPane.showMessageDialog(null, "无法连接办公自动化");
+							}
+//					}
+//				}).start();
 			}
 		}
 	}
@@ -147,22 +184,25 @@ public class OfficeInfoListPanel extends JPanel{
 	 * 更新列表的值
 	 * @param valueList 办公自动化信息的数组
 	 */
-	private void refreshList(ArrayList<OfficeInfo> valueList)
+	private void refreshList(final ArrayList<OfficeInfo> valueList)
 	{
-		if(model!= null)
-			model.removeAllElements();
-		else {
-			model = new DefaultListModel<>();
-			}
-		for( OfficeInfo info: valueList)
-			model.addElement(info);
-		if(scrollPane != null)
-		{	JScrollBar bar = scrollPane.getVerticalScrollBar();
-			bar.setValue(0);
-		}
-		
-		if(currentLabel != null)
-			currentLabel.setText("第 "+currentIndex+ " 页");
+//		new Thread(new Runnable() {
+//			public void run() {
+				if (model != null)
+					model.removeAllElements();
+				else {
+					model = new DefaultListModel<>();
+				}
+				for (OfficeInfo info : valueList)
+					model.addElement(info);
+				if (scrollPane != null) {
+					JScrollBar bar = scrollPane.getVerticalScrollBar();
+					bar.setValue(0);
+				}
+				if (currentLabel != null)
+					currentLabel.setText("第 " + currentIndex + " 页");
+//			}
+//		}).start();
 	}
 
 }

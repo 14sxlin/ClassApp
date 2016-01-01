@@ -97,7 +97,6 @@ public class GuiForServer extends JFrame {
 		
 		JScrollPane scrollPane = new JScrollPane();
 		splitPane.setRightComponent(scrollPane);
-		//gui…Ëº∆
 
 		textPane = new JTextArea();
 		scrollPane.setViewportView(textPane);
