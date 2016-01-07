@@ -1,4 +1,4 @@
-package api.client;
+package api.client.pubChatRoom;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -9,8 +9,9 @@ import java.net.UnknownHostException;
 import javax.swing.JList;
 import javax.swing.JTextArea;
 
-import gui.pubChatRoom.client.GuiForPublicChatRoom;
+import gui.pubChatRoom.GuiForPublicChatRoom;
 import headinfoFilter.HeadType;
+import object.AsClient;
 import object.Server;
 import tools.listprocesser.ListInfoProcesser;
 
@@ -19,7 +20,7 @@ import tools.listprocesser.ListInfoProcesser;
  * @author 林思鑫
  *
  */
-public class ClientForPubChatRoom implements AsClient {
+public class PubChatRoomLogic implements AsClient {
 	/**
 	 * 客户端用户的名称,用来标志客户端
 	 */
@@ -48,7 +49,7 @@ public class ClientForPubChatRoom implements AsClient {
 	 * 构造方法
 	 * @param userName 传入客户端的用户名
 	 */
-	public ClientForPubChatRoom(String userName,GuiForPublicChatRoom gui) {
+	public PubChatRoomLogic(String userName,GuiForPublicChatRoom gui) {
 		this.userName=userName;
 		this.gui = gui;
 		this.jTextArea=gui.jTextArea;

@@ -1,6 +1,6 @@
 package testLoginProcesser;
 
-import main.Client.PubChatRoomMainFrame;
+import main.clietn.pubchat.PubChatRoomMainFrame;
 import main_frame.server.ServerMainFraim;
 
 public class Run{

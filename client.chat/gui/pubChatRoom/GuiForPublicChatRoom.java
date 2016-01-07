@@ -1,5 +1,6 @@
-package gui.pubChatRoom.client;
+package gui.pubChatRoom;
 
+import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -9,13 +10,13 @@ import java.awt.event.MouseEvent;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JToolBar;
@@ -42,8 +43,13 @@ public class GuiForPublicChatRoom extends JDialog {
 	 */
 	public  JButton sendButton;
 	
+	/**
+	 * 加入组聊的按钮
+	 */
+	private JButton joinGroupButton;
+	
 	public JTextField jTextField;
-	private JComboBox<String>searchCombo;	
+//	private JComboBox<String>searchCombo;	
 	private JToolBar toolBar;
 	private JRadioButton online,all;
 	public JList<String> classmateList;
@@ -74,9 +80,12 @@ public class GuiForPublicChatRoom extends JDialog {
 		this.setTitle("群聊---"+username);
 		this.setSize(500, 400);
 		this.setLocationRelativeTo(null);
+		this.setLayout(new BorderLayout());
 		
+		
+		//左边的面板
 		GridBagLayout bagLayout=new GridBagLayout();
-		this.setLayout(bagLayout);
+		JPanel panel1 = new JPanel(bagLayout);
 		
 		//文本展示区
 		GridBagConstraints constraints=new 
@@ -84,28 +93,27 @@ public class GuiForPublicChatRoom extends JDialog {
 				GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0);
 		jTextArea=new JTextArea();
 		jTextArea.setEditable(false);
-		this.add(new JScrollPane(jTextArea), constraints);
+		panel1.add(new JScrollPane(jTextArea), constraints);
 		
 		//文本输入框
 		jTextField=new JTextField();
-		constraints=new GridBagConstraints(0, 9, 4, 1, 1, 0, GridBagConstraints.CENTER, 
+		constraints=new GridBagConstraints(0, 9, 4, 1, 0.7, 0, GridBagConstraints.CENTER, 
 				GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0);
-		this.add(jTextField, constraints);		
+		panel1.add(jTextField, constraints);		
 		
 		//发送按钮
-		constraints=new GridBagConstraints(5, 9, 1, 1, 0, 0, GridBagConstraints.CENTER, 
+		constraints=new GridBagConstraints(5, 9, 1, 1, 0.1, 0, GridBagConstraints.CENTER, 
 				GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0);
 		sendButton=new JButton("发送");
-		this.add(sendButton, constraints);
+		panel1.add(sendButton, constraints);
 		
-		//搜索框
-		constraints=new GridBagConstraints(6, 0, 2, 1, 0, 0, GridBagConstraints.CENTER, 
-				GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0);
-		searchCombo=new JComboBox<>();
-		this.add(searchCombo, constraints);
+		
+		//右边的面板
+		bagLayout=new GridBagLayout();
+		JPanel panel2 = new JPanel(bagLayout);
 		
 		//单选按钮
-		constraints=new GridBagConstraints(6, 1, 2, 1, 0, 0, GridBagConstraints.CENTER, 
+		constraints=new GridBagConstraints(0, 0, 1, 1, 0, 0.1, GridBagConstraints.CENTER, 
 				GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0);
 		ButtonGroup buttonGroup=new ButtonGroup();
 		online=new JRadioButton("在线");
@@ -117,15 +125,15 @@ public class GuiForPublicChatRoom extends JDialog {
 		jPanel.add(new JLabel("显示:"));
 		jPanel.add(online);
 		jPanel.add(all);
-		this.add(jPanel, constraints);
+		panel2.add(jPanel, constraints);
 		
 		//同学列表
-		constraints=new GridBagConstraints(6, 2, 2, 8, 0, 0, GridBagConstraints.CENTER, 
+		constraints=new GridBagConstraints(0, 3, 1, 5, 0,  7, GridBagConstraints.CENTER, 
 				GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0);
 		classmateList = new JList<>(new DefaultListModel<>());
 		classmateList.setCellRenderer(new ClassmateListRender(username));
 		classmateList.setToolTipText("使用crtl+点击多选,鼠标右键撤销全部选中");
-		this.add(new JScrollPane(classmateList), constraints);
+		panel2.add(new JScrollPane(classmateList), constraints);
 		classmateList.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -139,17 +147,32 @@ public class GuiForPublicChatRoom extends JDialog {
 			}
 		});
 		
+		//加入组聊的按钮
+		constraints=new GridBagConstraints(0, 2, 1, 1, 0, 0.1, GridBagConstraints.CENTER, 
+				GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0);
+		joinGroupButton = new JButton("邀请加入组聊");
+		panel2.add(joinGroupButton, constraints);
+
+		//添加分割窗口
+		JSplitPane jsplit = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, 
+				panel1, panel2);
+		jsplit.setDividerLocation(this.getWidth()*2/3);
+		jsplit.setDividerSize(1);
+		jsplit.setEnabled(false);
+		this.add(jsplit, "Center");
+		
 		//工具栏
 		toolBar=new JToolBar();
-		constraints=new GridBagConstraints(0, 10, 8, 1, 0, 0.1, GridBagConstraints.CENTER, 
-				GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0);
-		this.add(toolBar, constraints);
+		this.add(toolBar,"South");
 		
-		this.setDefaultCloseOperation(HIDE_ON_CLOSE);
 		//只是隐藏,方便当有人发送消息过来的时候能够接受到
-		
-		//这是为了在登录的时候就想服务器发送消息,所以不要显示出来
-//		this.setVisible(true);
+		this.setDefaultCloseOperation(HIDE_ON_CLOSE);
 		
 	}
+	
+	public static void main(String[]  args)
+	{
+		new GuiForPublicChatRoom("").setVisible(true);
+	}
+	
 }

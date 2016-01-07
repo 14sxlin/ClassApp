@@ -9,7 +9,7 @@ import java.net.Socket;
 
 import javax.swing.JFrame;
 
-import gui.pubChatRoom.client.GuiForPublicChatRoom;
+import gui.pubChatRoom.GuiForPublicChatRoom;
 
 
 /*

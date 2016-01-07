@@ -1,4 +1,4 @@
-package main.Client;
+package main.clietn.pubchat;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -6,9 +6,9 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.IOException;
 
-import api.client.ClientForPubChatRoom;
+import api.client.pubChatRoom.PubChatRoomLogic;
 import api.server.ServerInfo;
-import gui.pubChatRoom.client.GuiForPublicChatRoom;
+import gui.pubChatRoom.GuiForPublicChatRoom;
 
 /**
  * 客户端的公共聊天室的界面
@@ -20,7 +20,7 @@ import gui.pubChatRoom.client.GuiForPublicChatRoom;
 		/**
 	 * 使用一个client,用来管理socket的连接
 	 */
-	private ClientForPubChatRoom client;
+	private PubChatRoomLogic client;
 	/**
 	 * 公共聊天室的用户界面
 	 */
@@ -62,7 +62,7 @@ import gui.pubChatRoom.client.GuiForPublicChatRoom;
 	{
 		//连接服务器
 		try {
-			client=new ClientForPubChatRoom(username,gui);
+			client=new PubChatRoomLogic(username,gui);
 			client.startConnectServer(ServerInfo.SERVER_LOCAL_IP, ServerInfo.PORT);
 		} catch (IOException e) {
 			gui.jTextArea.append("服务器关闭了");
@@ -122,7 +122,7 @@ import gui.pubChatRoom.client.GuiForPublicChatRoom;
 		
 	}
 
-	public ClientForPubChatRoom getClient() {
+	public PubChatRoomLogic getClient() {
 		return client;
 	}
 }

@@ -11,10 +11,10 @@ import javax.swing.JSplitPane;
 import javax.swing.JToolBar;
 import javax.swing.border.TitledBorder;
 
-import api.client.LogoutEvent;
 import classapp.login.LoginDialog;
 import gui.OfficeInfoListPanel;
-import main.Client.PubChatRoomMainFrame;
+import main.clietn.pubchat.PubChatRoomMainFrame;
+import object.LogoutEvent;
 
 
 /**

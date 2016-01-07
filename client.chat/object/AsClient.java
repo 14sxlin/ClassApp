@@ -1,15 +1,11 @@
-package api.client;
+package object;
 
 import java.io.IOException;
 
 import object.Server;
 
 /**
- * <p>
  * 规定了作为客户端的方法
- * 在一对一连接的时候,能够接受到别人的连接
- * 这样在一对一连接的时候,就不用通过服务器转发信息了
- * </p>
  * @author 林思鑫
  *
  */

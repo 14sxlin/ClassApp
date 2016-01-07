@@ -68,9 +68,6 @@ public class GroupChatGUI extends JDialog implements ActionListener {
 		
 		//增加聊天面板
 		chatArea=new JTextPane();
-//		SimpleAttributeSet set=new SimpleAttributeSet();
-//		Document doc=chatArea.getDocument();
-//		int length=doc.getLength();
 		
 		//增加按钮
 		JPanel panel=new JPanel();
@@ -140,7 +137,6 @@ public class GroupChatGUI extends JDialog implements ActionListener {
 	}
 	
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 		new GroupChatGUI(null);
 	}
 

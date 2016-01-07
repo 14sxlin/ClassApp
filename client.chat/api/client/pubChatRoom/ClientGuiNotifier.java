@@ -1,4 +1,4 @@
-package api.client;
+package api.client.pubChatRoom;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JList;

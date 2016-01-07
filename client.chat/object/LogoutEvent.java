@@ -1,4 +1,4 @@
-package api.client;
+package object;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;

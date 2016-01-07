@@ -1,4 +1,4 @@
-package gui.pubChatRoom.client;
+package gui.pubChatRoom;
 
 import java.awt.Color;
 import java.awt.Component;
