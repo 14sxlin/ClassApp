@@ -14,18 +14,6 @@ public class RunServer {
 		});
 		
 		serverThread.start();
-		
-//		for (int i = 0; i < 3; i++) {
-//			Thread th = new Thread(new Runnable() {
-//
-//				@Override
-//				public void run() {
-//					new ClientThread().start();
-//				}
-//			});
-//			th.start();
-//		}
-		
 	}
 
 }

@@ -1,5 +1,10 @@
-package object;
+package headinfoFilter;
 
+/**
+ * 头信息过滤器,过滤出头信息的类型和值
+ * @author LinSixin sparrowxin@sina.cn
+ *
+ */
 public class HeadInfoFilter {
 	private final String head = "#head:"; 
 	private final String content= "content=";
@@ -9,6 +14,11 @@ public class HeadInfoFilter {
 		this.readline = readline;
 	}
 	
+	/**
+	 * 首先判断是不是头信息
+	 * @return 如果包含了#head:字段就认为是头信息返回true
+	 * 否则返回false
+	 */
 	public boolean isHeadInfo()
 	{
 		if(readline.contains("#head:"))

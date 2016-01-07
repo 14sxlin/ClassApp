@@ -8,9 +8,8 @@ import gui.pubChatRoom.server.GuiForServer;
 import headInfoProcesser.factory.ProcesserFactory;
 import headInfoProcesser.processer.HeadInfoProcesser;
 import headInfoProcesser.processer.LoginProcesser;
-import headInfoProcesser.processer.LogoutProcesser;
+import headinfoFilter.HeadInfoFilter;
 import object.Client;
-import object.HeadInfoFilter;
 import threadData.ThreadDataTransfer;
 import tools.clientmanager.ClientsManager;
 
@@ -147,10 +146,11 @@ public class ServerForPubChatRoom implements AsServer{
 									try {
 										factory = new ProcesserFactory(ClientsManager.clientList);
 										HeadInfoProcesser processer ;
-										//根据实例化的对象判断使用哪个方法
-										if((processer=factory.createProcesser(filter.filteType())) instanceof LogoutProcesser)
+										processer=factory.createProcesser(filter.filteType());	
+										if(processer.getType() == HeadInfoProcesser.STRING)
 											processer.process(filter.filteContent());
 										else processer.process(client);
+										
 									} catch (Exception e) {
 										e.printStackTrace();
 									}

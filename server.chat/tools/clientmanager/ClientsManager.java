@@ -4,8 +4,8 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import headinfoFilter.HeadType;
 import object.Client;
-import object.HeadType;
 
 public class ClientsManager {
 	

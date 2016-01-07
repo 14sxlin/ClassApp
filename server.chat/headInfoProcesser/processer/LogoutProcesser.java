@@ -18,6 +18,7 @@ public class LogoutProcesser extends HeadInfoProcesser {
 	private ArrayList<Client> memberList;
 	
 	public LogoutProcesser(ArrayList<Client> memberList) {
+		this.type = STRING;	
 		this.memberList=memberList;
 	}
 	

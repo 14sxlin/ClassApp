@@ -27,10 +27,10 @@ import classapp.login.LoginDialog;
  *
  */
 @SuppressWarnings("serial")
-public class GroupChat extends JDialog implements ActionListener {
+public class GroupChatGUI extends JDialog implements ActionListener {
 	
 	private JButton[] buttons;
-	private String [] strButton= {"设置颜色","导出聊天记录","邀请加入"};
+	private String [] strButton= {"导出聊天记录","邀请加入"};
 	private JToolBar bar;
 	private JTextPane chatArea;
 	private JTextField chatFiled;
@@ -43,7 +43,7 @@ public class GroupChat extends JDialog implements ActionListener {
 	 * 默认的构造函数
 	 * @param jframe 需要指定父容器,也可以为null
 	 */
-	public GroupChat(JFrame jframe) {
+	public GroupChatGUI(JFrame jframe) {
 		setGui();
 	}
 	
@@ -141,7 +141,7 @@ public class GroupChat extends JDialog implements ActionListener {
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		new GroupChat(null);
+		new GroupChatGUI(null);
 	}
 
 }

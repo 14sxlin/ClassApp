@@ -2,7 +2,7 @@ package tools.listprocesser;
 
 import javax.swing.DefaultListModel;
 
-import object.HeadInfoFilter;
+import headinfoFilter.HeadInfoFilter;
 
 /**
  * 这个类是服务器向客户端发送在线用户的列表信息

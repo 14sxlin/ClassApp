@@ -2,6 +2,7 @@ package headInfoProcesser.factory;
 
 import java.util.ArrayList;
 
+import headInfoProcesser.processer.GroupProcesser;
 import headInfoProcesser.processer.HeadInfoProcesser;
 import headInfoProcesser.processer.LoginProcesser;
 import headInfoProcesser.processer.LogoutProcesser;
@@ -9,23 +10,12 @@ import object.Client;
 
 public class ProcesserFactory {
 	
-	/**
-	 * 用来调用下面提醒的方法
-	 */
 	public  ArrayList<Client> memberList;
 	
 	public ProcesserFactory(ArrayList<Client> clientList) {
 		this.memberList = clientList;
 	}
 	
-//	/**
-//	 * 设置用户列表
-//	 * @param clientList
-//	 */
-//	public static  void setMemeberList(ArrayList<Client> clientList)
-//	{
-//		memberList=clientList;
-//	}
 	
 	/**
 	 * 根据条件创建相应的过滤器
@@ -38,6 +28,8 @@ public class ProcesserFactory {
 			return new LoginProcesser(memberList);
 		if(type.contains("logout") )
 			return new LogoutProcesser(memberList);
+		if(type.contains("group"))
+			return new GroupProcesser();
 		else return null;
 	}
 }

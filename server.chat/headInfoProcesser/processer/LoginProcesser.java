@@ -11,6 +11,7 @@ public class LoginProcesser extends HeadInfoProcesser{
 	private ArrayList<Client> memberList;
 	
 	public LoginProcesser(ArrayList<Client> memberList) {
+		super.type = CLIENT;
 		this.memberList=memberList;
 	}
 	@Override

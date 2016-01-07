@@ -10,7 +10,7 @@ import javax.swing.JList;
 import javax.swing.JTextArea;
 
 import gui.pubChatRoom.client.GuiForPublicChatRoom;
-import object.HeadType;
+import headinfoFilter.HeadType;
 import object.Server;
 import tools.listprocesser.ListInfoProcesser;
 
