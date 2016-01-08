@@ -31,10 +31,14 @@ public class PubChatRoomLogic implements AsClient {
 	 */
 	private Server server;
 	
+	public void setServer(Server server) {
+		this.server = server;
+	}
+
 	/**
 	 * 用来与外界交互的变量
 	 */
-	private JTextArea jTextArea;
+	public JTextArea jTextArea;
 	
 	/**
 	 * 用来显示在线或不在线的用户
@@ -53,6 +57,9 @@ public class PubChatRoomLogic implements AsClient {
 		this.userName=userName;
 		this.gui = gui;
 		this.jTextArea=gui.jTextArea;
+	}
+	
+	public PubChatRoomLogic() {
 	}
 	
 	/**
@@ -123,7 +130,7 @@ public class PubChatRoomLogic implements AsClient {
 						// TODO Auto-generated catch block
 						try {
 							//通知gui中的list变化
-							gui.classmateList.setModel(ListInfoProcesser.createListModel(line));
+							gui.classmateList.setModel(ListInfoProcesser.createListModel(userName,line));
 						} catch (NullPointerException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();

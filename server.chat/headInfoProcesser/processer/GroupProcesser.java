@@ -34,6 +34,8 @@ public class GroupProcesser extends HeadInfoProcesser {
 			}
 		}
 		ClientsManager.sendMessage(sender, message);
+		// TODO System Output Test Block
+		System.out.println(" 服务器接收到group头信息 ");
 	}
 	
 	/**
@@ -42,26 +44,19 @@ public class GroupProcesser extends HeadInfoProcesser {
 	 */
 	private void processContent(String groupContent) 
 	{
-		int index1 = groupContent.indexOf("!");
-		if( index1 != -1)
+		// TODO System Output Test Block
+		System.out.println(" groupcontetn =  "+ groupContent);
+		int index2 = groupContent.indexOf(":");
+		if( index2 != -1)
 		{
-			this.sender = groupContent.substring(0, index1);
-			System.out.println(" sender  =  "+ this.sender);
-			int index2 = groupContent.indexOf(":");
-			if( index2 != -1)
-			{
-				this.usernamelist = groupContent.substring(index1+1, index2);
-				// TODO System Output Test Block
-				System.out.println(" usname =  "+ this.usernamelist);
-				this.message = groupContent.substring(index2+1);
-				// TODO System Output Test Block
-				System.out.println(" message =  "+this.message);
-			}else
-				throw new NullPointerException();
-			
+			this.usernamelist = groupContent.substring(0, index2);
+			// TODO System Output Test Block
+			System.out.println(" usname =  "+ this.usernamelist);
+			this.message = groupContent.substring(index2+1);
+			// TODO System Output Test Block
+			System.out.println(" message =  "+this.message);
 		}else
-			throw new NullPointerException();
-		
+			throw new NullPointerException();		
 		
 	}
 }

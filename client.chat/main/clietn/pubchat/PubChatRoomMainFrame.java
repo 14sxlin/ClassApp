@@ -5,10 +5,15 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.IOException;
+import java.util.Iterator;
+import java.util.List;
+
+import javax.swing.JOptionPane;
 
 import api.client.pubChatRoom.PubChatRoomLogic;
 import api.server.ServerInfo;
 import gui.pubChatRoom.GuiForPublicChatRoom;
+import main.client.groupchat.GroupChatMainDialog;
 
 /**
  * 客户端的公共聊天室的界面
@@ -20,7 +25,7 @@ import gui.pubChatRoom.GuiForPublicChatRoom;
 		/**
 	 * 使用一个client,用来管理socket的连接
 	 */
-	private PubChatRoomLogic client;
+	private PubChatRoomLogic logic;
 	/**
 	 * 公共聊天室的用户界面
 	 */
@@ -35,6 +40,7 @@ import gui.pubChatRoom.GuiForPublicChatRoom;
 	 * 用来保存自己的用户名
 	 */
 	private String username;
+	
 	
 	public PubChatRoomMainFrame(String username) {
 		
@@ -62,8 +68,8 @@ import gui.pubChatRoom.GuiForPublicChatRoom;
 	{
 		//连接服务器
 		try {
-			client=new PubChatRoomLogic(username,gui);
-			client.startConnectServer(ServerInfo.SERVER_LOCAL_IP, ServerInfo.PORT);
+			logic=new PubChatRoomLogic(username,gui);
+			logic.startConnectServer(ServerInfo.SERVER_LOCAL_IP, ServerInfo.PORT);
 		} catch (IOException e) {
 			gui.jTextArea.append("服务器关闭了");
 		}		
@@ -75,7 +81,7 @@ import gui.pubChatRoom.GuiForPublicChatRoom;
 	private void receiveMessageFromServer()
 	{
 		try {
-			client.receiveMessageFromServer(storeString);
+			logic.receiveMessageFromServer(storeString);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -91,7 +97,7 @@ import gui.pubChatRoom.GuiForPublicChatRoom;
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				client.sendMessageToServer(gui.jTextField.getText());
+				logic.sendMessageToServer(gui.jTextField.getText());
 //				gui.jTextArea.append(gui.jTextField.getText()+"\n");
 				gui.jTextField.setText("");
 			}
@@ -108,7 +114,7 @@ import gui.pubChatRoom.GuiForPublicChatRoom;
 			public void keyReleased(KeyEvent e) {
 				if(e.getKeyCode() == KeyEvent.VK_ENTER)
 				{
-					client.sendMessageToServer(gui.jTextField.getText());
+					logic.sendMessageToServer(gui.jTextField.getText());
 //					gui.jTextArea.append(gui.jTextField.getText()+"\n");
 					gui.jTextField.setText("");
 				}
@@ -120,9 +126,42 @@ import gui.pubChatRoom.GuiForPublicChatRoom;
 			}
 		});
 		
+		gui.joinGroupButton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				List<String> selectedlist = gui.classmateList.getSelectedValuesList();
+				if(selectedlist != null)
+				{
+					String groupinfo = "";
+					Iterator<String> it = selectedlist.iterator();
+					while(it.hasNext())
+					{
+						groupinfo+=(it.next()+"&");
+					}
+					
+					if(!groupinfo.equals(""))
+					{
+						groupinfo = groupinfo.substring(0, groupinfo.length()-1);
+						// TODO System Output Test Block
+						System.out.println(" groupinfo =  "+groupinfo);
+						new GroupChatMainDialog(logic.getServer(),username, groupinfo);
+					}
+					else
+						JOptionPane.showMessageDialog(null, "请选择用户");
+					
+				}
+				else
+				{
+					JOptionPane.showMessageDialog(null, "请选择用户");
+				}
+				
+			}
+		});
+
 	}
 
 	public PubChatRoomLogic getClient() {
-		return client;
+		return logic;
 	}
 }

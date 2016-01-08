@@ -15,9 +15,12 @@ import headinfoFilter.HeadInfoFilter;
 public class ListInfoProcesser  {
 
 	/**
-	 * 客户端接收服务器发送过来的信息,并生成相应的列表
+	 * 
+	 * @param username 不希望在列表中显示自己的项目,这个名字指定自己的名字
+	 * @param listString 一定格式的用户名列表字符串
+	 * @return 一个新的列表model
 	 */
-	synchronized public static DefaultListModel<String> createListModel( String listString)
+	synchronized public static DefaultListModel<String> createListModel(String username,String listString)
 	{
 		HeadInfoFilter filter = new HeadInfoFilter(listString);
 		if(filter.filteType().equals("list"))
@@ -31,10 +34,10 @@ public class ListInfoProcesser  {
 			{
 				listModel.addElement(names[i]);
 			}
-			
+			listModel.removeElement(username);
 			return listModel;
 		}
 		else return null;
 		
-	}
+	} 
 }

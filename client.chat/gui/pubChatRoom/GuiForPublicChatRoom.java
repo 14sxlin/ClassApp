@@ -46,7 +46,7 @@ public class GuiForPublicChatRoom extends JDialog {
 	/**
 	 * 加入组聊的按钮
 	 */
-	private JButton joinGroupButton;
+	public JButton joinGroupButton;
 	
 	public JTextField jTextField;
 //	private JComboBox<String>searchCombo;	
@@ -128,7 +128,7 @@ public class GuiForPublicChatRoom extends JDialog {
 		panel2.add(jPanel, constraints);
 		
 		//同学列表
-		constraints=new GridBagConstraints(0, 3, 1, 5, 0,  7, GridBagConstraints.CENTER, 
+		constraints=new GridBagConstraints(0, 4, 1, 5, 0,  7, GridBagConstraints.CENTER, 
 				GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0);
 		classmateList = new JList<>(new DefaultListModel<>());
 		classmateList.setCellRenderer(new ClassmateListRender(username));
@@ -152,7 +152,15 @@ public class GuiForPublicChatRoom extends JDialog {
 				GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0);
 		joinGroupButton = new JButton("邀请加入组聊");
 		panel2.add(joinGroupButton, constraints);
+		
 
+		//加入用户自己的标签
+		constraints=new GridBagConstraints(0, 3, 1, 1, 0, 0, GridBagConstraints.CENTER, 
+				GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0);
+		JLabel label = new JLabel(username+"(我)");
+		label.setHorizontalAlignment(JLabel.CENTER);
+		panel2.add(label, constraints);
+		
 		//添加分割窗口
 		JSplitPane jsplit = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, 
 				panel1, panel2);
