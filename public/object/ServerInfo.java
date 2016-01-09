@@ -1,4 +1,4 @@
-package api.server;
+package object;
 
 /**
  * 保存了服务器的信息

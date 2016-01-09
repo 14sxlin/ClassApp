@@ -28,7 +28,7 @@ public class ProcesserFactory {
 			return new LoginProcesser(memberList);
 		if(type.contains("logout") )
 			return new LogoutProcesser(memberList);
-		if(type.contains("group"))
+		if(type.contains("group")||type.contains("gsend"))
 			return new GroupProcesser();
 		else return null;
 	}

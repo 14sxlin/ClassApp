@@ -1,68 +1,89 @@
 package api.client.groupChatRoom;
 
 import java.io.IOException;
+import java.net.SocketException;
 
 import api.client.pubChatRoom.PubChatRoomLogic;
-import gui.groupChatRoom.GroupChatGUI;
 import headinfoFilter.HeadType;
+import object.ChatDialog;
 import object.Server;
+import tools.ListInfoProcesser;
 
-public class GroupChatRoomLogic extends PubChatRoomLogic {
+public class GroupChatRoomLogic extends PubChatRoomLogic{
 
-	private GroupChatGUI gui;
-	private String username;
+	private ChatDialog gui;
+	private PubChatRoomLogic pubLogic;
+	private long mark;
 	
-	
-	public GroupChatRoomLogic(Server server,GroupChatGUI gui) {
+	public GroupChatRoomLogic(long mark,ChatDialog gui,PubChatRoomLogic logic) {
+		this.mark = mark;
 		this.gui = gui;
-		super.jTextArea = gui.chatArea;
-		super.setServer(server);
-//		this.publogic = publogic;
-		gui.setTitle("私(组)聊-----"+username);
-	}
+		this.pubLogic = logic;
+		this.server = logic.getServer();
 
-	@Override
-	public void startConnectServer(String serverIp, int serverPort) throws IOException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void sendLoginInfo(Server server) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void sendLogoutInfo(Server server) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void receiveMessageFromServer(StringBuilder storeString) throws IOException {
-		super.receiveMessageFromServer(storeString);
+		try {
+			if (server != null && server.getSocketStream()!=null) {
+				String line="";
+				while ((line = server.getSocketStream().getBufferReader().readLine()) != null) {
+					if( line.contains(HeadType.LIST))
+					{
+						try {
+							
+							//通知gui中的list变化
+							gui.classmateList.setModel(ListInfoProcesser.createListModel(userName,line));
+							
+						} catch (NullPointerException e) {
+							e.printStackTrace();
+						}
+						storeString.append(line + "\n");
+//						this.jTextArea.append("接收到list信息"+"\n");
+//						this.jTextArea.append(line+"\n");
+					}					
+					else
+					{
+						// TODO Auto-generated catch block
+		System.out.println("我是groupchatlogic中的接收方法 我接收到了");
+						storeString.append(line + "\n");
+						gui.textArea.append(line+"\n");
+					}
+					
+				} 
+			}else throw new NullPointerException();
+		} catch (SocketException e) {
+			gui.textArea.setText("与服务断开连接\n");
+		}
 	}
 
 	@Override
+	/**
+	 * 默认是已经建好了组了
+	 * 组聊的逻辑在点击邀请组聊的逻辑里面实现
+	 */
 	public void sendMessageToServer(String message) {
-		String groupMessage = HeadType.GROUP;
-		for( int i=0; i<gui.groupmember.getModel().getSize(); i++)
-		{
-			groupMessage+=(gui.groupmember.getModel().getElementAt(i)+"&");
-		}
-		int index = groupMessage.length()-1;
-		groupMessage = groupMessage.substring(0, index);
+		String groupMessage = HeadType.GSEND;
+		groupMessage+=""+this.mark;
 		groupMessage+=":"+message+"#";
-		// TODO System Output Test Block
-		System.out.println(" groupmessage =  "+groupMessage);
-		super.sendMessageToServer(groupMessage);		
+		
+		pubLogic.sendMessageToServer(groupMessage);
 	}
+	
+	/**
+	 * 加上自己的名字
+	 * @param message
+	 */
+	public void sendMessageWithName(String message)
+	{
+		super.sendMessageWithName(message);
+	}
+	
 
 	@Override
 	public Server getServer() {
-		// TODO Auto-generated method stub
-		return null;
+		return pubLogic.getServer();
 	}
 
 }

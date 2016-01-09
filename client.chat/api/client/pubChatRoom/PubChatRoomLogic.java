@@ -7,13 +7,14 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 
 import javax.swing.JList;
-import javax.swing.JTextArea;
 
+import classapp.mainframe.ClassAppMainFrame;
 import gui.pubChatRoom.GuiForPublicChatRoom;
 import headinfoFilter.HeadType;
 import object.AsClient;
 import object.Server;
-import tools.listprocesser.ListInfoProcesser;
+import tools.GroupChatProcesser;
+import tools.ListInfoProcesser;
 
 /**
  * 客户端的socket管理
@@ -24,21 +25,16 @@ public class PubChatRoomLogic implements AsClient {
 	/**
 	 * 客户端用户的名称,用来标志客户端
 	 */
-	private String userName;
+	protected String userName;
 	
 	/**
 	 * 服务器对象
 	 */
-	private Server server;
+	protected Server server;
 	
 	public void setServer(Server server) {
 		this.server = server;
 	}
-
-	/**
-	 * 用来与外界交互的变量
-	 */
-	public JTextArea jTextArea;
 	
 	/**
 	 * 用来显示在线或不在线的用户
@@ -56,7 +52,6 @@ public class PubChatRoomLogic implements AsClient {
 	public PubChatRoomLogic(String userName,GuiForPublicChatRoom gui) {
 		this.userName=userName;
 		this.gui = gui;
-		this.jTextArea=gui.jTextArea;
 	}
 	
 	public PubChatRoomLogic() {
@@ -111,6 +106,15 @@ public class PubChatRoomLogic implements AsClient {
 			pw.flush();
 		}
 	}
+	
+	/**
+	 * 加上自己的名字
+	 * @param message
+	 */
+	public void sendMessageWithName(String message)
+	{
+		sendMessageToServer(ClassAppMainFrame.username+" 说:  "+message);
+	}
 
 
 	/**
@@ -127,27 +131,35 @@ public class PubChatRoomLogic implements AsClient {
 				while ((line = server.getSocketStream().getBufferReader().readLine()) != null) {
 					if( line.contains(HeadType.LIST))
 					{
-						// TODO Auto-generated catch block
 						try {
+							
 							//通知gui中的list变化
 							gui.classmateList.setModel(ListInfoProcesser.createListModel(userName,line));
+							
 						} catch (NullPointerException e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 						storeString.append(line + "\n");
-						this.jTextArea.append("接收到list信息"+"\n");
-						this.jTextArea.append(line+"\n");
+						gui.jTextArea.append("接收到list信息"+"\n");
+						gui.jTextArea.append(line+"\n");
 					}
+					else if( line.contains(HeadType.GROUP) ||  line.contains(HeadType.GSEND))//处理组聊信息
+					{
+						GroupChatProcesser.process(line, this);
+						gui.jTextArea.append("接收到group信息"+"\n");
+						gui.jTextArea.append(line+"\n");
+					}
+					
 					else
 					{
 						storeString.append(line + "\n");
-						this.jTextArea.append(line+"\n");
+						gui.jTextArea.append(line+"\n");
 					}
+					
 				} 
 			}
 		} catch (SocketException e) {
-			this.jTextArea.setText("与服务断开连接\n");
+			gui.jTextArea.setText("与服务断开连接\n");
 		}
 	}
 

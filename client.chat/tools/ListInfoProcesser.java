@@ -1,4 +1,4 @@
-package tools.listprocesser;
+package tools;
 
 import javax.swing.DefaultListModel;
 

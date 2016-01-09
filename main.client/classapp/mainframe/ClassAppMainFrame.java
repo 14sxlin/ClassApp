@@ -14,6 +14,7 @@ import javax.swing.border.TitledBorder;
 import classapp.login.LoginDialog;
 import gui.OfficeInfoListPanel;
 import main.clietn.pubchat.PubChatRoomMainFrame;
+import object.GroupsChatManager;
 import object.LogoutEvent;
 
 
@@ -25,7 +26,8 @@ import object.LogoutEvent;
 @SuppressWarnings("serial")
 public class ClassAppMainFrame extends JFrame implements ActionListener{
 	
-	public static boolean admim;
+	public static String username;
+	public static GroupsChatManager groupChatManager;
 	private JPanel messageArea,buttonArea;
 	private String [] buttonstr= {"聊天室","文件互传","发送公告"};
 	private JButton [] buttons;
@@ -37,14 +39,16 @@ public class ClassAppMainFrame extends JFrame implements ActionListener{
 	 * 默认的构造函数
 	 */
 	public ClassAppMainFrame(String username) {
-		guiDesign(username);
+		ClassAppMainFrame.username = username;
+		groupChatManager = new GroupsChatManager();
+		guiDesign();
 		this.addWindowListener(new LogoutEvent(pubChatRoom.getClient()));
 	}
 	
 	/**
 	 * 界面布置
 	 */
-	private void guiDesign(String username)
+	private void guiDesign()
 	{
 		this.setTitle("我们这一班--"+username);
 		LoginDialog.dim=getToolkit().getScreenSize();

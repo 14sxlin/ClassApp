@@ -4,11 +4,12 @@ import java.util.ArrayList;
 
 import main_frame.server.ServerMainFraim;
 import object.Client;
-import tools.clientmanager.ClientsManager;
+import tools.ClientsManager;
 
 public class LoginProcesser extends HeadInfoProcesser{
 
 	private ArrayList<Client> memberList;
+
 	
 	public LoginProcesser(ArrayList<Client> memberList) {
 		super.type = CLIENT;
@@ -22,6 +23,7 @@ public class LoginProcesser extends HeadInfoProcesser{
 		ClientsManager.updateNameList();
 		ServerMainFraim.tdt.updateState(ClientsManager.counter, ClientsManager.userNameList);
 		ClientsManager.sendAllListMessage();
+		ClientsManager.sendAllClient(loginClient.getUserName()+ "  µÇÂ¼");
 	}
 	
 	@Override

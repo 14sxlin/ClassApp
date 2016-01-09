@@ -7,11 +7,11 @@ import java.awt.event.KeyListener;
 import java.io.IOException;
 import java.net.SocketException;
 
-import api.server.ServerForPubChatRoom;
-import api.server.ServerInfo;
+import api.server.ServerLogic;
 import gui.pubChatRoom.server.GuiForServer;
+import object.ServerInfo;
 import threadData.ThreadDataTransfer;
-import tools.clientmanager.ClientsManager;
+import tools.ClientsManager;
 
 /**
  * 服务器的管理器
@@ -28,7 +28,7 @@ public class ServerMainFraim {
 	/**
 	 * 服务器变量
 	 */
-	private ServerForPubChatRoom server;
+	private ServerLogic server;
 	
 	/**
 	 * 线程对象
@@ -135,7 +135,7 @@ public class ServerMainFraim {
 			
 			@Override
 			public void run() {
-				server=new ServerForPubChatRoom(gui);	
+				server=new ServerLogic(gui);	
 				try {
 					server.startService(ServerInfo.PORT);
 				} catch (SocketException e) {

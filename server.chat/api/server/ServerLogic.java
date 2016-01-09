@@ -11,14 +11,14 @@ import headInfoProcesser.processer.LoginProcesser;
 import headinfoFilter.HeadInfoFilter;
 import object.Client;
 import threadData.ThreadDataTransfer;
-import tools.clientmanager.ClientsManager;
+import tools.ClientsManager;
 
 /**
  * 服务器的Socket服务
  * @author 林思鑫
  *
  */
-public class ServerForPubChatRoom implements AsServer{
+public class ServerLogic implements AsServer{
 	
 	/**
 	 * 服务器的ServerSocket
@@ -58,7 +58,7 @@ public class ServerForPubChatRoom implements AsServer{
 	 * @param textPane 用来显示信息的,主要是测试使用
 	 * @param tdt 向外界传递线程内的数据的中介
 	 */
-	public ServerForPubChatRoom(GuiForServer gui)  {
+	public ServerLogic(GuiForServer gui)  {
 		this.gui = gui;
 	}
 	
@@ -150,7 +150,8 @@ public class ServerForPubChatRoom implements AsServer{
 										if(processer.getType() == HeadInfoProcesser.STRING)
 											processer.process(filter.filteContent());
 										else processer.process(client);
-										
+// TODO System Output Test Block
+System.out.println(" got it "+  "  服务器接收到的消息=    "+line);
 									} catch (Exception e) {
 										e.printStackTrace();
 									}

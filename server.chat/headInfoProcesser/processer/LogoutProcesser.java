@@ -5,7 +5,7 @@ import java.util.Iterator;
 
 import main_frame.server.ServerMainFraim;
 import object.Client;
-import tools.clientmanager.ClientsManager;
+import tools.ClientsManager;
 
 /**
  * @author LinSixin sparrowxin@sina.cn
@@ -37,6 +37,7 @@ public class LogoutProcesser extends HeadInfoProcesser {
 		ClientsManager.updateNameList();
 		ServerMainFraim.tdt.updateState(ClientsManager.counter, ClientsManager.userNameList);
 		ClientsManager.sendAllListMessage();
+		ClientsManager.sendAllClient(logoutClientName+ "  ÍË³öµÇÂ¼");
 	}
 	
 	private Client findClient(String userName)

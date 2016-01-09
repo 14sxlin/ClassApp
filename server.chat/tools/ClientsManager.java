@@ -1,4 +1,4 @@
-package tools.clientmanager;
+package tools;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -6,8 +6,10 @@ import java.util.Iterator;
 
 import headinfoFilter.HeadType;
 import object.Client;
+import object.TimeAddtion;
 
 public class ClientsManager {
+	
 	
 	/**
 	 * 用来记录在线人数
@@ -34,7 +36,7 @@ public class ClientsManager {
 		while(it.hasNext())
 		{
 			PrintWriter pw=it.next().getSocketStream().getPrintWriter();
-			pw.println(message);
+			pw.println(TimeAddtion.getTime()+message);
 			pw.flush();
 		}
 	}
@@ -58,7 +60,7 @@ public class ClientsManager {
 		
 		if (client != null )
 		{
-			client.getSocketStream().getPrintWriter().println(message);
+			client.getSocketStream().getPrintWriter().println(TimeAddtion.getTime()+message);
 			client.getSocketStream().getPrintWriter().flush();
 		}
 	}

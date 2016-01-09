@@ -10,7 +10,6 @@ import java.awt.event.MouseEvent;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
@@ -21,12 +20,14 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JToolBar;
 
+import object.ChatDialog;
+
 /**
  * 公共聊天室,给客户端使用的
  * @author 林思鑫
  *
  */
-public class GuiForPublicChatRoom extends JDialog {
+public class GuiForPublicChatRoom extends ChatDialog {
 
 	/**
 	 * 版本1.0

@@ -60,4 +60,5 @@ public class HeadInfoFilter {
 		}
 		else return "ÕÒ²»µ½ÄÚÈİ";
 	}
+	
 }

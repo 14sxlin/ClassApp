@@ -2,18 +2,13 @@ package gui.groupChatRoom;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
 import javax.swing.JToolBar;
 import javax.swing.border.TitledBorder;
 import javax.swing.text.BadLocationException;
@@ -22,6 +17,8 @@ import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 
 import classapp.login.LoginDialog;
+import classapp.mainframe.ClassAppMainFrame;
+import object.ChatDialog;
 
 /**
  * 组聊的窗口,给客户端使用的
@@ -29,32 +26,26 @@ import classapp.login.LoginDialog;
  *
  */
 @SuppressWarnings("serial")
-public class GroupChatGUI extends JDialog implements ActionListener {
+public class GroupChatGUI extends ChatDialog  {
 	
 //	private JButton[] buttons;
 //	private String [] strButton= {"导出聊天记录","邀请加入"};
 	private JToolBar bar;
-	public JTextArea chatArea;
-	public JTextField chatFiled;
 	public JButton sendButton;
-	public  JList<String> groupmember;
+//	public  JList<String> groupmember;
 	private JLabel melabel;
-	private String myUserName;
-//	private DefaultListModel<String>listModel;
-//	private Color myColor,otherColor;
 	
 	/**
 	 * 默认的构造函数
-	 * @param jframe 需要指定父容器,也可以为null
 	 */
-	public GroupChatGUI(String myusername) {
-		this.myUserName = myusername;
+	public GroupChatGUI() {
+		super();
 		setGui();
 	}
 	
 	private void setGui()
 	{
-		this.setTitle("私/组聊");
+		this.setTitle("私/组聊-----"+ ClassAppMainFrame.username);
 		LoginDialog.dim=getToolkit().getScreenSize();
 		this.setBounds(LoginDialog.dim.width/2-250, LoginDialog.dim.height/2-200, 500, 400);
 //		myColor=Color.blue;
@@ -72,12 +63,11 @@ public class GroupChatGUI extends JDialog implements ActionListener {
 //		}
 		
 		//增加聊天面板
-		chatArea=new JTextArea();
-		chatArea.setEditable(false);
+		super.textArea.setEditable(false);
 		
 		//增加按钮
 		JPanel panel=new JPanel();
-		panel.add(chatFiled=new JTextField(30));
+		panel.add(super.textField);
 		panel.add(sendButton=new JButton("发送"));
 //		panel.add(faceButton=new JButton("表情"));
 //		faceButton.addActionListener(this);
@@ -86,18 +76,18 @@ public class GroupChatGUI extends JDialog implements ActionListener {
 		JPanel memberpanel = new JPanel();
 		memberpanel.setLayout(new BorderLayout());
 		//增加自己用户名的标签
-		melabel = new JLabel(this.myUserName+"(我)");
+		melabel = new JLabel(ClassAppMainFrame.username+"(我)");
 		melabel.setAlignmentX(CENTER_ALIGNMENT);
 		memberpanel.add(melabel,"North");
 		
 		//增加成员面板
-		groupmember=new JList<String>(new DefaultListModel<String>());
-		memberpanel.add(groupmember,"Center");
+		classmateList=new JList<String>(new DefaultListModel<String>());
+		memberpanel.add(classmateList,"Center");
 		memberpanel.setBorder(new TitledBorder("讨论成员"));
 		
 		
 		//分割面板
-		JSplitPane jSplitPane=new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, chatArea, memberpanel);
+		JSplitPane jSplitPane=new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, super.textArea, memberpanel);
 		jSplitPane.setOneTouchExpandable(true);
 		this.setVisible(true);
 		jSplitPane.setDividerLocation(this.getWidth()*2/3);
@@ -111,7 +101,7 @@ public class GroupChatGUI extends JDialog implements ActionListener {
 	{
 		try {
 			SimpleAttributeSet set=new SimpleAttributeSet();
-			Document doc=chatArea.getDocument();
+			Document doc=super.textArea.getDocument();
 			int length=doc.getLength();
 			StyleConstants.setForeground(set, color);
 			doc.insertString(length, massage, set);
@@ -121,13 +111,8 @@ public class GroupChatGUI extends JDialog implements ActionListener {
 		}
 	}
 	
-	@Override
-	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
-	}
-	
 	public static void main(String[] args) {
-		new GroupChatGUI(null);
+		new GroupChatGUI();
 	}
 
 }
