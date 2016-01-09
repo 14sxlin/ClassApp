@@ -69,14 +69,9 @@ public class GroupProcesser extends HeadInfoProcesser {
 	 */
 	private String processSend(String content) 
 	{
-//		int index1  =content.indexOf("!");
-//		this.usernamelist = content.substring(0, index1);
 		int index2 = content.indexOf(":");
 		this.groupMark = content.substring(0, index2);
 		this.message = content.substring(index2+1);
-		// TODO System Output Test Block
-System.out.println(" 发送消息  给已经组好group的 = : "
-		+HeadType.GSEND+this.groupMark+":"+this.message+"#");
 		return HeadType.GSEND+this.groupMark+":"+this.message+"#";
 		
 	}
@@ -89,21 +84,12 @@ System.out.println(" 发送消息  给已经组好group的 = : "
 	 */
 	private String processMakeup(String content)
 	{
-		// TODO System Output Test Block
-		System.out.println(" processmakeup  -----------");
 		int index1  =content.indexOf("!");
 		int index2 = content.indexOf(":");
 		if( index2 != -1&& index1 != -1)
 		{
 			this.sender = content.substring(0, index1);
 			this.usernamelist = content.substring(index1+1, index2);
-			// TODO System Output Test Block
-			System.out.println(" usname =  "+ this.usernamelist);
-			this.message = content.substring(index2+1);//这个其实就是groupmark
-			// TODO System Output Test Block
-			System.out.println(" message =  "+this.message);
-			// TODO System Output Test Block
-			System.out.println(" sender =  "+this.sender);
 		}else
 			throw new NullPointerException();		
 		return HeadType.GROUP+this.sender+"!"+usernamelist+":"+this.message+"#";

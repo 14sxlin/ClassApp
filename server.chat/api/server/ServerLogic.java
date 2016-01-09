@@ -150,8 +150,6 @@ public class ServerLogic implements AsServer{
 										if(processer.getType() == HeadInfoProcesser.STRING)
 											processer.process(filter.filteContent());
 										else processer.process(client);
-// TODO System Output Test Block
-System.out.println(" got it "+  "  服务器接收到的消息=    "+line);
 									} catch (Exception e) {
 										e.printStackTrace();
 									}
@@ -217,34 +215,6 @@ System.out.println(" got it "+  "  服务器接收到的消息=    "+line);
 		
 	}
 	
-	/**
-//	 * 用来发信息给指定的客户端
-//	 * @param username 指定发送信息的用户名
-//	 * @param message 要发的信息
-//	 */
-//	public void sendMessage(Client client, String message)
-//	{
-//		if (client != null )
-//		{
-//			client.getSocketStream().getPrintWriter().println(message);
-//			client.getSocketStream().getPrintWriter().flush();
-//		}
-//	}
-
-//	/**
-//	 * 对所有保存的活动客户发送消息
-//	 * @param message
-//	 */
-//	public void sendAllClient(String message)
-//	{
-//		Iterator<Client> it = clientList.iterator();
-//		while(it.hasNext())
-//		{
-//			PrintWriter pw=it.next().getSocketStream().getPrintWriter();
-//			pw.println(message);
-//			pw.flush();
-//		}
-//	}
 
 }
 

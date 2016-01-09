@@ -45,8 +45,6 @@ public class GroupChatRoomLogic extends PubChatRoomLogic{
 					}					
 					else
 					{
-						// TODO Auto-generated catch block
-		System.out.println("我是groupchatlogic中的接收方法 我接收到了");
 						storeString.append(line + "\n");
 						gui.textArea.append(line+"\n");
 					}

@@ -28,11 +28,11 @@ import object.ChatDialog;
 @SuppressWarnings("serial")
 public class GroupChatGUI extends ChatDialog  {
 	
+	// TODO Auto-generated catch block
 //	private JButton[] buttons;
 //	private String [] strButton= {"导出聊天记录","邀请加入"};
+	
 	private JToolBar bar;
-	public JButton sendButton;
-//	public  JList<String> groupmember;
 	private JLabel melabel;
 	
 	/**
@@ -106,7 +106,6 @@ public class GroupChatGUI extends ChatDialog  {
 			StyleConstants.setForeground(set, color);
 			doc.insertString(length, massage, set);
 		} catch (BadLocationException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

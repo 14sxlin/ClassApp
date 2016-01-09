@@ -14,7 +14,7 @@ import classapp.mainframe.ClassAppMainFrame;
 import gui.groupChatRoom.GroupChatGUI;
 import object.ChatDialog;
 
-public class GroupChatMainDialog {
+public class GroupChatMainFrame {
 
 	private GroupChatRoomLogic logic;
 	private ChatDialog gui ;
@@ -23,7 +23,7 @@ public class GroupChatMainDialog {
 	private StringBuilder sb ;
 
 
-	public GroupChatMainDialog(long mark,String usernamelist,PubChatRoomLogic logic) {
+	public GroupChatMainFrame(long mark,String usernamelist,PubChatRoomLogic logic) {
 		this.mark = mark;
 		gui = new GroupChatGUI();
 		this.logic = new GroupChatRoomLogic(mark, gui, logic);
@@ -39,12 +39,12 @@ public class GroupChatMainDialog {
 			public void actionPerformed(ActionEvent e) {
 				if(!gui.textField.getText().equals(""))
 				{	
-					GroupChatMainDialog.this.logic.sendMessageWithName(gui.textField.getText());
-//				    gui.textArea.append(gui.textField.getText());
+					GroupChatMainFrame.this.logic.sendMessageWithName(gui.textField.getText());
 				    gui.textField.setText("");
 				}
 			}
 		});
+		
 		gui.textField.addKeyListener(new KeyListener() {
 			
 			
@@ -53,7 +53,7 @@ public class GroupChatMainDialog {
 				if(e.getKeyCode()==KeyEvent.VK_ENTER)
 				{
 					if(!gui.textField.getText().equals(""))
-					{	GroupChatMainDialog.this.logic.sendMessageWithName(gui.textField.getText());
+					{	GroupChatMainFrame.this.logic.sendMessageWithName(gui.textField.getText());
 //					    gui.textArea.append(gui.textField.getText());
 					    gui.textField.setText("");
 					}

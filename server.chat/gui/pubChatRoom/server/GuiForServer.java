@@ -125,13 +125,11 @@ public class GuiForServer extends JFrame {
 			
 			@Override
 			public void intervalRemoved(ListDataEvent e) {
-				// TODO Auto-generated method stub
 				
 			}
 			
 			@Override
 			public void intervalAdded(ListDataEvent e) {
-				// TODO Auto-generated method stub
 				
 			}
 			

@@ -1,13 +1,13 @@
 package object;
 
 import javax.swing.JButton;
-import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 @SuppressWarnings("serial")
-public abstract class ChatDialog extends JDialog{
+public abstract class ChatDialog extends JFrame{
 	public JTextArea textArea;
 	public JTextField textField;
 	public  JList<String> classmateList;

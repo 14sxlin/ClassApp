@@ -2,7 +2,7 @@ package tools;
 
 import api.client.pubChatRoom.PubChatRoomLogic;
 import classapp.mainframe.ClassAppMainFrame;
-import main.client.groupchat.GroupChatMainDialog;
+import main.client.groupchat.GroupChatMainFrame;
 
 /**
  * 处理建立组聊窗口的事件
@@ -27,7 +27,7 @@ public class GroupChatProcesser {
 			setData(filteContent(content));
 			if(content.contains("!"))//第一种情况,要新建一个
 			{
-				GroupChatMainDialog temp = new GroupChatMainDialog(mark, sender+"&"+usernameList, logic);
+				GroupChatMainFrame temp = new GroupChatMainFrame(mark, sender+"&"+usernameList, logic);
 				ClassAppMainFrame.groupChatManager.add(temp);
 			}
 			else

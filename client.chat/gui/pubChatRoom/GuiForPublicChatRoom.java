@@ -140,7 +140,6 @@ public class GuiForPublicChatRoom extends ChatDialog {
 			public void mouseClicked(MouseEvent e) {
 				if(e.getButton()==MouseEvent.BUTTON1)
 				{
-					// TODO Auto-generated catch block
 				}else
 				{
 					classmateList.clearSelection();

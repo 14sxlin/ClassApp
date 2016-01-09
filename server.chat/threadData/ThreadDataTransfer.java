@@ -25,12 +25,6 @@ public class ThreadDataTransfer {
 	 */
 	public DefaultListModel<String> listmodel;
 	
-	/**
-	 * 默认的构造方法,什么都不做
-	 */
-	public ThreadDataTransfer() {
-		// TODO Auto-generated constructor stub
-	}
 	
 	/**
 	 * 提供给外部的接口,用来更新外部swing组件的状态<br>

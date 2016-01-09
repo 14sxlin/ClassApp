@@ -14,7 +14,7 @@ import api.client.pubChatRoom.PubChatRoomLogic;
 import classapp.mainframe.ClassAppMainFrame;
 import gui.pubChatRoom.GuiForPublicChatRoom;
 import headinfoFilter.HeadType;
-import main.client.groupchat.GroupChatMainDialog;
+import main.client.groupchat.GroupChatMainFrame;
 import object.AsClient;
 import object.ServerInfo;
 
@@ -146,24 +146,14 @@ import object.ServerInfo;
 					if(!groupinfo.equals(""))
 					{
 						groupinfo = groupinfo.substring(0, groupinfo.length()-1);
-// TODO System Output Test Block
-System.out.println(" groupinfo =  "+groupinfo);
-//						try {
-							//发送组聊消息给服务器
-							long time = System.currentTimeMillis();
-							groupinfo =(HeadType.GROUP+username+"!"+
-									groupinfo+":"+time+"#");
-							logic.sendMessageToServer(groupinfo);
-// TODO System Output Test Block
-System.out.println(" 我是发起者 "+username+"   已发送 =  "+ groupinfo);
-							GroupChatMainDialog temp =
-									new GroupChatMainDialog(time,getSelectedUsername(), logic);
-//							temp.startReceiveMessage();
-							ClassAppMainFrame.groupChatManager.add(temp);
-//						} catch (IOException e1) {
-//							// TODO Auto-generated catch block
-//							e1.printStackTrace();
-//						};
+						//发送组聊消息给服务器
+						long time = System.currentTimeMillis();
+						groupinfo =(HeadType.GROUP+username+"!"+
+								groupinfo+":"+time+"#");
+						logic.sendMessageToServer(groupinfo);
+						GroupChatMainFrame temp =
+								new GroupChatMainFrame(time,getSelectedUsername(), logic);
+						ClassAppMainFrame.groupChatManager.add(temp);
 						
 					}
 					else
@@ -193,8 +183,6 @@ System.out.println(" 我是发起者 "+username+"   已发送 =  "+ groupinfo);
 				temp+=(gui.classmateList.getModel().getElementAt(i)+"&");
 		}
 		temp = temp.substring(0, temp.length()-1);
-		// TODO System Output Test Block
-		System.out.println(" selectednames =  "+ temp);
 		return temp;
 	}
 	

@@ -3,14 +3,14 @@ package object;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import main.client.groupchat.GroupChatMainDialog;
+import main.client.groupchat.GroupChatMainFrame;
 
 
 public class GroupsChatManager {
 
-	public  ArrayList<GroupChatMainDialog> groups = new ArrayList<>();
+	public  ArrayList<GroupChatMainFrame> groups = new ArrayList<>();
 	
-	public  void add(GroupChatMainDialog group)
+	public  void add(GroupChatMainFrame group)
 	{
 		groups.add(group);
 	}
@@ -20,16 +20,14 @@ public class GroupsChatManager {
 		groups.remove(id);
 	}
 	
-	public  GroupChatMainDialog find(long mark) 
+	public  GroupChatMainFrame find(long mark) 
 	{
-		Iterator<GroupChatMainDialog> it = groups.iterator();
+		Iterator<GroupChatMainFrame> it = groups.iterator();
 		while(it.hasNext())
 		{
-			GroupChatMainDialog temp = it.next();
+			GroupChatMainFrame temp = it.next();
 			if(temp.getMark()==mark)
 			{
-				// TODO System Output Test Block
-				System.out.println(" i find it ! ");
 				return temp;
 			}
 		}

@@ -139,11 +139,9 @@ public class ServerMainFraim {
 				try {
 					server.startService(ServerInfo.PORT);
 				} catch (SocketException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 					gui.textPane.append("服务器不再接收连接\n");
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
