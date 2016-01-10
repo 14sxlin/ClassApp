@@ -86,7 +86,7 @@ public class ServerMainFraim {
 	}
 	
 	/**
-	 * 实现gui的button和textfiled的监听
+	 * 实现gui组件的监听
 	 */
 	private void addListener()
 	{

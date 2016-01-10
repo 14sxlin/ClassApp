@@ -22,14 +22,14 @@ import classapp.mainframe.ClassAppMainFrame;
  *
  */
 @SuppressWarnings("serial")
-public class LoginDialog extends JFrame{
+public class ClassAppLoginFrame extends JFrame{
 
 	public static Dimension dim;
 	private JTextField userName;
 	private JPasswordField password;
 	private JButton loginButton,forgetButton;
 	
-	public LoginDialog() {
+	public ClassAppLoginFrame() {
 		super();
 		drawGui();
 	}
@@ -117,6 +117,6 @@ public class LoginDialog extends JFrame{
 	
 	public static void main(String args[])
 	{
-		new LoginDialog();
+		new ClassAppLoginFrame();
 	}
 }

@@ -8,6 +8,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JToolBar;
 import javax.swing.border.TitledBorder;
@@ -16,7 +17,7 @@ import javax.swing.text.Document;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 
-import classapp.login.LoginDialog;
+import classapp.login.ClassAppLoginFrame;
 import classapp.mainframe.ClassAppMainFrame;
 import object.ChatDialog;
 
@@ -46,10 +47,8 @@ public class GroupChatGUI extends ChatDialog  {
 	private void setGui()
 	{
 		this.setTitle("私/组聊-----"+ ClassAppMainFrame.username);
-		LoginDialog.dim=getToolkit().getScreenSize();
-		this.setBounds(LoginDialog.dim.width/2-250, LoginDialog.dim.height/2-200, 500, 400);
-//		myColor=Color.blue;
-//		otherColor=Color.red;
+		ClassAppLoginFrame.dim=getToolkit().getScreenSize();
+		this.setBounds(ClassAppLoginFrame.dim.width/2-250, ClassAppLoginFrame.dim.height/2-200, 500, 400);
 		
 		//增加菜单栏
 		bar=new JToolBar();
@@ -75,19 +74,22 @@ public class GroupChatGUI extends ChatDialog  {
 		
 		JPanel memberpanel = new JPanel();
 		memberpanel.setLayout(new BorderLayout());
+		
+		
 		//增加自己用户名的标签
 		melabel = new JLabel(ClassAppMainFrame.username+"(我)");
-		melabel.setAlignmentX(CENTER_ALIGNMENT);
+		melabel.setHorizontalAlignment(JLabel.CENTER);
 		memberpanel.add(melabel,"North");
 		
 		//增加成员面板
 		classmateList=new JList<String>(new DefaultListModel<String>());
-		memberpanel.add(classmateList,"Center");
+		memberpanel.add(new JScrollPane(classmateList),"Center");
 		memberpanel.setBorder(new TitledBorder("讨论成员"));
 		
 		
 		//分割面板
-		JSplitPane jSplitPane=new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, super.textArea, memberpanel);
+		JSplitPane jSplitPane=new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, 
+				new JScrollPane(super.textArea), memberpanel);
 		jSplitPane.setOneTouchExpandable(true);
 		this.setVisible(true);
 		jSplitPane.setDividerLocation(this.getWidth()*2/3);

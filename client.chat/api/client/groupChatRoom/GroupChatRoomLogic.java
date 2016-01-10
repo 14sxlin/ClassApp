@@ -40,13 +40,13 @@ public class GroupChatRoomLogic extends PubChatRoomLogic{
 							e.printStackTrace();
 						}
 						storeString.append(line + "\n");
-//						this.jTextArea.append("接收到list信息"+"\n");
-//						this.jTextArea.append(line+"\n");
+						gui.textArea.setCaretPosition(gui.textArea.getText().length());
 					}					
-					else
+					else//实际上是有调用这个方法?  实际上是没有调用的// TODO Auto-generated catch block
 					{
 						storeString.append(line + "\n");
 						gui.textArea.append(line+"\n");
+						gui.textArea.setCaretPosition(gui.textArea.getText().length());
 					}
 					
 				} 

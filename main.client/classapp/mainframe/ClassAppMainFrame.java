@@ -11,7 +11,7 @@ import javax.swing.JSplitPane;
 import javax.swing.JToolBar;
 import javax.swing.border.TitledBorder;
 
-import classapp.login.LoginDialog;
+import classapp.login.ClassAppLoginFrame;
 import gui.OfficeInfoListPanel;
 import main.clietn.pubchat.PubChatRoomMainFrame;
 import object.GroupsChatManager;
@@ -51,8 +51,8 @@ public class ClassAppMainFrame extends JFrame implements ActionListener{
 	private void guiDesign()
 	{
 		this.setTitle("我们这一班--"+username);
-		LoginDialog.dim=getToolkit().getScreenSize();
-		this.setBounds(LoginDialog.dim.width/2-250, LoginDialog.dim.height/2-200, 500, 400);
+		ClassAppLoginFrame.dim=getToolkit().getScreenSize();
+		this.setBounds(ClassAppLoginFrame.dim.width/2-250, ClassAppLoginFrame.dim.height/2-200, 500, 400);
 		
 		//添加公告栏
 		messageArea=new JPanel(new GridLayout(1, 2));

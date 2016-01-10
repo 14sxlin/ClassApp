@@ -29,4 +29,9 @@ public interface HeadType {
 	 * 格式是#head:gsned?content=usernamelist!mark:message#
 	 */
 	String GSEND = "#head:gsend?content=";
+	
+	/**
+	 * "我说"的字段
+	 */
+	String ISAY = "我 说:";
 }

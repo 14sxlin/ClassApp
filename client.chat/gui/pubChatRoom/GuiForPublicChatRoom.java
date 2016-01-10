@@ -1,9 +1,11 @@
 package gui.pubChatRoom;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -50,15 +52,10 @@ public class GuiForPublicChatRoom extends ChatDialog {
 	public JButton joinGroupButton;
 	
 	public JTextField jTextField;
-//	private JComboBox<String>searchCombo;	
 	private JToolBar toolBar;
 	private JRadioButton online,all;
 	public JList<String> classmateList;
 	
-//	/**
-//	 * 用来通知Jlist变化的类
-//	 */
-//	public static ClientGuiNotifier clientGuiNotifier;
 	
 	/**
 	 * 默认的构造函数,创建一个公共聊天室的窗口
@@ -67,7 +64,6 @@ public class GuiForPublicChatRoom extends ChatDialog {
 	public GuiForPublicChatRoom(String username) {
 		
 		guiDesign(username);
-//		clientGuiNotifier = new ClientGuiNotifier(classmateList);
 		
 	}
 	
@@ -79,7 +75,8 @@ public class GuiForPublicChatRoom extends ChatDialog {
 	private void guiDesign(String username)
 	{
 		this.setTitle("群聊---"+username);
-		this.setSize(500, 400);
+		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+		this.setSize((int) (dim.getWidth()/2.5), (int) (dim.getHeight()/2));
 		this.setLocationRelativeTo(null);
 		this.setLayout(new BorderLayout());
 		
@@ -94,6 +91,7 @@ public class GuiForPublicChatRoom extends ChatDialog {
 				GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0);
 		jTextArea=new JTextArea();
 		jTextArea.setEditable(false);
+		jTextArea.setPreferredSize(new Dimension(55, 50));
 		panel1.add(new JScrollPane(jTextArea), constraints);
 		
 		//文本输入框
@@ -164,9 +162,8 @@ public class GuiForPublicChatRoom extends ChatDialog {
 		//添加分割窗口
 		JSplitPane jsplit = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, 
 				panel1, panel2);
-		jsplit.setDividerLocation(this.getWidth()*2/3);
+		jsplit.setDividerLocation(this.getWidth()*7/10);
 		jsplit.setDividerSize(1);
-		jsplit.setEnabled(false);
 		this.add(jsplit, "Center");
 		
 		//工具栏

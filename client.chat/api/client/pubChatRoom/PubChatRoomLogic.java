@@ -81,9 +81,13 @@ public class PubChatRoomLogic implements AsClient {
 	@Override
 	public void sendLoginInfo(Server server)
 	{
-		//目前只有两个信息
-		server.getSocketStream().getPrintWriter().println(HeadType.LOGIN+this.userName+"#");
-		server.getSocketStream().getPrintWriter().flush();
+		try {
+			//目前只有两个信息
+			server.getSocketStream().getPrintWriter().println(HeadType.LOGIN+this.userName+"#");
+			server.getSocketStream().getPrintWriter().flush();
+		} catch (NullPointerException e) {
+			// TODO Auto-generated catch block
+		}
 	}
 	
 	@Override
@@ -92,6 +96,8 @@ public class PubChatRoomLogic implements AsClient {
 			server.getSocketStream().getPrintWriter().println(HeadType.LOGOUT+this.userName+"#");
 			server.getSocketStream().getPrintWriter().flush();
 		} catch (NullPointerException e) {
+			// TODO System Output Test Block
+			System.out.println(" catch nullpointer ");
 		}
 	}
 
@@ -143,20 +149,16 @@ public class PubChatRoomLogic implements AsClient {
 							e.printStackTrace();
 						}
 						storeString.append(line + "\n");
-						gui.jTextArea.append("接收到list信息"+"\n");
-						gui.jTextArea.append(line+"\n");
 					}
 					else if( line.contains(HeadType.GROUP) ||  line.contains(HeadType.GSEND))//处理组聊信息
 					{
 						GroupChatProcesser.process(line, this);
-						gui.jTextArea.append("接收到group信息"+"\n");
-						gui.jTextArea.append(line+"\n");
 					}
 					
 					else
 					{
 						storeString.append(line + "\n");
-						gui.jTextArea.append(line+"\n");
+						updateTextPane(line);
 					}
 				} 
 			}
@@ -165,6 +167,20 @@ public class PubChatRoomLogic implements AsClient {
 		}
 	}
 
+	private void updateTextPane(String message)
+	{
+		int length = 50;
+		if(message.length()>length)
+		{
+			String part1 = message.substring(0,length);
+			gui.jTextArea.append(part1+"\n");
+			updateTextPane(message.substring(length+1));
+		}else
+		{
+			gui.jTextArea.append(message+"\n");
+		}
+		gui.jTextArea.setCaretPosition(gui.jTextArea.getText().length());
+	}
 	public Server getServer() {
 		return this.server;
 	}

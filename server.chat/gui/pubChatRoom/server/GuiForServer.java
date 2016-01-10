@@ -5,6 +5,7 @@ import java.awt.Color;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -18,6 +19,8 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
+
+import object.ServerInfo;
 
 /**
  * 服务器的界面,服务器使用
@@ -48,6 +51,11 @@ public class GuiForServer extends JFrame {
 	public JButton startServiceButton;
 	public JTextField textField;
 	public JButton sendbutton;
+	public JComboBox<String> ipComboBox;
+	private JTextField portText;
+	private JLabel lblip;
+	private JLabel label_1;
+	private JLabel label_2;
 	
 	/**
 	 * Launch the application.
@@ -71,7 +79,7 @@ public class GuiForServer extends JFrame {
 	{
 		this.setTitle("服务器");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 600, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -80,16 +88,24 @@ public class GuiForServer extends JFrame {
 		JPanel panel = new JPanel();
 		contentPane.add(panel, BorderLayout.NORTH);
 		
+		ipComboBox = new JComboBox<String>();
+		ipComboAddItem();
+		
+		lblip = new JLabel("\u670D\u52A1\u5668IP:");
+		panel.add(lblip);
+		panel.add(ipComboBox);
+		
+		label_1 = new JLabel("\u670D\u52A1\u7AEF\u53E3:");
+		panel.add(label_1);
+		
+		portText = new JTextField();
+		panel.add(portText);
+		portText.setColumns(10);
+		portText.setText(""+ServerInfo.PORT);
+		portText.setEditable(false);
+		
 		startServiceButton = new JButton("\u5F00\u542F\u670D\u52A1");
-
 		panel.add(startServiceButton);
-		
-		textField = new JTextField();
-		panel.add(textField);
-		textField.setColumns(10);
-		
-		sendbutton = new JButton("\u53D1\u9001");
-		panel.add(sendbutton);
 		
 		JSplitPane splitPane = new JSplitPane();
 		splitPane.setResizeWeight(0.8);
@@ -118,6 +134,16 @@ public class GuiForServer extends JFrame {
 		toolBar.add(counterTextField);
 		counterTextField.setColumns(1);
 		
+		label_2 = new JLabel("\u53D1\u9001\u5168\u5C40\u6D88\u606F:");
+		toolBar.add(label_2);
+		
+		textField = new JTextField();
+		toolBar.add(textField);
+		textField.setColumns(10);
+		
+		sendbutton = new JButton("\u53D1\u9001");
+		toolBar.add(sendbutton);
+		
 		listmodel=new DefaultListModel<>();
 		list_1=new JList<>(listmodel);
 		panel_1.add(list_1);
@@ -140,6 +166,15 @@ public class GuiForServer extends JFrame {
 		});
 		
 		this.setVisible(true);		
+	}
+	
+	private void ipComboAddItem()
+	{
+		if(ipComboBox != null)
+		{
+			ipComboBox.addItem("10.21.30.30");
+			ipComboBox.setEditable(false);
+		}
 	}
 	
 }

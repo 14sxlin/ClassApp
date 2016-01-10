@@ -65,8 +65,6 @@ public class GroupChatProcesser {
 	private  static String filteContent(String content)
 	{
 		int i = content.indexOf("content=");
-		// TODO System Output Test Block
-		System.out.println(" content =  "+content.substring(i+"content=".length(), content.lastIndexOf("#")));
 		return content.substring(i+"content=".length(), content.lastIndexOf("#"));
 	}
 	

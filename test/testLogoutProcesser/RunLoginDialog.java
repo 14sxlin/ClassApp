@@ -1,10 +1,10 @@
 package testLogoutProcesser;
 
-import classapp.login.LoginDialog;
+import classapp.login.ClassAppLoginFrame;
 
 public class RunLoginDialog {
 
 	public static void main(String[] args) {
-		new LoginDialog();
+		new ClassAppLoginFrame();
 	}
 }

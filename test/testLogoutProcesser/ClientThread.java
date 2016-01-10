@@ -1,11 +1,11 @@
 package testLogoutProcesser;
 
-import classapp.login.LoginDialog;
+import classapp.login.ClassAppLoginFrame;
 
 public class ClientThread extends Thread {
 
 	@Override
 	public void run() {
-		new LoginDialog();
+		new ClassAppLoginFrame();
 	}
 }

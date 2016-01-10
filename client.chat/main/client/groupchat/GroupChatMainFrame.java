@@ -54,7 +54,6 @@ public class GroupChatMainFrame {
 				{
 					if(!gui.textField.getText().equals(""))
 					{	GroupChatMainFrame.this.logic.sendMessageWithName(gui.textField.getText());
-//					    gui.textArea.append(gui.textField.getText());
 					    gui.textField.setText("");
 					}
 				}
@@ -116,7 +115,17 @@ public class GroupChatMainFrame {
 	 */
 	public void updateTextPane(String message)
 	{
-		gui.textArea.append(message+"\n");
+		int length = 50;
+		if(message.length()>length)
+		{
+			String part1 = message.substring(0,length);
+			gui.textArea.append(part1+"\n");
+			updateTextPane(message.substring(length+1));
+		}else
+		{
+			gui.textArea.append(message+"\n");
+		}
+		gui.textArea.setCaretPosition(gui.textArea.getText().length());
 	}
 
 

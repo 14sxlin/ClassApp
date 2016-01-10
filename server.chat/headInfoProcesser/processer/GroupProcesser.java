@@ -2,6 +2,7 @@ package headInfoProcesser.processer;
 
 import headinfoFilter.HeadType;
 import object.Client;
+import object.TimeAddtion;
 import tools.ClientsManager;
 
 public class GroupProcesser extends HeadInfoProcesser {
@@ -73,7 +74,7 @@ public class GroupProcesser extends HeadInfoProcesser {
 		int index2 = content.indexOf(":");
 		this.groupMark = content.substring(0, index2);
 		this.message = content.substring(index2+1);
-		return HeadType.GSEND+this.groupMark+":"+this.message+"#";
+		return HeadType.GSEND+this.groupMark+":"+TimeAddtion.getTime()+this.message+"#";
 		
 	}
 	

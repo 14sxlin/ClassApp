@@ -72,9 +72,14 @@ import object.ServerInfo;
 		//连接服务器
 		try {
 			logic=new PubChatRoomLogic(username,gui);
-			logic.startConnectServer(ServerInfo.SERVER_LOCAL_IP, ServerInfo.PORT);
+			logic.startConnectServer(ServerInfo.SERVER_IP, ServerInfo.PORT);
 		} catch (IOException e) {
-			gui.jTextArea.append("服务器关闭了");
+			try {
+				logic.startConnectServer(ServerInfo.SERVER_LOCAL, ServerInfo.PORT);
+			} catch (IOException e1) {
+				gui.jTextArea.append("服务器关闭了");
+			}
+			
 		}		
 	}
 	
@@ -100,9 +105,11 @@ import object.ServerInfo;
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				logic.sendMessageWithName(gui.jTextField.getText());
-//				gui.jTextArea.append(gui.jTextField.getText()+"\n");
-				gui.jTextField.setText("");
+				if(!gui.jTextField.getText().equals(""))
+				{
+					logic.sendMessageWithName(gui.jTextField.getText());
+					gui.jTextField.setText("");
+				}
 			}
 		});
 		
@@ -117,9 +124,11 @@ import object.ServerInfo;
 			public void keyReleased(KeyEvent e) {
 				if(e.getKeyCode() == KeyEvent.VK_ENTER)
 				{
-					logic.sendMessageWithName(gui.jTextField.getText());
-//					gui.jTextArea.append(gui.jTextField.getText()+"\n");
-					gui.jTextField.setText("");
+					if(!gui.jTextField.getText().equals(""))
+					{
+						logic.sendMessageWithName(gui.jTextField.getText());
+						gui.jTextField.setText("");
+					}
 				}
 			}
 			
