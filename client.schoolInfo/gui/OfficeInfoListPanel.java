@@ -61,6 +61,7 @@ public class OfficeInfoListPanel extends JPanel{
 					if(e.getClickCount()== 2)
 					{
 						try {
+							//双击调用系统的浏览器打开办公自动化的网页
 							Desktop.getDesktop().browse(
 									new URI(AutoOfficeTools.getDetailWebsite((OfficeInfo) list.getSelectedValue())));
 						} catch (IOException | URISyntaxException e1) {

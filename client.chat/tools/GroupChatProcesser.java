@@ -51,7 +51,6 @@ public class GroupChatProcesser {
 			sender = content.substring(0, i1);
 			usernameList =  content.substring(i1+1, i2);
 			mark = Long.parseLong(content.substring(i2+1));
-			
 					
 		}else
 		{
@@ -66,6 +65,8 @@ public class GroupChatProcesser {
 	private  static String filteContent(String content)
 	{
 		int i = content.indexOf("content=");
+		// TODO System Output Test Block
+		System.out.println(" content =  "+content.substring(i+"content=".length(), content.lastIndexOf("#")));
 		return content.substring(i+"content=".length(), content.lastIndexOf("#"));
 	}
 	

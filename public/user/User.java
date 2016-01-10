@@ -8,6 +8,7 @@ public abstract class User {
 	private String ID;
 	private String email;
 	private String ownSign;
+	
 	public String getName() {
 		return name;
 	}

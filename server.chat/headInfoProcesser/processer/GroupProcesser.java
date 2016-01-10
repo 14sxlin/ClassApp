@@ -60,6 +60,7 @@ public class GroupProcesser extends HeadInfoProcesser {
 			}
 			ClientsManager.sendAllClient(headinfo);
 		}
+		
 	}
 	
 	/**
@@ -90,6 +91,7 @@ public class GroupProcesser extends HeadInfoProcesser {
 		{
 			this.sender = content.substring(0, index1);
 			this.usernamelist = content.substring(index1+1, index2);
+			this.message = content.substring(index2+1);
 		}else
 			throw new NullPointerException();		
 		return HeadType.GROUP+this.sender+"!"+usernamelist+":"+this.message+"#";

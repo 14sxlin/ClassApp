@@ -88,8 +88,11 @@ public class PubChatRoomLogic implements AsClient {
 	
 	@Override
 	public void sendLogoutInfo(Server server) {
-		server.getSocketStream().getPrintWriter().println(HeadType.LOGOUT+this.userName+"#");
-		server.getSocketStream().getPrintWriter().flush();
+		try {
+			server.getSocketStream().getPrintWriter().println(HeadType.LOGOUT+this.userName+"#");
+			server.getSocketStream().getPrintWriter().flush();
+		} catch (NullPointerException e) {
+		}
 	}
 
 	/**
@@ -155,7 +158,6 @@ public class PubChatRoomLogic implements AsClient {
 						storeString.append(line + "\n");
 						gui.jTextArea.append(line+"\n");
 					}
-					
 				} 
 			}
 		} catch (SocketException e) {

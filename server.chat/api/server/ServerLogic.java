@@ -160,7 +160,6 @@ public class ServerLogic implements AsServer{
 //									gui.textPane.append(line+"\n");
 									ClientsManager.sendAllClient(line);
 								}
-								
 							}
 						} catch (IOException e) {
 							e.printStackTrace();
