@@ -62,7 +62,7 @@ public class GroupChatGUI extends ChatDialog  {
 //		}
 		
 		//增加聊天面板
-		super.textArea.setEditable(false);
+		super.textPane.setEditable(false);
 		
 		//增加按钮
 		JPanel panel=new JPanel();
@@ -89,7 +89,7 @@ public class GroupChatGUI extends ChatDialog  {
 		
 		//分割面板
 		JSplitPane jSplitPane=new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, 
-				new JScrollPane(super.textArea), memberpanel);
+				new JScrollPane(super.textPane), memberpanel);
 		jSplitPane.setOneTouchExpandable(true);
 		this.setVisible(true);
 		jSplitPane.setDividerLocation(this.getWidth()*2/3);
@@ -103,9 +103,9 @@ public class GroupChatGUI extends ChatDialog  {
 	{
 		try {
 			SimpleAttributeSet set=new SimpleAttributeSet();
-			Document doc=super.textArea.getDocument();
+			Document doc=super.textPane.getDocument();
 			int length=doc.getLength();
-			StyleConstants.setForeground(set, color);
+			StyleConstants.setForeground(set, color);//加工方法
 			doc.insertString(length, massage, set);
 		} catch (BadLocationException e) {
 			e.printStackTrace();

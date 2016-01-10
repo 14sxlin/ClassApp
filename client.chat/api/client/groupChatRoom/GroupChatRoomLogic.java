@@ -1,7 +1,12 @@
 package api.client.groupChatRoom;
 
+import java.awt.Color;
 import java.io.IOException;
 import java.net.SocketException;
+
+import javax.swing.text.BadLocationException;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
 
 import api.client.pubChatRoom.PubChatRoomLogic;
 import headinfoFilter.HeadType;
@@ -40,19 +45,41 @@ public class GroupChatRoomLogic extends PubChatRoomLogic{
 							e.printStackTrace();
 						}
 						storeString.append(line + "\n");
-						gui.textArea.setCaretPosition(gui.textArea.getText().length());
+						gui.textPane.setCaretPosition(gui.textPane.getText().length());
 					}					
 					else//实际上是有调用这个方法?  实际上是没有调用的// TODO Auto-generated catch block
 					{
 						storeString.append(line + "\n");
-						gui.textArea.append(line+"\n");
-						gui.textArea.setCaretPosition(gui.textArea.getText().length());
+						if(isMyself(line))
+						{
+							try {
+								int i = gui.textPane.getDocument().getLength();
+								SimpleAttributeSet set = new SimpleAttributeSet();
+								StyleConstants.setForeground(set, Color.red);
+								gui.textPane.getDocument().insertString(i, line+"\n", set);
+							} catch (BadLocationException e) {
+								e.printStackTrace();
+							}
+								
+						}else
+						{
+							
+							try {
+								int i = gui.textPane.getDocument().getLength();
+								SimpleAttributeSet set = new SimpleAttributeSet();
+								StyleConstants.setForeground(set, Color.blue);
+								gui.textPane.getDocument().insertString(i, line+"\n", set);
+								
+							} catch (BadLocationException e) {
+								e.printStackTrace();
+							}
+						}
+						gui.textPane.setCaretPosition(gui.textPane.getDocument().getLength());
 					}
-					
-				} 
+				}
 			}else throw new NullPointerException();
 		} catch (SocketException e) {
-			gui.textArea.setText("与服务断开连接\n");
+			gui.textPane.setText("与服务断开连接\n");
 		}
 	}
 

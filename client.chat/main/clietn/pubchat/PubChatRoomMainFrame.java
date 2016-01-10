@@ -77,7 +77,7 @@ import object.ServerInfo;
 			try {
 				logic.startConnectServer(ServerInfo.SERVER_LOCAL, ServerInfo.PORT);
 			} catch (IOException e1) {
-				gui.jTextArea.append("服务器关闭了");
+				gui.my_jtextPane.setText("服务器关闭了");
 			}
 			
 		}		

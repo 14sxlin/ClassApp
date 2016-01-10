@@ -1,5 +1,6 @@
 package main.client.groupchat;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -7,6 +8,9 @@ import java.awt.event.KeyListener;
 import java.io.IOException;
 
 import javax.swing.DefaultListModel;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
 
 import api.client.groupChatRoom.GroupChatRoomLogic;
 import api.client.pubChatRoom.PubChatRoomLogic;
@@ -115,18 +119,33 @@ public class GroupChatMainFrame {
 	 */
 	public void updateTextPane(String message)
 	{
-		int length = 50;
-		if(message.length()>length)
+		if(logic.isMyself(message))
 		{
-			String part1 = message.substring(0,length);
-			gui.textArea.append(part1+"\n");
-			updateTextPane(message.substring(length+1));
+			try {
+				int i = gui.textPane.getDocument().getLength();
+				SimpleAttributeSet set = new SimpleAttributeSet();
+				StyleConstants.setForeground(set, Color.red);
+				gui.textPane.getDocument().insertString(i, message+"\n", set);
+			} catch (BadLocationException e) {
+				e.printStackTrace();
+			}
+				
 		}else
 		{
-			gui.textArea.append(message+"\n");
+			
+			try {
+				int i = gui.textPane.getDocument().getLength();
+				SimpleAttributeSet set = new SimpleAttributeSet();
+				StyleConstants.setForeground(set, Color.blue);
+				gui.textPane.getDocument().insertString(i, message+"\n", set);
+				
+			} catch (BadLocationException e) {
+				e.printStackTrace();
+			}
 		}
-		gui.textArea.setCaretPosition(gui.textArea.getText().length());
+		gui.textPane.setCaretPosition(gui.textPane.getDocument().getLength());
 	}
+	
 
 
 	public long getMark() {

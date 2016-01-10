@@ -1,5 +1,6 @@
 package api.client.pubChatRoom;
 
+import java.awt.Color;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
@@ -7,6 +8,9 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 
 import javax.swing.JList;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
 
 import classapp.mainframe.ClassAppMainFrame;
 import gui.pubChatRoom.GuiForPublicChatRoom;
@@ -82,11 +86,9 @@ public class PubChatRoomLogic implements AsClient {
 	public void sendLoginInfo(Server server)
 	{
 		try {
-			//目前只有两个信息
 			server.getSocketStream().getPrintWriter().println(HeadType.LOGIN+this.userName+"#");
 			server.getSocketStream().getPrintWriter().flush();
 		} catch (NullPointerException e) {
-			// TODO Auto-generated catch block
 		}
 	}
 	
@@ -96,8 +98,6 @@ public class PubChatRoomLogic implements AsClient {
 			server.getSocketStream().getPrintWriter().println(HeadType.LOGOUT+this.userName+"#");
 			server.getSocketStream().getPrintWriter().flush();
 		} catch (NullPointerException e) {
-			// TODO System Output Test Block
-			System.out.println(" catch nullpointer ");
 		}
 	}
 
@@ -158,31 +158,69 @@ public class PubChatRoomLogic implements AsClient {
 					else
 					{
 						storeString.append(line + "\n");
-						updateTextPane(line);
+						if(isMyself(line))
+						{
+							try {
+								addStringWithColor(line , Color.blue);
+							} catch (BadLocationException e) {
+								e.printStackTrace();
+							}
+								
+						}else
+						{
+							
+							try {
+								addStringWithColor(line, Color.red);
+								
+							} catch (BadLocationException e) {
+								e.printStackTrace();
+							}
+						}
+						
 					}
+					gui.my_jtextPane.setCaretPosition(gui.my_jtextPane.getDocument().getLength());
 				} 
 			}
 		} catch (SocketException e) {
-			gui.jTextArea.setText("与服务断开连接\n");
+			gui.my_jtextPane.setText("与服务断开连接\n");
 		}
 	}
 
-	private void updateTextPane(String message)
-	{
-		int length = 50;
-		if(message.length()>length)
-		{
-			String part1 = message.substring(0,length);
-			gui.jTextArea.append(part1+"\n");
-			updateTextPane(message.substring(length+1));
-		}else
-		{
-			gui.jTextArea.append(message+"\n");
-		}
-		gui.jTextArea.setCaretPosition(gui.jTextArea.getText().length());
+	private void addStringWithColor(String line,Color color) throws BadLocationException {
+		int i = gui.my_jtextPane.getDocument().getLength();
+		SimpleAttributeSet set = new SimpleAttributeSet();
+		StyleConstants.setForeground(set, color);
+		gui.my_jtextPane.getDocument().insertString(i, line+"\n", set);
 	}
+
 	public Server getServer() {
 		return this.server;
+	}
+
+	@Override
+	public boolean isMyself(String message) {
+		
+		if(ClassAppMainFrame.username == null)
+			return false;
+		else
+		{
+			int i = message.indexOf(" 说");
+			if(i != -1)
+			{
+				 try {
+					if (message.substring(i-ClassAppMainFrame.username.length() , i).equals(ClassAppMainFrame.username ))
+					{	
+						return true;
+					}
+						else return false;
+				} catch (Exception e) {
+					
+					return false;
+				}
+				
+			}else return false;
+			
+		}
 	}
 	
 }

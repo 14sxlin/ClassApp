@@ -18,11 +18,12 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.JTextPane;
 import javax.swing.JToolBar;
 
 import object.ChatDialog;
+import object.ClassmateListRender;
 
 /**
  * 公共聊天室,给客户端使用的
@@ -39,7 +40,7 @@ public class GuiForPublicChatRoom extends ChatDialog {
 	/**
 	 * 公用的,暴露在外面让别的类引用
 	 */
-	public  JTextArea jTextArea;
+	public  JTextPane my_jtextPane;
 	
 	/**
 	 * 公用的发送按钮,暴露在外
@@ -89,10 +90,10 @@ public class GuiForPublicChatRoom extends ChatDialog {
 		GridBagConstraints constraints=new 
 				GridBagConstraints(0, 0, 6, 8, 1, 1, GridBagConstraints.CENTER, 
 				GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0);
-		jTextArea=new JTextArea();
-		jTextArea.setEditable(false);
-		jTextArea.setPreferredSize(new Dimension(55, 50));
-		panel1.add(new JScrollPane(jTextArea), constraints);
+		my_jtextPane = new JTextPane();
+		my_jtextPane.setEditable(false);
+//		jTextArea.setPreferredSize(new Dimension(55, 50));
+		panel1.add(new JScrollPane(my_jtextPane), constraints);
 		
 		//文本输入框
 		jTextField=new JTextField();
@@ -132,7 +133,8 @@ public class GuiForPublicChatRoom extends ChatDialog {
 		classmateList = new JList<>(new DefaultListModel<>());
 		classmateList.setCellRenderer(new ClassmateListRender(username));
 		classmateList.setToolTipText("使用crtl+点击多选,鼠标右键撤销全部选中");
-		panel2.add(new JScrollPane(classmateList), constraints);
+		JScrollPane sc = new JScrollPane(classmateList);
+		panel2.add(sc, constraints);
 		classmateList.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {

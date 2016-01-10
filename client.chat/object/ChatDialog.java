@@ -3,18 +3,18 @@ package object;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JList;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.JTextPane;
 
 @SuppressWarnings("serial")
 public abstract class ChatDialog extends JFrame{
-	public JTextArea textArea;
+	public JTextPane textPane;
 	public JTextField textField;
 	public  JList<String> classmateList;
 	public JButton sendButton;
 	
 	public ChatDialog() {
-		textArea = new JTextArea();
+		textPane = new JTextPane();
 		textField = new JTextField(30);
 		classmateList = new JList<>();
 		sendButton = new JButton("·¢ËÍ");

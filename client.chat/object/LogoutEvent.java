@@ -12,7 +12,10 @@ public class LogoutEvent extends WindowAdapter{
 
 	@Override
 	public void windowClosing(WindowEvent e) {
-		client.sendLogoutInfo(client.getServer());
+		try {
+			client.sendLogoutInfo(client.getServer());
+		} catch (NullPointerException e1) {
+		}
 	}
 
 

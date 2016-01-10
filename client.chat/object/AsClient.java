@@ -45,4 +45,11 @@ public interface AsClient  {
 	 * @return 返回本客户端绑定的服务器
 	 */
 	Server getServer();
+	
+	/**
+	 * 检查这个字符串是不是自己发送的
+	 * @param message
+	 * @return
+	 */
+	boolean isMyself(String message);
 }
