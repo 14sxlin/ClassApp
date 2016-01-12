@@ -1,9 +1,10 @@
 package headInfoProcesser.processer;
 
-import headinfoFilter.HeadType;
 import object.Client;
+import object.HeadType;
 import object.TimeAddtion;
 import tools.ClientsManager;
+import tools.FormatInfo;
 
 public class GroupProcesser extends HeadInfoProcesser {
 
@@ -24,7 +25,9 @@ public class GroupProcesser extends HeadInfoProcesser {
 
 	@Override
 	synchronized public void process(String groupContent) throws Exception {
-		if(groupContent.contains("!"))//组建的情况
+		// TODO System Output Test Block
+		System.out.println(" 服务器接收到的groupinfo =  "+groupContent);
+		if(groupContent.contains(HeadType.GROUP))//组建的情况
 		{
 			String headinfo = processMakeup(groupContent);
 			String[] namelist = null ;
@@ -59,7 +62,7 @@ public class GroupProcesser extends HeadInfoProcesser {
 					}
 				}
 			}
-			ClientsManager.sendAllClient(headinfo);
+			ClientsManager.sendAllClient(headinfo,false);
 		}
 		
 	}
@@ -71,10 +74,14 @@ public class GroupProcesser extends HeadInfoProcesser {
 	 */
 	private String processSend(String content) 
 	{
-		int index2 = content.indexOf(":");
-		this.groupMark = content.substring(0, index2);
-		this.message = content.substring(index2+1);
-		return HeadType.GSEND+this.groupMark+":"+TimeAddtion.getTime()+this.message+"#";
+		// TODO System Output Test Block
+		System.out.println(" 处理发送 ");
+		String[] temp = FormatInfo.filte3(filteContent(content));
+		this.usernamelist = temp[0];
+		this.groupMark = temp[1];
+		this.message = temp[2];
+
+		return HeadType.GSEND+"!"+this.groupMark+":"+TimeAddtion.getTime()+this.message+"#";
 		
 	}
 	
@@ -86,15 +93,18 @@ public class GroupProcesser extends HeadInfoProcesser {
 	 */
 	private String processMakeup(String content)
 	{
-		int index1  =content.indexOf("!");
-		int index2 = content.indexOf(":");
-		if( index2 != -1&& index1 != -1)
-		{
-			this.sender = content.substring(0, index1);
-			this.usernamelist = content.substring(index1+1, index2);
-			this.message = content.substring(index2+1);
-		}else
-			throw new NullPointerException();		
+		// TODO System Output Test Block
+		System.out.println(" 处理makeup ");
+		String[] temp = FormatInfo.filte3(filteContent(content));
+		this.sender = temp[0];
+		this.usernamelist =temp[1];
+		this.message = temp[2];
 		return HeadType.GROUP+this.sender+"!"+usernamelist+":"+this.message+"#";
+	}
+	
+	private  String filteContent(String content)
+	{
+		int i = content.indexOf("content=");
+		return content.substring(i+"content=".length(), content.lastIndexOf("#"));
 	}
 }

@@ -16,21 +16,24 @@ import api.client.groupChatRoom.GroupChatRoomLogic;
 import api.client.pubChatRoom.PubChatRoomLogic;
 import classapp.mainframe.ClassAppMainFrame;
 import gui.groupChatRoom.GroupChatGUI;
-import object.ChatDialog;
 
 public class GroupChatMainFrame {
 
 	private GroupChatRoomLogic logic;
-	private ChatDialog gui ;
+	private GroupChatGUI gui ;
+	public GroupChatGUI getGui() {
+		return gui;
+	}
+
+
 	private String[] nameList;
 	private long mark;
 	private StringBuilder sb ;
 
-
 	public GroupChatMainFrame(long mark,String usernamelist,PubChatRoomLogic logic) {
 		this.mark = mark;
 		gui = new GroupChatGUI();
-		this.logic = new GroupChatRoomLogic(mark, gui, logic);
+		this.logic = new GroupChatRoomLogic(mark, logic);
 		sb = new StringBuilder();
 		
 		//更新列表
@@ -72,6 +75,7 @@ public class GroupChatMainFrame {
 			public void keyReleased(KeyEvent e) {
 			}
 		});
+
 	}
 	
 	
@@ -146,8 +150,36 @@ public class GroupChatMainFrame {
 		gui.textPane.setCaretPosition(gui.textPane.getDocument().getLength());
 	}
 	
+   public void updateList(String listString,boolean isIn)
+   {
+		synchronized (gui.classmateList) {
+			if (isIn) //登入的情况
+			{
+				DefaultListModel<String> listModel = (DefaultListModel<String>) gui.classmateList.getModel();
+				String[] names = listString.split("&");
+				if (listModel == null)
+					listModel = new DefaultListModel<>();
+				for (int i = 0; i < names.length; i++) {
+					if (!listModel.contains(names[i])) //让重复添加无效
+						listModel.addElement(names[i]);
+				}
+				gui.classmateList.setModel(listModel);
+			} else//登出的情况
+			{
+				DefaultListModel<String> listModel = (DefaultListModel<String>) gui.classmateList.getModel();
+				String[] names = listString.split("&");
+				if (listModel == null)
+					listModel = new DefaultListModel<>();
+				for (int i = 0; i < names.length; i++) {
+					listModel.removeElement(names[i]);
+				}
+				gui.classmateList.setModel(listModel);
+			}
+		}
+		
+   }
 
-
+   
 	public long getMark() {
 		return mark;
 	}

@@ -4,8 +4,8 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import headinfoFilter.HeadType;
 import object.Client;
+import object.HeadType;
 import object.TimeAddtion;
 
 public class ClientsManager {
@@ -30,13 +30,19 @@ public class ClientsManager {
 	 * 想所有的客户端发送消息
 	 * @param message 要发送的消息
 	 */
-	public static void sendAllClient(String message)
+	public static void sendAllClient(String message,boolean sendTime)
 	{
 		Iterator<Client> it = clientList.iterator();
 		while(it.hasNext())
 		{
 			PrintWriter pw=it.next().getSocketStream().getPrintWriter();
-			pw.println(TimeAddtion.getTime()+message);
+			if(sendTime)
+			{
+				pw.println(TimeAddtion.getTime()+message);
+			}else
+			{
+				pw.println(message);
+			}
 			pw.flush();
 		}
 	}
@@ -94,6 +100,6 @@ public class ClientsManager {
 			}
 			returnString = returnString.substring(0, returnString.length() - 1)+"#";
 		}
-		sendAllClient(returnString);
+		sendAllClient(returnString,false);
 	}
 }

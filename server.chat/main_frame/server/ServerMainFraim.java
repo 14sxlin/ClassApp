@@ -94,7 +94,7 @@ public class ServerMainFraim {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				ClientsManager.sendAllClient(gui.textField.getText());
+				ClientsManager.sendAllClient(gui.textField.getText(),true);
 				if( gui.textField.getText() != "" )
 					gui.textPane.append(gui.textField.getText()+"\n");
 				gui.textField.setText("");
@@ -112,7 +112,7 @@ public class ServerMainFraim {
 			public void keyReleased(KeyEvent e) {
 				if(e.getKeyCode() == KeyEvent.VK_ENTER)
 				{
-					ClientsManager.sendAllClient(gui.textField.getText());
+					ClientsManager.sendAllClient(gui.textField.getText(),true);
 					if( gui.textField.getText() != "" )
 						gui.textPane.append(gui.textField.getText()+"\n");
 					gui.textField.setText("");

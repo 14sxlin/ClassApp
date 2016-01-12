@@ -30,8 +30,8 @@ import object.ChatDialog;
 public class GroupChatGUI extends ChatDialog  {
 	
 	// TODO Auto-generated catch block
-//	private JButton[] buttons;
-//	private String [] strButton= {"导出聊天记录","邀请加入"};
+	public  JButton[] buttons;
+	private String [] strButton= {"邀请加入"};
 	
 	private JToolBar bar;
 	private JLabel melabel;
@@ -53,13 +53,13 @@ public class GroupChatGUI extends ChatDialog  {
 		//增加菜单栏
 		bar=new JToolBar();
 		this.add(bar,"North");
-//		buttons=new JButton[strButton.length];
-//		for(int i=0;i<strButton.length;i++)
-//		{
-//			buttons[i]=new JButton(strButton[i]);
-//			bar.add(buttons[i]);
-//			buttons[i].addActionListener(this);
-//		}
+		buttons=new JButton[strButton.length];
+		for(int i=0;i<strButton.length;i++)
+		{
+			buttons[i]=new JButton(strButton[i]);
+			bar.add(buttons[i]);
+		};
+		
 		
 		//增加聊天面板
 		super.textPane.setEditable(false);

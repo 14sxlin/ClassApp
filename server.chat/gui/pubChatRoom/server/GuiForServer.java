@@ -108,7 +108,7 @@ public class GuiForServer extends JFrame {
 		panel.add(startServiceButton);
 		
 		JSplitPane splitPane = new JSplitPane();
-		splitPane.setResizeWeight(0.8);
+		splitPane.setResizeWeight(0.6);
 		contentPane.add(splitPane, BorderLayout.CENTER);
 		
 		JScrollPane scrollPane = new JScrollPane();

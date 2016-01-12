@@ -14,9 +14,10 @@ import javax.swing.text.StyleConstants;
 
 import classapp.mainframe.ClassAppMainFrame;
 import gui.pubChatRoom.GuiForPublicChatRoom;
-import headinfoFilter.HeadType;
 import object.AsClient;
+import object.HeadType;
 import object.Server;
+import tools.GroupChatListProcesser;
 import tools.GroupChatProcesser;
 import tools.ListInfoProcesser;
 
@@ -138,6 +139,15 @@ public class PubChatRoomLogic implements AsClient {
 			if (server != null && server.getSocketStream()!=null) {
 				String line="";
 				while ((line = server.getSocketStream().getBufferReader().readLine()) != null) {
+					try {
+						
+						// TODO System Output Test Block
+						addStringWithColor(line, Color.cyan);
+						
+					} catch (BadLocationException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 					if( line.contains(HeadType.LIST))
 					{
 						try {
@@ -150,11 +160,14 @@ public class PubChatRoomLogic implements AsClient {
 						}
 						storeString.append(line + "\n");
 					}
-					else if( line.contains(HeadType.GROUP) ||  line.contains(HeadType.GSEND))//处理组聊信息
+					else if( line.contains(HeadType.GROUP) ||  line.contains(HeadType.GSEND) )//处理组聊信息
 					{
 						GroupChatProcesser.process(line, this);
 					}
-					
+					else if(line.contains(HeadType.GIN) ||  line.contains(HeadType.GOUT))
+					{
+						GroupChatListProcesser.updateList(line);
+					}
 					else
 					{
 						storeString.append(line + "\n");
@@ -178,7 +191,13 @@ public class PubChatRoomLogic implements AsClient {
 						}
 						
 					}
-					gui.my_jtextPane.setCaretPosition(gui.my_jtextPane.getDocument().getLength());
+					try {
+						gui.my_jtextPane.setCaretPosition(gui.my_jtextPane.getDocument().getLength());
+					} catch (NullPointerException e) {
+						// TODO Auto-generated catch block
+						//什么情况?
+						e.printStackTrace();
+					}
 				} 
 			}
 		} catch (SocketException e) {

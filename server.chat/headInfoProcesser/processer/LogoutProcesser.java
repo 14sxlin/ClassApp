@@ -37,7 +37,7 @@ public class LogoutProcesser extends HeadInfoProcesser {
 		ClientsManager.updateNameList();
 		ServerMainFraim.tdt.updateState(ClientsManager.counter, ClientsManager.userNameList);
 		ClientsManager.sendAllListMessage();
-		ClientsManager.sendAllClient(logoutClientName+ "  ÍË³öµÇÂ¼");
+		ClientsManager.sendAllClient(logoutClientName+ "  ÍË³öµÇÂ¼",true);
 	}
 	
 	private Client findClient(String userName)

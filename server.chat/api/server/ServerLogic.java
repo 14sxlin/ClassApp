@@ -136,6 +136,7 @@ public class ServerLogic implements AsServer{
 					}
 					
 					//接收客户端的信息 这里面要处理客户端可能发过来的头信息
+					//包含 #head: 这个字段的
 					if(gui.textPane != null)
 						try {
 							while((line=client.getSocketStream().getBufferReader().readLine()) != null)
@@ -147,18 +148,36 @@ public class ServerLogic implements AsServer{
 										factory = new ProcesserFactory(ClientsManager.clientList);
 										HeadInfoProcesser processer ;
 										processer=factory.createProcesser(filter.filteType());	
+										
+										//processer有两种处理方式,要判断一下应该选择哪一种
 										if(processer.getType() == HeadInfoProcesser.STRING)
 											processer.process(filter.filteContent());
 										else processer.process(client);
+										
 									} catch (Exception e) {
 										e.printStackTrace();
 									}
-//									gui.textPane.append(line+"\n");
+									gui.textPane.append(line+"\n");
+									gui.textPane.setCaretPosition(gui.textPane.getText().length());
+								}
+								else if(filter.isGroupInfo())
+								{
+									//组信息不用过滤内容
+									try {
+										factory = new ProcesserFactory(ClientsManager.clientList);
+										HeadInfoProcesser processer ;
+										processer=factory.createProcesser(filter.filteType());	
+										processer.process(line);
+									} catch (Exception e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
+									}
 								}
 								else
 								{
-//									gui.textPane.append(line+"\n");
-									ClientsManager.sendAllClient(line);
+									gui.textPane.append(line+"\n");
+									gui.textPane.setCaretPosition(gui.textPane.getText().length());
+									ClientsManager.sendAllClient(line,false);
 								}
 							}
 						} catch (IOException e) {

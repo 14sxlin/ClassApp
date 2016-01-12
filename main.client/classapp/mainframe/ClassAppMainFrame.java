@@ -52,7 +52,7 @@ public class ClassAppMainFrame extends JFrame implements ActionListener{
 	{
 		this.setTitle("我们这一班--"+username);
 		ClassAppLoginFrame.dim=getToolkit().getScreenSize();
-		this.setBounds(ClassAppLoginFrame.dim.width/2-250, ClassAppLoginFrame.dim.height/2-200, 500, 400);
+		this.setBounds(ClassAppLoginFrame.dim.width/2-250, ClassAppLoginFrame.dim.height/2-250, 500, 500);
 		
 		//添加公告栏
 		messageArea=new JPanel(new GridLayout(1, 2));
@@ -77,7 +77,7 @@ public class ClassAppMainFrame extends JFrame implements ActionListener{
 		
 		//添加组件
 		JSplitPane jsplit=new JSplitPane(JSplitPane.VERTICAL_SPLIT, messageArea, buttonArea);
-		jsplit.setDividerLocation(this.getHeight()*2/3);
+		jsplit.setDividerLocation(this.getHeight()*7/10);
 		this.add(jsplit);
 		
 		//构造聊天室界面,但是一开始不可见

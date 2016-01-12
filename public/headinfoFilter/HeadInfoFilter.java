@@ -2,10 +2,12 @@ package headinfoFilter;
 
 /**
  * 头信息过滤器,过滤出头信息的类型和值
+ * 格式是 #head:type?content= 具体内容#
  * @author LinSixin sparrowxin@sina.cn
  *
  */
 public class HeadInfoFilter {
+	private final String group = "#group:";
 	private final String head = "#head:"; 
 	private final String content= "content=";
 	private String readline;
@@ -22,6 +24,18 @@ public class HeadInfoFilter {
 	public boolean isHeadInfo()
 	{
 		if(readline.contains("#head:"))
+			return true;
+		else return false;
+	}
+	
+	/**
+	 * 首先判断是不是组信息
+	 * @return 如果包含了#group:字段就认为是头信息返回true
+	 * 否则返回false
+	 */
+	public boolean isGroupInfo()
+	{
+		if(readline.contains(group))
 			return true;
 		else return false;
 	}

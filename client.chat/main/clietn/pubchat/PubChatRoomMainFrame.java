@@ -13,10 +13,11 @@ import javax.swing.JOptionPane;
 import api.client.pubChatRoom.PubChatRoomLogic;
 import classapp.mainframe.ClassAppMainFrame;
 import gui.pubChatRoom.GuiForPublicChatRoom;
-import headinfoFilter.HeadType;
 import main.client.groupchat.GroupChatMainFrame;
 import object.AsClient;
+import object.HeadType;
 import object.ServerInfo;
+import tools.ClassmateListSelectDialog;
 
 /**
  * 客户端的公共聊天室的界面
@@ -44,6 +45,7 @@ import object.ServerInfo;
 	 */
 	private String username;
 	
+	private String onlineList ="";
 	
 	public PubChatRoomMainFrame(String username) {
 		
@@ -155,14 +157,87 @@ import object.ServerInfo;
 					if(!groupinfo.equals(""))
 					{
 						groupinfo = groupinfo.substring(0, groupinfo.length()-1);
+						
 						//发送组聊消息给服务器
 						long time = System.currentTimeMillis();
 						groupinfo =(HeadType.GROUP+username+"!"+
 								groupinfo+":"+time+"#");
 						logic.sendMessageToServer(groupinfo);
+						
+						//弹出组聊窗口
 						GroupChatMainFrame temp =
 								new GroupChatMainFrame(time,getSelectedUsername(), logic);
 						ClassAppMainFrame.groupChatManager.add(temp);
+						
+						//邀请加入的按钮的事件
+						temp.getGui().buttons[0].addActionListener(new ActionListener() {
+							
+							@Override
+							public void actionPerformed(ActionEvent e) {
+									String namelist ="";
+									for(int i=0 ;i<gui.classmateList.getModel().getSize(); i++)
+									{
+										if(gui.classmateList.getModel().getElementAt(i) != null)
+											onlineList+=(gui.classmateList.getModel().getElementAt(i)+"&");
+									}
+									if(onlineList.equals("")||onlineList==null) {
+										JOptionPane.showMessageDialog(gui, "没人在线");
+									}else
+									{
+										//新建选人的窗口,并且将信息发送到服务器
+										new Thread(new Runnable() {
+											
+											@Override
+											public void run() {
+												try {
+													onlineList = onlineList.substring(0 , onlineList.length()-1);
+													ClassmateListSelectDialog select = 
+															new ClassmateListSelectDialog(onlineList);
+													
+													synchronized (ClassmateListSelectDialog.lock) {
+															if(select.selectedUsernamelist.equals(""))
+															{	
+																// TODO System Output Test Block
+																System.out.println(" 进入等待 ");
+																ClassmateListSelectDialog.lock.wait();
+															
+															}
+															
+															System.out.println(" namelist =  "+namelist);
+															String headinfo =
+																	HeadType.GIN+temp.getMark()+":"+select.selectedUsernamelist+"#";
+															// TODO System Output Test Block
+															System.out.println(" headinfo =  "+headinfo);
+															logic.sendMessageToServer(headinfo);
+														}
+												} catch (InterruptedException e1) {
+													// TODO Auto-generated catch block
+													e1.printStackTrace();
+												}
+												
+											}
+										}).start();
+									}
+								}
+						});
+					
+						
+						// TODO Auto-generated catch block
+						//这个我想看看无限分流性能不能成立
+						//结果是轮流接收的
+//						new Thread(new Runnable() {
+//							
+//							@Override
+//							public void run() {
+//								try {
+//									temp.startReceiveMessage();
+//								} catch (IOException e) {
+//									// TODO Auto-generated catch block
+//									e.printStackTrace();
+//								}
+//								
+//							}
+//						}).start();
 						
 					}
 					else
@@ -177,11 +252,12 @@ import object.ServerInfo;
 			}
 		});
 
+		
 	}
 
 	/**
 	 * 获取选中的人加入到讨论组里面
-	 * @return
+	 * @return username1 & username2
 	 */
 	private String getSelectedUsername()
 	{

@@ -31,6 +31,7 @@ public class GroupsChatManager {
 				return temp;
 			}
 		}
-		throw new NullPointerException();
+		throw new NullPointerException("找不到时间标志 = "+mark
+				+"\ngrouplength = "+groups.size());
 	}
 }

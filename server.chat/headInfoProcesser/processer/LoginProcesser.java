@@ -23,7 +23,7 @@ public class LoginProcesser extends HeadInfoProcesser{
 		ClientsManager.updateNameList();
 		ServerMainFraim.tdt.updateState(ClientsManager.counter, ClientsManager.userNameList);
 		ClientsManager.sendAllListMessage();
-		ClientsManager.sendAllClient(loginClient.getUserName()+ "  µÇÂ¼");
+		ClientsManager.sendAllClient(loginClient.getUserName()+ "  µÇÂ¼",true);
 	}
 	
 	@Override
