@@ -52,7 +52,7 @@ public interface HeadType {
 	 * 组聊退出时候的头信息<br>
 	 * namelist是退出的人,一般只有有个人<br>
 	 * mark是组的标识<br>
-	 * #group:out?content=mark:namelist#
+	 * #group:out?content=mark:outer#
 	 */
 	String GOUT = "#group:out?content=";
 }

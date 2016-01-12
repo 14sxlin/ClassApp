@@ -35,7 +35,12 @@ public class GroupChatProcesser {
 			}
 			else
 			{
-				ClassAppMainFrame.groupChatManager.find(mark).updateTextPane(message);
+				try {
+					ClassAppMainFrame.groupChatManager.find(mark).updateTextPane(message);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 			clean();
 		} catch (NullPointerException e) {

@@ -66,6 +66,9 @@ public class GroupProcesser extends HeadInfoProcesser {
 		}else if(groupinfo.contains(HeadType.GIN))
 		{
 			processGroupIn(groupinfo);
+		}else if(groupinfo.contains(HeadType.GOUT))
+		{
+			processGroupOut(groupinfo);
 		}
 		
 	}
@@ -118,7 +121,6 @@ public class GroupProcesser extends HeadInfoProcesser {
 	private void processGroupIn(String content)
 	{
 		// TODO System Output Test Block
-		// TODO System Output Test Block
 		System.out.println("  ");
 		System.out.println(" 处理组内登录 ");
 		String[] temp = FormatInfo.filte3(filteContent(content));
@@ -129,7 +131,6 @@ public class GroupProcesser extends HeadInfoProcesser {
 		//让新成员建立组
 		String newinfo = 
 				HeadType.GROUP+ "!"+temp[0]+"&"+temp[2]+":"+temp[1]+"#";
-		// TODO System Output Test Block
 		// TODO System Output Test Block
 		System.out.println("  ");
 		System.out.println(" 让新成员建立的信息 =  "+ newinfo);
@@ -142,7 +143,6 @@ public class GroupProcesser extends HeadInfoProcesser {
 		//让旧成员加人的信息
 		String oldinfo = HeadType.GIN+"!"+temp[1]+":"+temp[2]+"#";
 		// TODO System Output Test Block
-		// TODO System Output Test Block
 		System.out.println("  ");
 		System.out.println(" 让旧成员加人的信息 =  "+oldinfo);
 		System.out.println("  ");
@@ -153,6 +153,27 @@ public class GroupProcesser extends HeadInfoProcesser {
 		
 	}
 	
+	/**
+	 * 处理从讨论组退出的情况
+	 * @param message #group:out?content=mark:outer#
+	 */
+	private void processGroupOut(String message)
+	{
+		// TODO System Output Test Block
+		System.out.println(" 服务器接收到要退出讨论组的消息 =  "+message);
+		String temp[] = FormatInfo.filte2(filteContent(message));
+		String outinfo = HeadType.GSEND+"!"+temp[0]+":"+TimeAddtion.getTime()
+						+temp[1]+"  退出讨论 "+"#";
+		ClientsManager.sendAllClient(outinfo, false);
+		ClientsManager.sendAllClient(message, false); //直接转发 让客户端去处理
+		
+	}
+	
+	/**
+	 * 获得头信息content=之后的内容
+	 * @param content
+	 * @return
+	 */
 	private  String filteContent(String content)
 	{
 		int i = content.indexOf("content=");

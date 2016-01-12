@@ -211,10 +211,16 @@ import tools.FormatInfo;
 																// TODO System Output Test Block
 																System.out.println(" namelist =  "+
 																select.selectedUsernamelist);
-																String orginlist = FormatInfo
-																		.formatNames(ClassAppMainFrame.groupChatManager
-																				.find(temp.getMark())
-																				.getGui().classmateList);
+																String orginlist = "";
+																try {
+																	orginlist = FormatInfo
+																			.formatNames(ClassAppMainFrame.groupChatManager
+																					.find(temp.getMark())
+																					.getGui().classmateList);
+																} catch (Exception e) {
+																	// TODO Auto-generated catch block
+																	e.printStackTrace();
+																}
 																// TODO System Output Test Block
 																System.out
 																		.println(" 客户端中发送的 originname =  " + orginlist);

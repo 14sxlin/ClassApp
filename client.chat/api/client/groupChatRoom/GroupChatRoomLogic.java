@@ -1,18 +1,17 @@
 package api.client.groupChatRoom;
 
 import api.client.pubChatRoom.PubChatRoomLogic;
+import classapp.mainframe.ClassAppMainFrame;
 import object.HeadType;
 import object.Server;
 
 public class GroupChatRoomLogic extends PubChatRoomLogic{
 
-//	private ChatDialog gui;
 	private PubChatRoomLogic pubLogic;
 	private long mark;
 	
 	public GroupChatRoomLogic(long mark,PubChatRoomLogic logic) {
 		this.mark = mark;
-//		this.gui = gui;
 		this.pubLogic = logic;
 		this.server = logic.getServer();
 
@@ -82,11 +81,19 @@ public class GroupChatRoomLogic extends PubChatRoomLogic{
 	 * 组聊的逻辑在点击邀请组聊的逻辑里面实现
 	 */
 	public void sendMessageToServer(String message) {
+		pubLogic.sendMessageToServer(message);
+	}
+	
+	/**
+	 * 发送具有gsend头的信息
+	 * @param message
+	 */
+	public void sendCodedMessage(String message)
+	{
 		String groupMessage = HeadType.GSEND;
 		groupMessage+="!"+this.mark;
 		groupMessage+=":"+message+"#";
-		
-		pubLogic.sendMessageToServer(groupMessage);
+		sendMessageToServer(groupMessage);
 	}
 	
 	/**
@@ -95,7 +102,10 @@ public class GroupChatRoomLogic extends PubChatRoomLogic{
 	 */
 	public void sendMessageWithName(String message)
 	{
-		super.sendMessageWithName(message);
+		String groupMessage = HeadType.GSEND;
+		groupMessage+="!"+this.mark;
+		groupMessage+=":"+ClassAppMainFrame.username+"  说: "+message+"#";
+		sendMessageToServer(groupMessage);
 	}
 	
 

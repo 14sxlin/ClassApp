@@ -15,12 +15,20 @@ public class GroupsChatManager {
 		groups.add(group);
 	}
 	
-	public  void remove(int id)
+	public  void remove(long mark)
 	{
-		groups.remove(id);
+		try {
+			groups.remove(find(mark));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		// TODO System Output Test Block
+		System.out.println(" 移除成功 ");
+		System.out.println();
 	}
 	
-	public  GroupChatMainFrame find(long mark) 
+	public  GroupChatMainFrame find(long mark) throws Exception
 	{
 		Iterator<GroupChatMainFrame> it = groups.iterator();
 		while(it.hasNext())
@@ -31,7 +39,7 @@ public class GroupsChatManager {
 				return temp;
 			}
 		}
-		throw new NullPointerException("找不到时间标志 = "+mark
-				+"\ngrouplength = "+groups.size());
+			throw new Exception("找不到时间标志 = "+mark
+					+"\ngrouplength = "+groups.size());
 	}
 }

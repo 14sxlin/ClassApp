@@ -5,6 +5,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.IOException;
 
 import javax.swing.DefaultListModel;
@@ -16,6 +18,7 @@ import api.client.groupChatRoom.GroupChatRoomLogic;
 import api.client.pubChatRoom.PubChatRoomLogic;
 import classapp.mainframe.ClassAppMainFrame;
 import gui.groupChatRoom.GroupChatGUI;
+import object.HeadType;
 
 public class GroupChatMainFrame {
 
@@ -76,6 +79,7 @@ public class GroupChatMainFrame {
 			}
 		});
 
+		addGroupoutListener();
 	}
 	
 	
@@ -184,6 +188,62 @@ public class GroupChatMainFrame {
 			}
 		}
 		
+   }
+   
+   /**
+    * 给gui添加退出的时候发送组聊中的退出信息的监听器
+    * 并将chatgroup中对应的组聊去掉
+    */
+   private void addGroupoutListener()
+   {
+	   gui.addWindowListener(new WindowListener() {
+		
+		@Override
+		public void windowOpened(WindowEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+		@Override
+		public void windowIconified(WindowEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+		@Override
+		public void windowDeiconified(WindowEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+		@Override
+		public void windowDeactivated(WindowEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+		@Override
+		public void windowClosing(WindowEvent e) {
+			String groupoutinfo = HeadType.GOUT+getMark()+":"+ClassAppMainFrame.username+"#";
+			// TODO System Output Test Block
+			System.out.println(" group out info =  "+groupoutinfo+"\n");
+			logic.sendMessageToServer(groupoutinfo);
+			ClassAppMainFrame.groupChatManager.remove(getMark());
+			
+		}
+		
+		@Override
+		public void windowClosed(WindowEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+		@Override
+		public void windowActivated(WindowEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+	});
    }
 
    
