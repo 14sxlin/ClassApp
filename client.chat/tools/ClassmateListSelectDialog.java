@@ -16,7 +16,7 @@ import javax.swing.border.TitledBorder;
 public class ClassmateListSelectDialog {
 
 	public static String lock ="lock";
-	public  String selectedUsernamelist ="";
+	public String selectedUsernamelist ="";
 	public ClassmateListSelectDialog(String usernameList) {
 		new Thread(new Runnable() {
 			
@@ -37,7 +37,6 @@ public class ClassmateListSelectDialog {
 		private void genalizeGui(String usernameList)
 		{
 			this.setTitle("ื้มฤ");
-			this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 			this.setSize(new Dimension(200, 300));
 			this.setLocationRelativeTo(null);
 			getContentPane().setLayout(new BorderLayout());
@@ -93,15 +92,14 @@ public class ClassmateListSelectDialog {
 				
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					dispose();
+					synchronized (lock) {
+						lock.notify();
+						dispose();
+					}
 				}
 			});
 			setVisible(true);
 		}
 	}
 	
-	public static void main(String args[])
-	{
-		new ClassmateListSelectDialog("11&22&33");
-	}
 }

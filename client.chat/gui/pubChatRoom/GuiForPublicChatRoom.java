@@ -55,6 +55,9 @@ public class GuiForPublicChatRoom extends ChatDialog {
 	public JTextField jTextField;
 	private JToolBar toolBar;
 	private JRadioButton online,all;
+	/**
+	 * 这个公共聊天界面私有的列表
+	 */
 	public JList<String> classmateList;
 	
 	

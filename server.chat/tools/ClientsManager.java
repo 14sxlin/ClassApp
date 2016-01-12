@@ -51,8 +51,9 @@ public class ClientsManager {
 	 * 用来发信息给指定的客户端
 	 * @param username 指定发送信息的用户名
 	 * @param message 要发的信息
+	 * @param addTime true则加入时间
 	 */
-	public static void sendMessage(String username, String message)
+	public static void sendMessage(String username, String message,boolean addTime)
 	{
 		Client client = null;
 		Iterator<Client> it = clientList.iterator();
@@ -66,8 +67,15 @@ public class ClientsManager {
 		
 		if (client != null )
 		{
-			client.getSocketStream().getPrintWriter().println(TimeAddtion.getTime()+message);
-			client.getSocketStream().getPrintWriter().flush();
+			if(addTime)
+			{
+				client.getSocketStream().getPrintWriter().println(TimeAddtion.getTime()+message);
+				client.getSocketStream().getPrintWriter().flush();
+			}else
+			{
+				client.getSocketStream().getPrintWriter().println(message);
+				client.getSocketStream().getPrintWriter().flush();
+			}
 		}
 	}
 

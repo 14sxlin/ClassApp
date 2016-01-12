@@ -150,17 +150,24 @@ public class GroupChatMainFrame {
 		gui.textPane.setCaretPosition(gui.textPane.getDocument().getLength());
 	}
 	
-   public void updateList(String listString,boolean isIn)
+	/**
+	 * 更新组聊面板的讨论组成员
+	 * @param listString 成员列表字符串
+	 * @param isLogin 是不是登录
+	 */
+   public void updateList(String listString,boolean isLogin)
    {
+	   // TODO System Output Test Block
+	System.out.println(" 更新列表接收到的列表信息 =  "+listString);
 		synchronized (gui.classmateList) {
-			if (isIn) //登入的情况
+			if (isLogin) //登入的情况
 			{
 				DefaultListModel<String> listModel = (DefaultListModel<String>) gui.classmateList.getModel();
 				String[] names = listString.split("&");
 				if (listModel == null)
 					listModel = new DefaultListModel<>();
 				for (int i = 0; i < names.length; i++) {
-					if (!listModel.contains(names[i])) //让重复添加无效
+					if (!listModel.contains(names[i].trim())) //让重复添加无效
 						listModel.addElement(names[i]);
 				}
 				gui.classmateList.setModel(listModel);

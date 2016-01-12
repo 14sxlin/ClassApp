@@ -16,15 +16,22 @@ public class GroupChatListProcesser {
 	
 	synchronized public static void	 updateList(String headinfo)
 	{
+		// TODO System Output Test Block
+		System.out.println(" grouplist process接收到的信息 =  "+headinfo);
 		setState(headinfo);
 		try {
 			ClassAppMainFrame.groupChatManager.find(mark).updateList(namelist, isIn);
 		} catch (NullPointerException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 	
+	/**
+	 * 截取发过来的字符串中的信息
+	 * 格式是三段的
+	 * @param headinfo
+	 */
 	private static void setState(String headinfo)
 	{
 		int index = headinfo.indexOf("#group:");
@@ -35,11 +42,12 @@ public class GroupChatListProcesser {
 				.equals("in")?true:false;
 		HeadInfoFilter filter = new HeadInfoFilter(headinfo);
 		String content = filter.filteContent().trim();
-		int i = content.indexOf(":");
-		mark = Long.parseLong(content.substring(0,  i));
-		namelist = content.substring(i+1);
+		String temp[] = FormatInfo.filte3(content);
+		mark = Long.parseLong(temp[1]);
+		namelist = temp[2];
 		
 		// TODO System Output Test Block
+		System.out.println(" 我是更新list的,截取的数据如下:");
 		System.out.println(" isIn =  "+isIn);
 		System.out.println("  mark = "+mark);
 		System.out.println("  namelist = "+namelist);

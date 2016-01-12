@@ -164,7 +164,7 @@ public class PubChatRoomLogic implements AsClient {
 					{
 						GroupChatProcesser.process(line, this);
 					}
-					else if(line.contains(HeadType.GIN) ||  line.contains(HeadType.GOUT))
+					else if(line.contains(HeadType.GIN) ||  line.contains(HeadType.GOUT))//处理加入退出的信息
 					{
 						GroupChatListProcesser.updateList(line);
 					}

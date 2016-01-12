@@ -41,9 +41,10 @@ public interface HeadType {
 	
 	/**
 	 * 组聊加入时候的头信息<br>
+	 * origin_usernames是发出邀请的组原来的成员<br>
 	 * mark是组聊的标识<br>
 	 * content指定成员列表字符串<br>
-	 * #group:in?content=mark:namelist#
+	 * #group:in?content=origin_usernames!mark:namelist#
 	 */
 	String GIN = "#group:in?content=";
 	

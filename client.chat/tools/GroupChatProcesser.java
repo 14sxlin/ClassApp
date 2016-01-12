@@ -30,6 +30,7 @@ public class GroupChatProcesser {
 			if(setData(content))//第一种情况,要新建一个
 			{
 				GroupChatMainFrame temp = new GroupChatMainFrame(mark, sender+"&"+usernameList, logic);
+//				GroupChatMainFrame temp = new GroupChatMainFrame(mark, usernameList, logic);
 				ClassAppMainFrame.groupChatManager.add(temp);
 			}
 			else

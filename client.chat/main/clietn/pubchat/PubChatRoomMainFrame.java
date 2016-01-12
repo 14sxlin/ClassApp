@@ -18,6 +18,7 @@ import object.AsClient;
 import object.HeadType;
 import object.ServerInfo;
 import tools.ClassmateListSelectDialog;
+import tools.FormatInfo;
 
 /**
  * 客户端的公共聊天室的界面
@@ -174,10 +175,13 @@ import tools.ClassmateListSelectDialog;
 							
 							@Override
 							public void actionPerformed(ActionEvent e) {
-									String namelist ="";
+								   onlineList = "";
 									for(int i=0 ;i<gui.classmateList.getModel().getSize(); i++)
 									{
-										if(gui.classmateList.getModel().getElementAt(i) != null)
+										if(gui.classmateList.getModel().getElementAt(i) != null
+												&& 
+												!gui.classmateList.getModel().getElementAt(i)
+															.equals(ClassAppMainFrame.username))
 											onlineList+=(gui.classmateList.getModel().getElementAt(i)+"&");
 									}
 									if(onlineList.equals("")||onlineList==null) {
@@ -191,8 +195,7 @@ import tools.ClassmateListSelectDialog;
 											public void run() {
 												try {
 													onlineList = onlineList.substring(0 , onlineList.length()-1);
-													ClassmateListSelectDialog select = 
-															new ClassmateListSelectDialog(onlineList);
+													ClassmateListSelectDialog select = new ClassmateListSelectDialog(onlineList);
 													
 													synchronized (ClassmateListSelectDialog.lock) {
 															if(select.selectedUsernamelist.equals(""))
@@ -200,15 +203,29 @@ import tools.ClassmateListSelectDialog;
 																// TODO System Output Test Block
 																System.out.println(" 进入等待 ");
 																ClassmateListSelectDialog.lock.wait();
-															
+																System.out.println(" 被唤醒了");
 															}
 															
-															System.out.println(" namelist =  "+namelist);
-															String headinfo =
-																	HeadType.GIN+temp.getMark()+":"+select.selectedUsernamelist+"#";
-															// TODO System Output Test Block
-															System.out.println(" headinfo =  "+headinfo);
-															logic.sendMessageToServer(headinfo);
+															
+															synchronized (select.selectedUsernamelist) {
+																// TODO System Output Test Block
+																System.out.println(" namelist =  "+
+																select.selectedUsernamelist);
+																String orginlist = FormatInfo
+																		.formatNames(ClassAppMainFrame.groupChatManager
+																				.find(temp.getMark())
+																				.getGui().classmateList);
+																// TODO System Output Test Block
+																System.out
+																		.println(" 客户端中发送的 originname =  " + orginlist);
+																String headinfo = HeadType.GIN
+																		+ ClassAppMainFrame.username + "&" + orginlist
+																		+ "!" + temp.getMark() + ":"
+																		+ select.selectedUsernamelist + "#";
+																// TODO System Output Test Block
+																System.out.println(" headinfo =  " + headinfo);
+																logic.sendMessageToServer(headinfo);
+															}
 														}
 												} catch (InterruptedException e1) {
 													// TODO Auto-generated catch block

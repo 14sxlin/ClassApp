@@ -83,7 +83,7 @@ public class GroupChatRoomLogic extends PubChatRoomLogic{
 	 */
 	public void sendMessageToServer(String message) {
 		String groupMessage = HeadType.GSEND;
-		groupMessage+="ÔÝÎÞ !"+this.mark;
+		groupMessage+="!"+this.mark;
 		groupMessage+=":"+message+"#";
 		
 		pubLogic.sendMessageToServer(groupMessage);

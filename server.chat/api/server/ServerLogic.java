@@ -166,8 +166,12 @@ public class ServerLogic implements AsServer{
 									try {
 										factory = new ProcesserFactory(ClientsManager.clientList);
 										HeadInfoProcesser processer ;
-										processer=factory.createProcesser(filter.filteType());	
+										processer=factory.createProcesser("group");	
+										// TODO System Output Test Block
+										System.out.println(" 处理组聊的操作组,process ="+processer);
 										processer.process(line);
+										gui.textPane.append(line+"\n");
+										gui.textPane.setCaretPosition(gui.textPane.getText().length());
 									} catch (Exception e) {
 										// TODO Auto-generated catch block
 										e.printStackTrace();
@@ -177,7 +181,7 @@ public class ServerLogic implements AsServer{
 								{
 									gui.textPane.append(line+"\n");
 									gui.textPane.setCaretPosition(gui.textPane.getText().length());
-									ClientsManager.sendAllClient(line,false);
+									ClientsManager.sendAllClient(line,true);
 								}
 							}
 						} catch (IOException e) {
