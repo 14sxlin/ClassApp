@@ -194,9 +194,18 @@ import tools.FormatInfo;
 											@Override
 											public void run() {
 												try {
-													onlineList = onlineList.substring(0 , onlineList.length()-1);
-													ClassmateListSelectDialog select = new ClassmateListSelectDialog(onlineList);
+													//锁定组聊窗口和群聊窗口
+													try {
+														onlineList = onlineList.substring(0 , onlineList.length()-1);
+														gui.setEnabled(false);
+														ClassAppMainFrame.groupChatManager
+																.find(temp.getMark()).getGui().setEnabled(false);
+													} catch (Exception e1) {
+														// TODO Auto-generated catch block
+														e1.printStackTrace();
+													}
 													
+													ClassmateListSelectDialog select = new ClassmateListSelectDialog(onlineList);
 													synchronized (ClassmateListSelectDialog.lock) {
 															if(select.selectedUsernamelist.equals(""))
 															{	
@@ -231,6 +240,16 @@ import tools.FormatInfo;
 																// TODO System Output Test Block
 																System.out.println(" headinfo =  " + headinfo);
 																logic.sendMessageToServer(headinfo);
+																//解锁组聊窗口和群聊窗口
+																try {
+																	onlineList = onlineList.substring(0 , onlineList.length()-1);
+																	gui.setEnabled(true);
+																	ClassAppMainFrame.groupChatManager
+																			.find(temp.getMark()).getGui().setEnabled(true);
+																} catch (Exception e1) {
+																	// TODO Auto-generated catch block
+																	e1.printStackTrace();
+																}
 															}
 														}
 												} catch (InterruptedException e1) {

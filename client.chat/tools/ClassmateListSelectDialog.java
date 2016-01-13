@@ -22,7 +22,7 @@ public class ClassmateListSelectDialog {
 			
 			@Override
 			public void run() {
-				new SelectDialog(usernameList);
+				new SelectDialog(usernameList).setAlwaysOnTop(true);;
 				
 			}
 		}).start();
@@ -76,12 +76,17 @@ public class ClassmateListSelectDialog {
 										selectedUsernamelist += boxs[i].getText() + "&";
 									}
 								}
-								// TODO System Output Test Block
-								System.out.println("value has set = "
-										+ selectedUsernamelist.substring(0, selectedUsernamelist.length() - 1));
-								selectedUsernamelist = selectedUsernamelist.substring(0,
-										selectedUsernamelist.length() - 1);
-								lock.notify();
+								if (!selectedUsernamelist.equals("")) {
+									// TODO System Output Test Block
+									System.out.println("value has set = "
+											+ selectedUsernamelist.substring(0, selectedUsernamelist.length() - 1));
+									selectedUsernamelist = selectedUsernamelist.substring(0,
+											selectedUsernamelist.length() - 1);
+									lock.notify();
+								}else
+								{
+									lock.notify();
+								}
 								
 							}
 							dispose();

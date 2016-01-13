@@ -30,6 +30,7 @@ public class GroupsChatManager {
 	
 	public  GroupChatMainFrame find(long mark) throws Exception
 	{
+		int originsize = groups.size();
 		Iterator<GroupChatMainFrame> it = groups.iterator();
 		while(it.hasNext())
 		{
@@ -40,6 +41,6 @@ public class GroupsChatManager {
 			}
 		}
 			throw new Exception("找不到时间标志 = "+mark
-					+"\ngrouplength = "+groups.size());
+					+"     组管理长度变化  = "+(groups.size()-originsize));
 	}
 }
