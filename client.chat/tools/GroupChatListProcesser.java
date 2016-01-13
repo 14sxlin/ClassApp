@@ -1,7 +1,8 @@
 package tools;
 
-import classapp.mainframe.ClassAppMainFrame;
 import headinfoFilter.HeadInfoFilter;
+import mainframe.ClassAppMainFrame;
+import pubtools.FormatInfo;
 
 /**
  * @author LinSixin sparrowxin@sina.cn

@@ -1,7 +1,7 @@
 package testLoginProcesser;
 
-import main.clietn.pubchat.PubChatRoomMainFrame;
-import main_frame.server.ServerMainFraim;
+import mainframe.ServerMainFraim;
+import pubchatmain.PubChatRoomMainFrame;
 
 public class Run{
 

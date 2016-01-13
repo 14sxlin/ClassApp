@@ -1,9 +1,10 @@
 package tools;
 
-import api.client.pubChatRoom.PubChatRoomLogic;
-import classapp.mainframe.ClassAppMainFrame;
-import main.client.groupchat.GroupChatMainFrame;
+import groupchatmain.GroupChatMainFrame;
+import mainframe.ClassAppMainFrame;
 import object.HeadType;
+import pubChatLogic.PubChatRoomLogic;
+import pubtools.FormatInfo;
 
 /**
  * 处理建立组聊窗口的事件

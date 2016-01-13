@@ -1,6 +1,6 @@
 package testLogoutProcesser;
 
-import main_frame.server.ServerMainFraim;
+import mainframe.ServerMainFraim;
 
 public class RunServer {
 

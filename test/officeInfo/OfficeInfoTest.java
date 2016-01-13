@@ -8,7 +8,7 @@ import java.util.concurrent.TimeoutException;
 
 import javax.swing.JOptionPane;
 
-import tool.AutoOfficeTools;
+import tools.AutoOfficeTools;
 
 public class OfficeInfoTest {
 

@@ -26,7 +26,7 @@ import javax.swing.JTextField;
 import javax.swing.JToolBar;
 
 import bean.OfficeInfo;
-import tool.AutoOfficeTools;
+import tools.AutoOfficeTools;
 
 public class OfficeInfoListPanel extends JPanel{
 
